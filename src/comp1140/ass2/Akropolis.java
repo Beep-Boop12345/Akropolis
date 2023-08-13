@@ -100,7 +100,7 @@ public class Akropolis {
      * @return The character representing the tile at the position (null if there is no tile).
      */
     public static Character tileAt(String gameState, int playerId, String position) {
-        return ""; // FIXME Task 9
+        return null; // FIXME Task 9
     }
 
     /**
@@ -149,7 +149,7 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
      */
     public static Set<String> generateAllValidMoves(String gameState) {
-        return new HashSet<>(); // FIXME Task 14
+        return null; // FIXME Task 14
     }
 
     /**
