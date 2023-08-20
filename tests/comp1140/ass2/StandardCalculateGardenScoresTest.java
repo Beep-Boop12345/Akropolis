@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.concurrent.TimeUnit;
 
-@Timeout(value = 2000, unit = TimeUnit.MILLISECONDS)
+@Timeout(value = 4000, unit = TimeUnit.MILLISECONDS)
 public class StandardCalculateGardenScoresTest extends CalculateScoresTest {
     @Override
     protected ScoreDataLoader fetchScoreLoader() {

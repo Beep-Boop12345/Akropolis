@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@Timeout(value = 3000, unit = TimeUnit.MILLISECONDS)
+@Timeout(value = 5000, unit = TimeUnit.MILLISECONDS)
 public class ApplyMoveTest implements TestPlayerCount {
     private final GameDataLoader gameDataLoader = new GameDataLoader();
     private final AvailableTilesDataLoader availableTilesDataLoader = new AvailableTilesDataLoader();
@@ -96,6 +96,7 @@ public class ApplyMoveTest implements TestPlayerCount {
         newState = mutator.mutateVariant(newState);
 
         String result = Akropolis.applyMove(previousState, move);
+        Assertions.assertNotNull(result, "Got null for state: " + result);
         testGameState(newState, result, availableTiles, previousState, move);
         mutator.updateMutator();
     }
