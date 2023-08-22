@@ -30,4 +30,14 @@ public class Game extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+    /*Initializes the start of a newGame*/
+    private void newGame() {
+
+    }
+
+    /*Checks if new game*/
+    private boolean nextTurnCheck() {
+
+    }
 }
