@@ -23,6 +23,11 @@ public class Akropolis {
 
     public static int curentTurn;
 
+    /*Cycles turn*/
+    public static void nextTurn() {
+
+    }
+
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
      *
