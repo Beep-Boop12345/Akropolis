@@ -7,8 +7,16 @@ public class PieceStack {
     private void PieceStack() {
 
     }
-    /*How the object responds to a click*/
+    /*How the object responds to being Clicked*/
     private void onMousePressed() {
+
+    }
+    /*How the object responds to being dragged*/
+    private void onMouseDragged() {
+
+    }
+    /*How the object responds to being released by mouse*/
+    private void onMouseDragStop() {
 
     }
 }
