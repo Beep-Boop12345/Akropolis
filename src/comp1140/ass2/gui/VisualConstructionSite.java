@@ -6,4 +6,12 @@ public class VisualConstructionSite {
 
     /*Holds the backend ConstructionSite*/
     public static ConstructionSite site;
+
+    private visualConstructionSite (ConstructionSite site){
+
+    }
+    /*How the constructionSite representation responds to a click*/
+    private void onClick() {
+
+    }
 }
