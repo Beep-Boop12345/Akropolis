@@ -5,6 +5,23 @@ import java.util.Set;
 public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
 
+    public static int numberOfPlayers;
+
+    public static Player[] currentPlayers;
+
+    public static int pieceCount;
+
+    public static Piece[] pieces;
+
+    public static ConstructionSite constructionSite;
+
+    public static PieceStack stack;
+
+    public static bool[] scoreVariants = bool[5];
+
+    public static GameState gameStage;
+
+    public static int curentTurn;
 
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
