@@ -9,4 +9,8 @@ public class Tile {
 
     private bool isOccupied;
 
+    public void Tile() {
+
+    }
+
 }

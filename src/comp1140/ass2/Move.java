@@ -5,4 +5,8 @@ public class Move {
     private Piece[] plays;
 
     private int cost;
+
+    public void Move() {
+
+    }
 }
