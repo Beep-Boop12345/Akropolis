@@ -13,4 +13,5 @@ public class VisualBoard {
     private void piecePlacement(MoveablePiece piece) {
 
     }
+
 }
