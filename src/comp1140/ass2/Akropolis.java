@@ -15,7 +15,7 @@ public class Akropolis {
 
     public static ConstructionSite constructionSite;
 
-    public static PieceStack stack;
+    public static Stack stack;
 
     public static bool[] scoreVariants = bool[5];
 
