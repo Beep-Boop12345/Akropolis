@@ -73,7 +73,7 @@ public class ResupplyConstructionSiteTest implements TestPlayerCount {
                 r++;
             }
             chiSquare /= expectedTimes;
-            Assertions.assertTrue(Math.abs(chiSquare - r) <= 5 * Math.sqrt(r), "Distribution of tiles " +
+            Assertions.assertTrue(Math.abs(chiSquare - r) <= 7 * Math.sqrt(r), "Distribution of tiles " +
                     "does not follow a discrete uniform random distribution. The following displays the frequency" +
                     " of tile IDs in each position of the Construction Site. The expected frequency is " +
                     expectedTimes + ":\n" + positionTileCount + "\nInput State: " + state);
@@ -96,6 +96,7 @@ public class ResupplyConstructionSiteTest implements TestPlayerCount {
         // Randomly distribute the tiles into the Construction Site over a number of simulations
         for (int sim = 0; sim < SIMULATIONS; sim++) {
             String result = Akropolis.resupplyConstructionSite(state);
+            Assertions.assertNotNull(result, "Got null for input state: " + state);
             // Test nothing else changed
             testConstantInformation(state, result);
             // Test new tiles

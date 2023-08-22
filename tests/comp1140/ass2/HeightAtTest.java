@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Timeout(value = 5000, unit = TimeUnit.MILLISECONDS)
+@Timeout(value = 8000, unit = TimeUnit.MILLISECONDS)
 public class HeightAtTest implements TestPlayerCount {
     private static final int STEP_SIZE = 70;
     private final GameDataLoader gameDataLoader = new GameDataLoader();

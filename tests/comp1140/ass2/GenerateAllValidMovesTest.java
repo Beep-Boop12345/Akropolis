@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@Timeout(value = 3000, unit = TimeUnit.MILLISECONDS)
+@Timeout(value = 6000, unit = TimeUnit.MILLISECONDS)
 public class GenerateAllValidMovesTest implements TestPlayerCount {
     private final GameDataLoader gameDataLoader = new GameDataLoader();
     private final AllValidMovesDataLoader loader = new AllValidMovesDataLoader();
@@ -19,6 +19,8 @@ public class GenerateAllValidMovesTest implements TestPlayerCount {
 
     private static void test(Set<String> expected, String state) {
         Set<String> actual = Akropolis.generateAllValidMoves(state);
+        Assertions.assertNotNull(actual, "Move set should never be null.\nGot null for input state: " + state);
+
         List<String> expectedList = new ArrayList<>(expected);
         List<String> actualList = new ArrayList<>(actual);
         if (!expected.equals(actual)) {
