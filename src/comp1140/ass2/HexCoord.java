@@ -13,19 +13,22 @@ public class HexCoord {
     * @Return array of these HexCoords starting from top of the rightmost tiles in anti-clockwise direction*/
     private HexCoord[] findSurroundings() {
 
+        return new HexCoord[0];
     }
 
     /*Checks if other object is HeCoord equal component-wise
     * @Param Object compared with
     * @Return true if it is a HexCoord with same components*/
-    private bool isEqual(Onj onject) {
+    private Boolean isEqual(Object onject) {
 
+        return null;
     }
 
     /*Adds another hexCoord component wise
     * @Param HexCoord to add with
     * @Return HexCoord sum*/
-    private HexCoord add(HexCoord) {
+    private HexCoord add(HexCoord otherCoord) {
 
+        return null;
     }
 }

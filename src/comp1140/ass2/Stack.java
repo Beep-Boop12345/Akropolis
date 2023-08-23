@@ -13,5 +13,6 @@ public class Stack {
     /*Chooses given amount of random tiles for refilling construction site*/
     private Piece[] choose (int numberOfTiles) {
 
+        return new Piece[0];
     }
 }
