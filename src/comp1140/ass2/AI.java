@@ -13,6 +13,7 @@ public class AI extends Player{
     * @Return Move decided on*/
     private Move chooseMove() {
 
+        return null;
     }
 
     /*Calls to make chosen move

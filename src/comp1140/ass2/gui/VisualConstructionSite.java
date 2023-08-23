@@ -1,5 +1,7 @@
 package comp1140.ass2.gui;
 
+import comp1140.ass2.ConstructionSite;
+
 public class VisualConstructionSite {
     /*Holds the pieces that can be purchased*/
     public static PurchasablePiece[] purchasablePieces = new PurchasablePiece[11];

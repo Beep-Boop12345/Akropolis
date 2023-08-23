@@ -38,6 +38,6 @@ public class Game extends Application {
 
     /*Checks if new game*/
     private boolean nextTurnCheck() {
-
+        return true;
     }
 }
