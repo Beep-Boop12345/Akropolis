@@ -16,20 +16,20 @@ public class Board {
 
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
-    private bool isValidPlacement(Piece pieceToPlace) {
-
+    private Boolean isValidPlacement(Piece pieceToPlace) {
+        return true;
     }
 
     /*Decides if there is a tile at a given position
     *@Param HexCoord
      */
-    private bool isTile(HexCoord position) {
-
+    private Boolean isTile(HexCoord position) {
+        return true;
     }
 
     /*Returns tile at given position
     * @Param HexCoord*/
     private Tile getTile (HexCoord position) {
-
+        return null;
     }
 }

@@ -3,10 +3,14 @@ package comp1140.ass2;
 public class Tile {
     private District districtType;
 
-    private bool isPlaza;
+    private Boolean isPlaza;
 
     private int height;
 
-    private bool isOccupied;
+    private Boolean isOccupied;
+
+    public void Tile() {
+
+    }
 
 }

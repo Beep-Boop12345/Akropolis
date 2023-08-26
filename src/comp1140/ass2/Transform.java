@@ -12,8 +12,9 @@ public class Transform {
     /*Checks if it is being compared with the same Transform
     * @Param Object
     * @Return true if it is a transform with same position and rotation*/
-    private bool isEqual(Obj object) {
+    private Boolean isEqual(Object object) {
 
+        return null;
     }
 
     /*Adds a transform to this transform (component-wise)

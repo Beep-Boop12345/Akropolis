@@ -17,7 +17,7 @@ public class Akropolis {
 
     public static Stack stack;
 
-    public static bool[] scoreVariants = bool[5];
+    public static Boolean[] scoreVariants = new Boolean[5];
 
     public static GameState gameStage;
 

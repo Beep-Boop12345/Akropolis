@@ -8,26 +8,27 @@ public enum GameState {
     PLAYER4MOVE,
     SETUP;
 
-    public GameState () {
+    GameState() {
 
     }
     /*updates GameState from setup or to ended
     * @Param bool has the game begun?
     * @Param bool has game ended?
     * @Return new GameState*/
-    public GameState UpdateState (bool playing, bool finished) {
+    public GameState UpdateState (Boolean playing, Boolean finished) {
 
+        return null;
     }
 
     /*Cycles player Turn
     * @Param current GameState
     * @Return GameState after cycling move*/
-    public GameState cycleMove (gameState) {
+    public GameState cycleMove (GameState currentState) {
 
+        return currentState;
     }
 
-    @Overide
     public String toString() {
-
+        return "Null";
     }
 }

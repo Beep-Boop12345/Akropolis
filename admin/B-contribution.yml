@@ -10,17 +10,17 @@ declaration: >-
 contributions:
   - uid: u7646615
     contribution: 33
-  - uid:
-    contribution:
-  - uid:
-    contribution:
+  - uid: u7683699
+    contribution: 33
+  - uid: u7330006
+    contribution: 33
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members)
 signatures:
   - name: Koen Dubrow
     uid: u7646615
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Oliver Ross
+    uid: u7683699
+  - name: Andrew Nguyen 
+    uid: u7330006
