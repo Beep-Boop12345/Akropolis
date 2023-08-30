@@ -1,34 +1,54 @@
 package comp1140.ass2;
 
 public class HexCoord {
-    private int x;
 
-    private int y;
+    // The horizontal and vertical positions as integers x and y
+    private final int x;
+    private final int y;
 
-    public void HexCoord() {
 
+    /**
+     * Constructor for instances of HexCoordinates
+     * @param x the horizontal displacement
+     * @param y the vertical displacement
+     */
+
+    public HexCoord(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    /*Finds the surronding HexCoords in 6 directions
-    * @Return array of these HexCoords starting from top of the rightmost tiles in anti-clockwise direction*/
-    private HexCoord[] findSurroundings() {
 
-        return new HexCoord[0];
+    /**
+     * Creates a new Hex Coordinate from the resulting addition of two hex coordinates.
+     * @param other HexCoordinate added
+     * @return a new HexCoord which is the resulting addition of the two.
+     */
+    public HexCoord add(HexCoord other) {
+        int sumX = this.x + other.x;
+        int sumY = this.y + other.y;
+        return new HexCoord(sumX,sumY);
     }
 
-    /*Checks if other object is HeCoord equal component-wise
-    * @Param Object compared with
-    * @Return true if it is a HexCoord with same components*/
-    private Boolean isEqual(Object onject) {
+    /**
+     *
+     * @return all adjacent HexCoords that are within the board
+     */
+    public HexCoord[] getSurroundings(){ return null; } // Todo
 
-        return null;
-    }
+    @Override
+    public String toString() { return "(" + x +", " + y; }
 
-    /*Adds another hexCoord component wise
-    * @Param HexCoord to add with
-    * @Return HexCoord sum*/
-    private HexCoord add(HexCoord otherCoord) {
-
-        return null;
+    /**
+     * Method to ensure equals compares objects of HexCoord correctly
+     * @param o the other object of comparison
+     * @return true if the object is identical to the given HexCoord
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HexCoord position = (HexCoord) o;
+        return x == position.x && y == position.y;
     }
 }
