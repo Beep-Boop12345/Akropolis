@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
 import static comp1140.ass2.Akropolis.TILE_POOL;
+import java.util.Arrays;
 
 public class Stack {
 
@@ -14,17 +15,41 @@ public class Stack {
     }
 
     public Stack (String gamestate) {
-        String[] constructionSiteIDs;
-        char[][] constructionSiteIDsArray = formatPieceIDs(isolateConstructionSite(gamestate));
-        constructionSiteIDs = new String[constructionSiteIDsArray.length];
-        for (int i = 0; i < constructionSiteIDsArray.length; i++) {
-            constructionSiteIDs[i] = new String(constructionSiteIDsArray[i]);
+        char[][] constructionSiteIDs = formatPieceIDs(isolateConstructionSite(gamestate));
+        char[][] movedPieceIDs = isolateIDs(isolatePLayers(gamestate));
+        int[] activePieces = new int[constructionSiteIDs.length + movedPieceIDs.length];
+        for (int i = 0; i < constructionSiteIDs.length; i++) {
+            activePieces[i] = (int) Integer.parseInt(new String(constructionSiteIDs[i]));
         }
-        String[] movedPieceIDs;
-        char[][] movedPieceIDsArray = isolateIDs(isolatePLayers(gamestate));
-        movedPieceIDs = new String[movedPieceIDsArray.length];
-        for (int i = 0; i < movedPieceIDsArray.length; i++) {
-            movedPieceIDs[i] = new String(movedPieceIDsArray[i]);
+        for (int i = 0; i < movedPieceIDs.length; i++) {
+            activePieces[i + constructionSiteIDs.length] = (int) Integer.parseInt(new String(movedPieceIDs[i]));
+        }
+        Arrays.sort(activePieces);
+        int playerCount = (int) gamestate.charAt(0);
+        int idCap = 0;
+        switch (playerCount) {
+            case 2:
+                idCap = 37;
+                break;
+            case 3:
+                idCap = 49;
+                break;
+            case 4:
+                idCap = 61;
+                break;
+        }
+        this.pieceCount = idCap - activePieces.length;
+        this.currentPieces = new Piece[pieceCount];
+        int index = 0;
+        for (int i = 1; i <= idCap; i++) {
+            if (Arrays.binarySearch(activePieces, i) < 0) {
+                String id = String.valueOf(i);
+                if (id.length() == 1) {
+                    id = "0" + id;
+                }
+                this.currentPieces[index] = new Piece(id);
+                index++;
+            }
         }
     }
 
@@ -77,6 +102,7 @@ public class Stack {
         }
         return movedPieces;
     }
+
 
     /*Chooses given amount of random tiles for refilling construction site*/
     private Piece[] choose (int numberOfTiles) {
