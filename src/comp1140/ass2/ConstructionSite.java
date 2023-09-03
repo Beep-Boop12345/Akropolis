@@ -9,7 +9,9 @@ public class ConstructionSite {
     public static Piece[] currentPieces;
 
     public ConstructionSite (int size, Piece[] initialPieces) {
-
+        //An exception could go here
+        this.size = size;
+        this.currentPieces = initialPieces;
     }
     /*Constructor from string input*/
     public ConstructionSite (String gamestate) {
@@ -33,6 +35,7 @@ public class ConstructionSite {
         return pieceIDs;
     }
 
+    /*Groups numbers part of the same Piece ID together into a 2 dimensional array*/
     private static char[][] formatPieceIDs (char[] pieceIDs) {
         char[][] formatedPieceIDs = new char[pieceIDs.length/2][2];
         for (int i = 0; i < pieceIDs.length; i++) {
