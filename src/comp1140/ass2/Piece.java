@@ -6,7 +6,7 @@ public class Piece {
 
     private Tile[] tiles = new Tile[3];
 
-    public void Piece() {
+    public Piece(String pieceID) {
 
     }
 
