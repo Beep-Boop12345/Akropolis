@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 public class Move {
     /*The Piece used*/
-    private Piece play;
+    private Piece piece;
 
     /*The player making the move (0 to p-1)*/
     private int player;
@@ -19,4 +19,7 @@ public class Move {
         return this.position;
     }
 
+    public Piece getPiece() {
+        return this.piece;
+    }
 }

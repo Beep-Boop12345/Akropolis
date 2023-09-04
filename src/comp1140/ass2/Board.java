@@ -43,11 +43,40 @@ public class Board {
             return;
         }
 
+
     }
 
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
-        tilePosition[1] = moveToMake.getPosition().getPos();
+        HexCoord basePos = moveToMake.getPosition().getPos();
+        tilePosition[0] = basePos;
+        switch (moveToMake.getPosition().getRot()) {
+            case DEG_0:
+                tilePosition[1] = basePos.add(new HexCoord(0,1));
+                tilePosition[2] = basePos.add(new HexCoord(1,0));
+                break;
+            case DEG_60:
+                tilePosition[1] = basePos.add(new HexCoord(1,0));
+                tilePosition[2] = basePos.add(new HexCoord(1,-1));
+                break;
+            case DEG_120:
+                tilePosition[1] = basePos.add(new HexCoord(1,-1));
+                tilePosition[2] = basePos.add(new HexCoord(0,-1));
+                break;
+            case DEG_180:
+                tilePosition[1] = basePos.add(new HexCoord(0,-1));
+                tilePosition[2] = basePos.add(new HexCoord(-1,-1));
+                break;
+            case DEG_240:
+                tilePosition[1] = basePos.add(new HexCoord(-1,-1));
+                tilePosition[2] = basePos.add(new HexCoord(-1,0));
+                break;
+            case DEG_300:
+                tilePosition[1] = basePos.add(new HexCoord(-1,0));
+                tilePosition[2] = basePos.add(new HexCoord(0,1));
+                break;
+        }
+        return tilePosition;
     }
 
     /*Decides if piece can be placed legally
