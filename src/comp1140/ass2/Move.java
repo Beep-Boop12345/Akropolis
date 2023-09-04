@@ -6,7 +6,7 @@ public class Move {
 
     private int cost;
 
-    public void Move() {
+    public Move(String moveString) {
 
     }
 }
