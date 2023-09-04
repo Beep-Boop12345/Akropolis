@@ -4,8 +4,8 @@ public class AI extends Player{
 
     private int lookAhead;
 
-    public void AI() {
-
+    AI(String playerString) {
+        super(playerString);
     }
 
     /*chooses the most optimal move (by its calculations)

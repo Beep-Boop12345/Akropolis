@@ -48,6 +48,7 @@ public class Board {
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
         tilePosition[1] = moveToMake.getPosition().getPos();
+        return tilePosition; // Error here so I added a return
     }
 
     /*Decides if piece can be placed legally
