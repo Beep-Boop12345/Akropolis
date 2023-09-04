@@ -16,7 +16,7 @@ public class Board {
         String[] movesStringForm = isolateMoves(gamestate);
         Move[] moves = new Move[movesStringForm.length];
         for (int i = 0; i < movesStringForm.length; i++) {
-            moves[i] = new Move(movesStringForm[i]);
+            moves[i] = new Move(this.player,movesStringForm[i]);
         }
     }
 
@@ -32,12 +32,15 @@ public class Board {
     /*Places piece on Board incorporating the piece tiles into surfaceTiles if possible
     * @Param move*/
     private void placePiece(Move moveToMake){
+        if (! isValidPlacement(moveToMake)) {
+            return;
+        }
 
     }
 
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
-    private Boolean isValidPlacement(Piece pieceToPlace) {
+    private Boolean isValidPlacement(Move moveToMake) {
         return true;
     }
 

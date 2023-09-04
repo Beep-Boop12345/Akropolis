@@ -12,5 +12,11 @@ public class Tile {
     public void Tile() {
 
     }
+    private int getHeight (){
+        return this.height;
+    }
 
+    private void setHeight(int height) {
+        this.height = height;
+    }
 }
