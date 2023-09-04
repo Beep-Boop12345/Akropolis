@@ -14,4 +14,8 @@ public class Move {
     public Move(int player, String moveString) {
 
     }
+
+    public Transform getPosition () {
+        return this.position;
+    }
 }

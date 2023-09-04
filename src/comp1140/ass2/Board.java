@@ -1,7 +1,10 @@
 package comp1140.ass2;
 
+import static comp1140.ass2.District.HOUSES;
+
 public class Board {
 
+    /*100 100 is origin*/
     private Tile[][] surfaceTiles = new Tile[200][200];
 
     /*Player ID 0 to P-1 inclusive, P is number of players*/
@@ -18,6 +21,10 @@ public class Board {
         for (int i = 0; i < movesStringForm.length; i++) {
             moves[i] = new Move(this.player,movesStringForm[i]);
         }
+        this.surfaceTiles[100][100] = new Tile(District.HOUSES, true);
+        this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);
+        this.surfaceTiles[100][101] = new Tile(District.QUARRY, false);
+        this.surfaceTiles[99][99] = new Tile(District.QUARRY, false);
     }
 
     /*Isolates the part of the game string pertaining only to the moves made by corresponding player*/
@@ -35,6 +42,12 @@ public class Board {
         if (! isValidPlacement(moveToMake)) {
             return;
         }
+
+    }
+
+    private Transform[] findTilePosition (Move moveToMake) {
+        Transform[] tilePosition = new Transform[3];
+        tilePosition[1] = moveToMake.getPosition();
 
     }
 

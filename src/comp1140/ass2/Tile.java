@@ -9,7 +9,7 @@ public class Tile {
 
     private Boolean isOccupied;
 
-    public void Tile() {
+    public Tile(District districtType, Boolean isPlaza) {
 
     }
     private int getHeight (){
