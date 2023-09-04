@@ -6,8 +6,8 @@ public class MovablePiece {
     /*The back end piece that this represents*/
     private Piece piece;
 
-    private void MovablePiece(Piece piece) {
-
+    private MovablePiece(Piece piece) {
+        this.piece = piece;
     }
 
     private void onMousedPressed() {
