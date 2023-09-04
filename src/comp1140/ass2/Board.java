@@ -25,6 +25,9 @@ public class Board {
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false);
+        for (int i = 0; i < moves.length; i++) {
+            placePiece(moves[i]);
+        }
     }
 
     /*Isolates the part of the game string pertaining only to the moves made by corresponding player*/
@@ -42,8 +45,14 @@ public class Board {
         if (! isValidPlacement(moveToMake)) {
             return;
         }
-
-
+        HexCoord[] tilePositions = findTilePosition(moveToMake);
+        Tile[] tiles = moveToMake.getPiece().getTiles();
+        for (int i = 0; i < 3; i++) {
+            if (isTile(tilePositions[i])) {
+                tiles[i].setHeight(getTile(tilePositions[i]).getHeight() + 1);
+            }
+            this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
+        }
     }
 
     private HexCoord[] findTilePosition (Move moveToMake) {
