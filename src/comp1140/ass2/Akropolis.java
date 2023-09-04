@@ -337,4 +337,8 @@ public class Akropolis {
     public static String generateAIMove(String gameState) {
         return ""; // FIXME Task 22
     }
+
+    public static Stack getStack() {
+        return stack;
+    }
 }

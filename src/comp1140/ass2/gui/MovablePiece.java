@@ -4,9 +4,9 @@ import comp1140.ass2.Piece;
 
 public class MovablePiece {
     /*The back end piece that this represents*/
-    private Piece piece;
+    private final Piece piece;
 
-    private MovablePiece(Piece piece) {
+    public MovablePiece(Piece piece) {
         this.piece = piece;
     }
 
