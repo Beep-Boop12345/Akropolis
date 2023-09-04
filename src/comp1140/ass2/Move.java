@@ -18,4 +18,5 @@ public class Move {
     public Transform getPosition () {
         return this.position;
     }
+
 }

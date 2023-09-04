@@ -45,10 +45,9 @@ public class Board {
 
     }
 
-    private Transform[] findTilePosition (Move moveToMake) {
-        Transform[] tilePosition = new Transform[3];
-        tilePosition[1] = moveToMake.getPosition();
-
+    private HexCoord[] findTilePosition (Move moveToMake) {
+        HexCoord[] tilePosition = new HexCoord[3];
+        tilePosition[1] = moveToMake.getPosition().getPos();
     }
 
     /*Decides if piece can be placed legally

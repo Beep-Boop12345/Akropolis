@@ -22,4 +22,12 @@ public class Transform {
     private void add(Transform transform) {
 
     }
+
+    public HexCoord getPos() {
+        return pos;
+    }
+
+    public Rotation getRot() {
+        return rot;
+    }
 }
