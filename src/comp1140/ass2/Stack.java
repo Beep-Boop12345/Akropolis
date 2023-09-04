@@ -1,6 +1,5 @@
 package comp1140.ass2;
 
-import static comp1140.ass2.Akropolis.TILE_POOL;
 import java.util.Arrays;
 
 public class Stack {
@@ -10,8 +9,8 @@ public class Stack {
     private static Piece[] currentPieces;
 
     public Stack (Piece[] pieces){
-        this.pieceCount = pieces.length;
-        this.currentPieces = pieces;
+        pieceCount = pieces.length;
+        currentPieces = pieces;
     }
 
     public Stack (String gamestate) {
@@ -19,13 +18,13 @@ public class Stack {
         char[][] movedPieceIDs = isolateIDs(isolatePLayers(gamestate));
         int[] activePieces = new int[constructionSiteIDs.length + movedPieceIDs.length];
         for (int i = 0; i < constructionSiteIDs.length; i++) {
-            activePieces[i] = (int) Integer.parseInt(new String(constructionSiteIDs[i]));
+            activePieces[i] = Integer.parseInt(new String(constructionSiteIDs[i]));
         }
         for (int i = 0; i < movedPieceIDs.length; i++) {
-            activePieces[i + constructionSiteIDs.length] = (int) Integer.parseInt(new String(movedPieceIDs[i]));
+            activePieces[i + constructionSiteIDs.length] = Integer.parseInt(new String(movedPieceIDs[i]));
         }
         Arrays.sort(activePieces);
-        int playerCount = (int) gamestate.charAt(0);
+        int playerCount = gamestate.charAt(0);
         int idCap = 0;
         switch (playerCount) {
             case 2:
@@ -38,8 +37,8 @@ public class Stack {
                 idCap = 61;
                 break;
         }
-        this.pieceCount = idCap - activePieces.length;
-        this.currentPieces = new Piece[pieceCount];
+        pieceCount = idCap - activePieces.length;
+        currentPieces = new Piece[pieceCount];
         int index = 0;
         for (int i = 1; i <= idCap; i++) {
             if (Arrays.binarySearch(activePieces, i) < 0) {
@@ -47,7 +46,7 @@ public class Stack {
                 if (id.length() == 1) {
                     id = "0" + id;
                 }
-                this.currentPieces[index] = new Piece(id);
+                currentPieces[index] = new Piece(id);
                 index++;
             }
         }
@@ -108,5 +107,13 @@ public class Stack {
     private Piece[] choose (int numberOfTiles) {
 
         return new Piece[0];
+    }
+
+    public static int getPieceCount() {
+        return pieceCount;
+    }
+
+    public static Piece[] getCurrentPieces() {
+        return currentPieces;
     }
 }

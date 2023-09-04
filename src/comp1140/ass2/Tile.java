@@ -12,11 +12,11 @@ public class Tile {
     public Tile(District districtType, Boolean isPlaza) {
 
     }
-    private int getHeight (){
+    public int getHeight (){
         return this.height;
     }
 
-    private void setHeight(int height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 }

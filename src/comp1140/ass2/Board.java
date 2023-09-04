@@ -25,6 +25,9 @@ public class Board {
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false);
+        for (int i = 0; i < moves.length; i++) {
+            placePiece(moves[i]);
+        }
     }
 
     /*Isolates the part of the game string pertaining only to the moves made by corresponding player*/
@@ -42,13 +45,47 @@ public class Board {
         if (! isValidPlacement(moveToMake)) {
             return;
         }
-
+        HexCoord[] tilePositions = findTilePosition(moveToMake);
+        Tile[] tiles = moveToMake.getPiece().getTiles();
+        for (int i = 0; i < 3; i++) {
+            if (isTile(tilePositions[i])) {
+                tiles[i].setHeight(getTile(tilePositions[i]).getHeight() + 1);
+            }
+            this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
+        }
     }
 
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
-        tilePosition[1] = moveToMake.getPosition().getPos();
-        return tilePosition; // Error here so I added a return
+        HexCoord basePos = moveToMake.getPosition().getPos();
+        tilePosition[0] = basePos;
+        switch (moveToMake.getPosition().getRot()) {
+            case DEG_0:
+                tilePosition[1] = basePos.add(new HexCoord(0,1));
+                tilePosition[2] = basePos.add(new HexCoord(1,0));
+                break;
+            case DEG_60:
+                tilePosition[1] = basePos.add(new HexCoord(1,0));
+                tilePosition[2] = basePos.add(new HexCoord(1,-1));
+                break;
+            case DEG_120:
+                tilePosition[1] = basePos.add(new HexCoord(1,-1));
+                tilePosition[2] = basePos.add(new HexCoord(0,-1));
+                break;
+            case DEG_180:
+                tilePosition[1] = basePos.add(new HexCoord(0,-1));
+                tilePosition[2] = basePos.add(new HexCoord(-1,-1));
+                break;
+            case DEG_240:
+                tilePosition[1] = basePos.add(new HexCoord(-1,-1));
+                tilePosition[2] = basePos.add(new HexCoord(-1,0));
+                break;
+            case DEG_300:
+                tilePosition[1] = basePos.add(new HexCoord(-1,0));
+                tilePosition[2] = basePos.add(new HexCoord(0,1));
+                break;
+        }
+        return tilePosition;
     }
 
     /*Decides if piece can be placed legally
