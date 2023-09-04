@@ -7,7 +7,7 @@ public class PurchasablePiece {
     private Piece piece;
 
     private PurchasablePiece(Piece piece) {
-
+        this.piece = piece;
     }
 
     /*How the constructionSite representation responds to a click*/

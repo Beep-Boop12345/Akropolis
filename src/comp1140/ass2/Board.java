@@ -19,7 +19,7 @@ public class Board {
         String[] movesStringForm = isolateMoves(gamestate);
         Move[] moves = new Move[movesStringForm.length];
         for (int i = 0; i < movesStringForm.length; i++) {
-            moves[i] = new Move(this.player,movesStringForm[i]);
+            moves[i] = new Move(movesStringForm[i]);
         }
         this.surfaceTiles[100][100] = new Tile(District.HOUSES, true);
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);

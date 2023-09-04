@@ -5,7 +5,7 @@ public class Transform {
 
     private Rotation rot;
 
-    public void Transform() {
+    Transform(String transformString) {
 
     }
 

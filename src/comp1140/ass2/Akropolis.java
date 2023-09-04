@@ -341,4 +341,36 @@ public class Akropolis {
     public static Stack getStack() {
         return stack;
     }
+
+    public static Piece[] createPieceArray(int numberOfPlayers) {
+
+        String currentPool = TILE_POOL;
+        Piece[] pieceArray = new Piece[pieceCount];
+
+        for (int i = 1; i < numberOfPlayers + 1; i++) {
+            String splitPoint  = Integer.toString(i + 1) + ":";
+            String[] splitPool = currentPool.split(splitPoint);
+            currentPool = splitPool[0];
+            for (int j = 0; j < (currentPool.length()/5); j++) {
+                String subString = currentPool.substring((j*5), (j*5) + 5);
+                String pieceId = subString.substring(0,2);
+                int pieceIndex = Integer.parseInt(pieceId);
+
+                pieceArray[pieceIndex] = new Piece(subString);
+            }
+            System.out.println(currentPool);
+            currentPool = splitPool[1];
+            System.out.println(currentPool);
+        }
+
+        return new Piece[0];
+    }
+
+    public static void main(String[] args) {
+        createPieceArray(3);
+    }
+    public static Piece getPieceFromId(int pieceId) {
+        return null;
+    }
+
 }
