@@ -35,8 +35,20 @@ public class Akropolis {
      * @return true is the move string is well-formed, false otherwise.
      */
     public static boolean isMoveStringWellFormed(String move) {
-        return false; // FIXME Task 4
+        // General pattern of the moveString
+        String pattern = "\\d{2}[NS]\\d{2}[EW]\\d{2}R[0-5]";
+
+        // Check if the moveString contains "N00" or "W00"
+        boolean hasInvalidCharacters = move.contains("N00") || move.contains("W00");
+
+        // Check if the tile is valid
+        boolean validPiece = move.startsWith("00"); // todo
+
+        return move.matches(pattern) && !hasInvalidCharacters && !validPiece;
     }
+
+
+
 
 
     /**

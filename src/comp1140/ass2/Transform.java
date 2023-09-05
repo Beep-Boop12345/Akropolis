@@ -26,7 +26,7 @@ public class Transform {
         String positionPart = parts[0].substring(idLength); // Skip the ID part
         String rotationPart = parts[1];
 
-        // Parse the positionPart to get the hexcoord
+        // Parse the positionPart to get the HexCoord
         int xOffset = 0;
         int yOffset = 0;
 
