@@ -9,33 +9,31 @@ public class Board {
 
     /*Player ID 0 to P-1 inclusive, P is number of players*/
     private int player;
+
+    /*Constructs board form player ID and tiles. Trusts that the tile arrangement is possible.*/
     public Board(int player, Tile[][] surfaceTiles) {
         this.player = player;
         this.surfaceTiles = surfaceTiles;
     }
 
-    public Board(int player, String gamestate) {
+    /*Constructs board from playerID and moves applied to it*/
+    public Board(int player, String movesString) {
         this.player = player;
-        String[] movesStringForm = isolateMoves(gamestate);
-        Move[] moves = new Move[movesStringForm.length];
-        for (int i = 0; i < movesStringForm.length; i++) {
-            moves[i] = new Move(movesStringForm[i]);
-        }
+        Move[] move = movesFromString(movesString);
         this.surfaceTiles[100][100] = new Tile(District.HOUSES, true);
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false);
-        for (int i = 0; i < moves.length; i++) {
-            placePiece(moves[i]);
+        for (int i = 0; i < move.length; i++) {
+            placePiece(move[i]);
         }
     }
 
     /*Isolates the part of the game string pertaining only to the moves made by corresponding player*/
-    private String[] isolateMoves (String gamestate) {
-        String playerstate = gamestate.split(";")[1+player];
-        String[] moves = new String[Math.floorDiv( playerstate.length() - 4,10)];
+    private Move[] movesFromString (String moveString) {
+        Move[] moves = new Move[Math.floorDiv( moveString.length(),10)];
         for (int i = 1; i < moves.length; i++) {
-            moves[i] = playerstate.substring(i*10+4,14);
+            moves[i] = new Move(moveString.substring(i*10,10));
         }
         return moves;
     }
