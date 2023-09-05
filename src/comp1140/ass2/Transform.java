@@ -1,13 +1,64 @@
 package comp1140.ass2;
 
+
 public class Transform {
-    private HexCoord pos;
+    private final HexCoord pos;
 
-    private Rotation rot;
+    private final Rotation rot;
 
-    Transform(String transformString) {
 
+    public Transform(HexCoord translation, Rotation angle) {
+        this.pos = translation;
+        this.rot = angle;
     }
+    /**
+     * translates a moveString into a transform object
+     * ignores the pieceID (current tile transform is applied to)
+     */
+    public Transform(String moveString) {
+        // Define the length of the ID part
+        int idLength = 2; // Change this to the actual length of the ID if needed
+
+        // Split the moveString into parts using "R" as the delimiter
+        String[] parts = moveString.split("R");
+
+        // Extract the position and rotation parts
+        String positionPart = parts[0].substring(idLength); // Skip the ID part
+        String rotationPart = parts[1];
+
+        // Parse the positionPart to get the hexcoord
+        int xOffset = 0;
+        int yOffset = 0;
+
+        if (positionPart.contains("N")) {
+            int nIndex = positionPart.indexOf("N") + 1;
+            yOffset = Integer.parseInt(positionPart.substring(nIndex, nIndex + 2));
+        } else if (positionPart.contains("S")) {
+            int sIndex = positionPart.indexOf("S") + 1;
+            yOffset = -Integer.parseInt(positionPart.substring(sIndex, sIndex + 2));
+        }
+
+        if (positionPart.contains("E")) {
+            int eIndex = positionPart.indexOf("E") + 1;
+            xOffset = Integer.parseInt(positionPart.substring(eIndex, eIndex + 2));
+        } else if (positionPart.contains("W")) {
+            int wIndex = positionPart.indexOf("W") + 1;
+            xOffset = -Integer.parseInt(positionPart.substring(wIndex, wIndex + 2));
+        }
+
+        // Create the HexCoord
+        this.pos = new HexCoord(xOffset, yOffset);
+
+        // Parse the rotation part
+        int rotationIndex = Integer.parseInt(rotationPart);
+
+        // Create the rotation
+        this.rot = Rotation.values()[rotationIndex];
+    }
+
+
+
+
 
     /*Checks if it is being compared with the same Transform
     * @Param Object
@@ -30,4 +81,26 @@ public class Transform {
     public Rotation getRot() {
         return rot;
     }
+
+    @Override
+    public String toString() { return pos.toString() + " " + rot.toString(); }
+
+
+    // Main method for testing
+    public static void main(String[] args) {
+        // Test move strings
+        String moveString1 = "02S01E03R5";
+        String moveString2 = "01N02W01R2";
+
+        // Create Transform objects and print them using toString
+        Transform transform1 = new Transform(moveString1);
+        Transform transform2 = new Transform(moveString2);
+
+        System.out.println("Move String 1: " + moveString1);
+        System.out.println(transform1);
+
+        System.out.println("\nMove String 2: " + moveString2);
+        System.out.println(transform2);
+    }
+
 }

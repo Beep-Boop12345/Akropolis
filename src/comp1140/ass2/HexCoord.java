@@ -37,7 +37,7 @@ public class HexCoord {
     public HexCoord[] getSurroundings(){ return null; } // Todo
 
     @Override
-    public String toString() { return "(" + x +", " + y; }
+    public String toString() { return "Position: " + "(" + x +", " + y + ")"; }
 
     /**
      * Method to ensure equals compares objects of HexCoord correctly

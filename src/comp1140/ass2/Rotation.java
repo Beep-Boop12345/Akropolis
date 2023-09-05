@@ -12,7 +12,8 @@ public enum Rotation {
     public final int value;
 
     /**
-     * Constructor: create a new instance of Angle class
+     * Constructor: create a new instance of Rotation class
+     * Rotation is clockwise
      * @param angle of rotation
      */
     Rotation(int angle){
