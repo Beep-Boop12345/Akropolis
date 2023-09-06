@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 public enum Rotation {
     DEG_0(0),
-    DEG_60(0),
+    DEG_60(60),
     DEG_120(120),
     DEG_180(180),
     DEG_240(240),
