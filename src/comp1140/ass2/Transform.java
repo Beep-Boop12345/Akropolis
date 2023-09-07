@@ -12,7 +12,7 @@ public class Transform {
         this.rot = angle;
     }
     /**
-     * translates a moveString into a transform object
+     * Translates a moveString into a transform object
      * ignores the pieceID (current tile transform is applied to)
      */
     public Transform(String moveString) {
