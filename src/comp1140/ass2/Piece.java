@@ -20,19 +20,24 @@ public class Piece {
 
     // Need to know number of players & most recent moveString
     public Piece(String pieceID) {
-        String TILE_POOL = Akropolis.TILE_POOL;
-        int startIndex = TILE_POOL.indexOf(pieceID);
+        String globalTilePool = Akropolis.TILE_POOL;
+        String[] tileSections = globalTilePool.split(":");
 
-        String tileInfo = TILE_POOL.substring(startIndex + 2, startIndex + 5);
-        char[] tileChars = tileInfo.toCharArray();
+        int numberOfPlayers = Akropolis.numberOfPlayers;
+        String playerSpecificTilePool = tileSections[numberOfPlayers - 2];
+
+        int startIndex = playerSpecificTilePool.indexOf(pieceID);
+
+        String tileInfo = playerSpecificTilePool.substring(startIndex + 2, startIndex + 5);
+        char[] tileCharacters = tileInfo.toCharArray();
 
         for (int i = 0; i < 3; i++) {
-            this.tiles[i] = new Tile(tileChars[i]);
+            this.tiles[i] = new Tile(tileCharacters[i]);
         }
 
-        this.position = null; // todo
-
+        this.position = null; // todo: Requires information from moveString
     }
+
 
     /*move the piece by replacing position with you Transform
 
