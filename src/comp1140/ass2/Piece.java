@@ -18,7 +18,7 @@ public class Piece {
     // and the pool string to deduce information about the piece
 
 
-    // Need to know number of players
+    // Need to know number of players & most recent moveString
     public Piece(String pieceID) {
         String TILE_POOL = Akropolis.TILE_POOL;
         int startIndex = TILE_POOL.indexOf(pieceID);
