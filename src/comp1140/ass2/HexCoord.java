@@ -6,7 +6,6 @@ public class HexCoord {
     private final int x;
     private final int y;
 
-
     /**
      * Constructor for instances of HexCoordinates
      * @param x the horizontal displacement

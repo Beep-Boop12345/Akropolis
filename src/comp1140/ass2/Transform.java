@@ -29,40 +29,7 @@ public class Transform {
 
         // Create the rotation
         this.rot = Rotation.values()[rotationIndex];
-
-        /*// Parse the positionPart to get the HexCoord
-        int xOffset = 0;
-        int yOffset = 0;
-
-        if (positionPart.contains("N")) {
-            int nIndex = positionPart.indexOf("N") + 1;
-            yOffset = Integer.parseInt(positionPart.substring(nIndex, nIndex + 2));
-        } else if (positionPart.contains("S")) {
-            int sIndex = positionPart.indexOf("S") + 1;
-            yOffset = -Integer.parseInt(positionPart.substring(sIndex, sIndex + 2));
-        }
-
-        if (positionPart.contains("E")) {
-            int eIndex = positionPart.indexOf("E") + 1;
-            xOffset = Integer.parseInt(positionPart.substring(eIndex, eIndex + 2));
-        } else if (positionPart.contains("W")) {
-            int wIndex = positionPart.indexOf("W") + 1;
-            xOffset = -Integer.parseInt(positionPart.substring(wIndex, wIndex + 2));
-        }
-
-        // Create the HexCoord
-        this.pos = new HexCoord(xOffset, yOffset);
-
-        // Parse the rotation part
-        int rotationIndex = Integer.parseInt(rotationPart);
-
-        // Create the rotation
-        this.rot = Rotation.values()[rotationIndex];*/
     }
-
-
-
-
 
     /*Checks if it is being compared with the same Transform
     * @Param Object
@@ -106,5 +73,4 @@ public class Transform {
         System.out.println("\nMove String 2: " + moveString2);
         System.out.println(transform2);
     }
-
 }

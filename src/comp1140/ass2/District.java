@@ -27,8 +27,6 @@ public enum District {
         };
     }
 
-
-
     /**
      * Returns a string representation of the district.
      *
@@ -38,6 +36,4 @@ public enum District {
     public String toString() {
         return "District: " + displayName;
     }
-
-
 }
