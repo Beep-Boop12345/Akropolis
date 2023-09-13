@@ -85,9 +85,40 @@ public class Akropolis {
      * @param gameState a state string.
      * @return true if the state string is well-formed, false otherwise.
      */
+    // Dependency on isSettingsStringWellFormed, isSharedStringWellFormed, and isPlayerStringWellFormed
     public static boolean isStateStringWellFormed(String gameState) {
-        return false; // FIXME Task 5
+        // Parse the gameState string into its components
+        String[] components = gameState.split(";");
+        if (components.length < 4) { return false; }
+
+        // Check settings string
+        String settings = components[0];
+        if (!isSettingsStringWellFormed(settings)) { return false; }
+
+        // Check shared string
+        String shared = components[1];
+        if (!isSharedStringWellFormed(shared)) { return false; }
+
+        // Check all player strings
+        for (int i = 2; i < components.length; i++) {
+            String playerString = components[i];
+            if (!isPlayerStringWellFormed(playerString)) {
+                return false;
+            }
+        }
+
+        // todo isSettingStringWellFormed, isSharedStringWellFormed,
+        //  isPlayerStringWellFormed, duplicateTiles, playableTilesForPlayerCount
+
+        return true;
     }
+
+    // Helper functions for Task 5
+    public static boolean isSettingsStringWellFormed(String settingsString) { return false; } // todo
+    public static boolean isSharedStringWellFormed(String sharedString) { return false; } // todo
+
+    public static boolean isPlayerStringWellFormed(String playerString) { return false; } //todo
+
 
     /**
      * Given a state string, checks whether the game has ended.
