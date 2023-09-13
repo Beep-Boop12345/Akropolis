@@ -113,7 +113,14 @@ public class Akropolis {
      * @return the height of the tile for the player at the given position.
      */
     public static int heightAt(String gameState, int playerId, String position) {
-        return -1; // FIXME Task 8
+        String playerString;
+        playerString = gameState.split(";")[playerId + 2];
+        Player player = new Player(playerString);
+        Tile tile = player.getBoard().getTile(new HexCoord(position));
+        if (tile == null) {
+            return 0;
+        }
+        return tile.getHeight() + 1;
     }
 
     /**
