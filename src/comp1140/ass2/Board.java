@@ -32,8 +32,8 @@ public class Board {
     /*Isolates the part of the game string pertaining only to the moves made by corresponding player*/
     private Move[] movesFromString (String moveString) {
         Move[] moves = new Move[Math.floorDiv( moveString.length(),10)];
-        for (int i = 1; i < moves.length; i++) {
-            moves[i] = new Move(moveString.substring(i*10,10));
+        for (int i = 0; i < moves.length; i++) {
+            moves[i] = new Move(moveString.substring(i*10,i*10+10));
         }
         return moves;
     }
@@ -46,7 +46,7 @@ public class Board {
         HexCoord[] tilePositions = findTilePosition(moveToMake);
         Tile[] tiles = moveToMake.getPiece().getTiles();
         for (int i = 0; i < 3; i++) {
-            if (isTile(tilePositions[i])) {
+            if (getTile(tilePositions[i]) != null) {
                 tiles[i].setHeight(getTile(tilePositions[i]).getHeight() + 1);
             }
             this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
@@ -57,29 +57,34 @@ public class Board {
         HexCoord[] tilePosition = new HexCoord[3];
         HexCoord basePos = moveToMake.getPosition().getPos();
         tilePosition[0] = basePos;
+        /*Offset to account for hexagonal grid, rotations work differently for odd columns*/
+        int offset = 0;
+        if (Math.abs(basePos.getX()) % 2 == 1) {
+            offset = 1;
+        }
         switch (moveToMake.getPosition().getRot()) {
             case DEG_0:
                 tilePosition[1] = basePos.add(new HexCoord(0,1));
-                tilePosition[2] = basePos.add(new HexCoord(1,0));
+                tilePosition[2] = basePos.add(new HexCoord(1,0+offset));
                 break;
             case DEG_60:
-                tilePosition[1] = basePos.add(new HexCoord(1,0));
-                tilePosition[2] = basePos.add(new HexCoord(1,-1));
+                tilePosition[1] = basePos.add(new HexCoord(1,0+offset));
+                tilePosition[2] = basePos.add(new HexCoord(1,-1+offset));
                 break;
             case DEG_120:
-                tilePosition[1] = basePos.add(new HexCoord(1,-1));
+                tilePosition[1] = basePos.add(new HexCoord(1,-1+offset));
                 tilePosition[2] = basePos.add(new HexCoord(0,-1));
                 break;
             case DEG_180:
                 tilePosition[1] = basePos.add(new HexCoord(0,-1));
-                tilePosition[2] = basePos.add(new HexCoord(-1,-1));
+                tilePosition[2] = basePos.add(new HexCoord(-1,-1+offset));
                 break;
             case DEG_240:
-                tilePosition[1] = basePos.add(new HexCoord(-1,-1));
-                tilePosition[2] = basePos.add(new HexCoord(-1,0));
+                tilePosition[1] = basePos.add(new HexCoord(-1,-1+offset));
+                tilePosition[2] = basePos.add(new HexCoord(-1,0+offset));
                 break;
             case DEG_300:
-                tilePosition[1] = basePos.add(new HexCoord(-1,0));
+                tilePosition[1] = basePos.add(new HexCoord(-1,0+offset));
                 tilePosition[2] = basePos.add(new HexCoord(0,1));
                 break;
         }
@@ -89,15 +94,19 @@ public class Board {
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
     private Boolean isValidPlacement(Move moveToMake) {
+        if (moveToMake == null) {
+            return false;
+        }
+        if (moveToMake.getPiece() == null) {
+            return false;
+        }
         return true;
     }
 
     /*Decides if there is a tile at a given position
     *@Param HexCoord
      */
-    private Boolean isTile(HexCoord position) {
-        return true;
-    }
+
 
     /*Returns tile at given position
     * @Param HexCoord*/

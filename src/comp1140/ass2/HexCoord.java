@@ -19,17 +19,17 @@ public class HexCoord {
     }
 
     public HexCoord(String position) {
-        int absX = Integer.parseInt(position.substring(1,2));
-        int absY = Integer.parseInt(position.substring(4,5));
+        int absX = Integer.parseInt(position.substring(4,6));
+        int absY = Integer.parseInt(position.substring(1,3));
         if (position.charAt(0) == 'N') {
-            this.x = absX;
-        } else {
-            this.x = -1*absX;
-        }
-        if (position.charAt(3) == 'E') {
             this.y = absY;
         } else {
             this.y = -1*absY;
+        }
+        if (position.charAt(3) == 'E') {
+            this.x = absX;
+        } else {
+            this.x = -1*absX;
         }
     }
 

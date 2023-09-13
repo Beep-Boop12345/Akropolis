@@ -17,7 +17,7 @@ public class Move {
     }
     public Move(String moveString) {
         String pieceId = moveString.substring(0, 2);
-        this.piece = Akropolis.getPieceFromId(Integer.parseInt(pieceId));
+        this.piece = new Piece (pieceId);
         String transformString = moveString.substring(2);
         this.position = new Transform(transformString);
     }
@@ -28,5 +28,10 @@ public class Move {
 
     public Piece getPiece() {
         return this.piece;
+    }
+
+    @Override
+    public String toString() {
+       return position.toString();
     }
 }
