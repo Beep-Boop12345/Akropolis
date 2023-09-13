@@ -10,6 +10,7 @@ public class VisualConstructionSite {
     public static ConstructionSite site;
 
     private void visualConstructionSite (ConstructionSite site){
+        this.site = site;
 
     }
     /*How the constructionSite representation responds to a click*/

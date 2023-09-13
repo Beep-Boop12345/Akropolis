@@ -8,6 +8,7 @@ public class VisualBoard {
 
     /*Backend board that this visual board corresponds to*/
     private VisualBoard(Board board) {
+        this.board = board;
 
     }
 
