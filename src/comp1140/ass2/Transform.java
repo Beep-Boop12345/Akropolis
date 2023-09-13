@@ -21,7 +21,7 @@ public class Transform {
         String[] parts = transformString.split("R");
 
         // Extract the position and rotation parts
-        String positionPart = parts[0]; // Skip the ID part
+        String positionPart = parts[0].substring(2); // Skip the ID part
         String rotationPart = parts[1];
         this.pos = new HexCoord(positionPart);
         // Parse the rotation part
@@ -72,5 +72,6 @@ public class Transform {
 
         System.out.println("\nMove String 2: " + moveString2);
         System.out.println(transform2);
+
     }
 }

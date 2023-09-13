@@ -35,17 +35,41 @@ public class Akropolis {
      * @return true is the move string is well-formed, false otherwise.
      */
     public static boolean isMoveStringWellFormed(String move) {
+        if (move.length() < 10) { return false; }
         // General pattern of the moveString
         String pattern = "\\d{2}[NS]\\d{2}[EW]\\d{2}R[0-5]";
 
         // Check if the moveString contains "N00" or "W00"
         boolean hasInvalidCharacters = move.contains("N00") || move.contains("W00");
 
-        // Check if the tile is valid
-        boolean validPiece = move.startsWith("00"); // todo
+        // Set maxPieceID based on numberOfPlayers
+        int maxPieceID;
+        switch (numberOfPlayers) {
+            case 2:
+                maxPieceID = 37;
+                break;
+            case 3:
+                maxPieceID = 49;
+                break;
+            default:
+                maxPieceID = 61;
+        }
 
-        return move.matches(pattern) && !hasInvalidCharacters && !validPiece;
+        // Get the pieceID
+        int pieceID;
+        try {
+            pieceID = Integer.parseInt(move.substring(0, 2));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+
+        boolean validPieceID = pieceID > 0 && pieceID <= maxPieceID;
+
+
+        return move.matches(pattern) && !hasInvalidCharacters && validPieceID;
     }
+
 
 
 
