@@ -54,9 +54,55 @@ public class Tile {
         this.height = height;
     }
 
+    public District getDistrictType() {
+        return districtType;
+    }
+
     @Override
     public String toString() {
         return "Tile( " + districtType + " | isPlaza: " + isPlaza + " | height: " + height + " | isOccupied: " + isOccupied + ")";
+    }
+
+    public char toStringRep() {
+        switch (districtType) {
+            case HOUSES:
+                if (isPlaza) {
+                    return 'H';
+                } else {
+                    return 'h';
+                }
+            case MARKETS:
+                if (isPlaza) {
+                    return 'M';
+                } else {
+                    return 'm';
+                }
+            case GARDENS:
+                if (isPlaza) {
+                    return 'G';
+                } else {
+                    return 'g';
+                }
+            case BARRACKS:
+                if (isPlaza) {
+                    return 'B';
+                } else {
+                    return 'b';
+                }
+            case TEMPLES:
+                if (isPlaza) {
+                    return 'T';
+                } else {
+                    return 't';
+                }
+            case QUARRY:
+                if (isPlaza) {
+                    return 'Q';
+                } else {
+                    return 'q';
+                }
+        }
+        return '0';
     }
 
     //Constructor testing code

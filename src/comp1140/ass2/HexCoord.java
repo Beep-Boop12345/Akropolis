@@ -18,6 +18,20 @@ public class HexCoord {
         this.y = y;
     }
 
+    public HexCoord(String position) {
+        int absX = Integer.parseInt(position.substring(1,2));
+        int absY = Integer.parseInt(position.substring(4,5));
+        if (position.charAt(0) == 'N') {
+            this.x = absX;
+        } else {
+            this.x = -1*absX;
+        }
+        if (position.charAt(3) == 'E') {
+            this.y = absY;
+        } else {
+            this.y = -1*absY;
+        }
+    }
 
     /**
      * Creates a new Hex Coordinate from the resulting addition of two hex coordinates.

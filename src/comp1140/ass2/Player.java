@@ -42,4 +42,8 @@ public class Player {
         System.out.println(newPlayer4);
 
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }

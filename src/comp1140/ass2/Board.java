@@ -101,7 +101,7 @@ public class Board {
 
     /*Returns tile at given position
     * @Param HexCoord*/
-    private Tile getTile (HexCoord position) {
-        return null;
+    public Tile getTile (HexCoord position) {
+        return surfaceTiles[100+ position.getX()][100+ position.getY()];
     }
 }

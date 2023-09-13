@@ -134,7 +134,15 @@ public class Akropolis {
      * @return The character representing the tile at the position (null if there is no tile).
      */
     public static Character tileAt(String gameState, int playerId, String position) {
-        return null; // FIXME Task 9
+        String playerString;
+        playerString = gameState.split(";")[playerId + 2];
+        Player player = new Player(playerString);
+        Tile tile = player.getBoard().getTile(new HexCoord(position));
+        if (tile == null) {
+            return null;
+        }
+        return tile.toStringRep();
+
     }
 
     /**
