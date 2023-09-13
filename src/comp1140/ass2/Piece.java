@@ -1,23 +1,22 @@
 package comp1140.ass2;
 
 public class Piece {
-
-
-
-    // Tile array of the tiles associated to the piece from top left,
-    // bottom left and bottom right
+    /* Tile array of the tiles associated to the piece from top left,
+       bottom left and bottom right                                */
     private Tile[] tiles = new Tile[3];
 
+    /* Missing position field
+       Requires more than just the pieceID to match the position field transform
+       as knowing the current position requires the most recently played
+       moveString stored in the gameState which cannot be deduced just from the pieceID
+       2 digit pieceID
+
+       Maybe getPosition method?
+     */
 
     /** Constructor for instance of piece class
      * @oaram Two-digit number pieceID
      */
-
-    // From the pieceID match the ID to the ID FROM the moveString
-    // and the pool string to deduce information about the piece
-
-
-    // Need to know number of players & most recent moveString
     public Piece(String pieceID) {
         String globalTilePool = Akropolis.TILE_POOL;
         int index = globalTilePool.indexOf(pieceID);
@@ -26,7 +25,6 @@ public class Piece {
         }
     }
 
-
     /*move the piece by replacing position with you Transform
 
     is this likely to be used?
@@ -34,7 +32,6 @@ public class Piece {
     private void movePiece (Transform transform) {
 
     }
-
     public Tile[] getTiles() {
         return this.tiles;
     }
