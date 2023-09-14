@@ -17,12 +17,12 @@ public class ConstructionSite {
     }
     /*Constructor from string input*/
     public ConstructionSite (String gamestate) {
-        Piece[] pieceIDs = isolateConstructionSite(gamestate);
+        Piece[] pieces = isolateConstructionSite(gamestate);
         int playerCount = findPlayerCount(gamestate);
         this.size = playerCount + 2;
         this.currentPieces = new Piece[this.size];
-        for (int i =0; i < pieceIDs.length; i++) {
-            this.currentPieces[i] = pieceIDs[i];
+        for (int i =0; i < pieces.length; i++) {
+            this.currentPieces[i] = pieces[i];
         }
     }
 
@@ -32,8 +32,9 @@ public class ConstructionSite {
     private static Piece[] isolateConstructionSite (String gameState) {
         String shared = gameState.split(";")[1];
         Piece[] initialPieces = new Piece[(shared.length() - 1)/2];
-        for (int i  = 0; i < initialPieces.length; i++) {
-            initialPieces[i] = new Piece(shared.substring(i+1,i+3));
+        for (int i  = 0; i < initialPieces.length; i ++) {
+            initialPieces[i] = new Piece(shared.substring((i*2)+1,(i*2)+3));
+            System.out.println(shared.substring((i*2)+1,(i*2)+3));
         }
         return initialPieces;
     }
@@ -47,9 +48,10 @@ public class ConstructionSite {
 
     public static void resupply () {
         if (!isEmpty()) {
+            System.out.println("it is empty");
             return;
         }
-        order();
+        /*order();*/
         for (int i = countPieces(); i < size; i++) {
             currentPieces[i] = addPiece();
         }
@@ -80,11 +82,12 @@ public class ConstructionSite {
         while (index < size) {
             if (currentPieces[index] == null) {
                 int i = 0;
-                while (index + i < size) {
+                while (index + i < size && currentPieces[index] == null) {
                     if (currentPieces[index + i] != null) {
                         Piece holdr = currentPieces[index + i];
                         currentPieces[index + i] = null;
                         currentPieces[index] = holdr;
+                        System.out.println("swap made");
                         break;
                     }
                 }

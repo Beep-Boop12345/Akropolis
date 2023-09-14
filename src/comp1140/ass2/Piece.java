@@ -23,6 +23,7 @@ public class Piece {
         int index = globalTilePool.indexOf(pieceID);
         for (int i = 0; i < 3; i++) {
             this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i));
+            System.out.println(globalTilePool.charAt(index+2+i));
         }
         this.pieceID = Integer.parseInt(pieceID);
     }
@@ -44,6 +45,11 @@ public class Piece {
 
     @Override
     public String toString() {
-        return String.valueOf(pieceID);
+        String output = String.valueOf(pieceID);
+        /*adds "0" to front if single digit int*/
+        if (output.length() == 1) {
+            output = "0" + output;
+        }
+        return output;
     }
 }

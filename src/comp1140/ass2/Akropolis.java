@@ -151,11 +151,14 @@ public class Akropolis {
      * @return the state string with the Construction Site refilled if needed, otherwise the unmodified state string.
      */
     public static String resupplyConstructionSite(String gameState) {
+        /*make Construction site*/
         ConstructionSite constructionSite = new ConstructionSite(gameState);
+        /*reSupplies it*/
         constructionSite.resupply();
+        /*gets the new string representation and incorporates it into the gameState string*/
         String[] gameStateAsArray = gameState.split(";");
         gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + constructionSite.toString();
-        return String.join(";", gameStateAsArray); // FIXME Task 7
+        return String.join(";", gameStateAsArray) + ";"; // FIXME Task 7
     }
 
     /**

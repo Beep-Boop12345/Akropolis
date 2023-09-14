@@ -107,6 +107,7 @@ public class Stack {
     /*Chooses a random tile to give to constructionSite*/
     public static Piece choose() {
         if (pieceCount == 0) {
+            System.out.println("I am empty");
             return null;
         }
         int pieceIndex = (int) Math.floor(Math.random()*(pieceCount+1));
@@ -130,5 +131,14 @@ public class Stack {
 
     public static Piece[] getCurrentPieces() {
         return currentPieces;
+    }
+
+    @Override
+    public String toString() {
+        String output = "";
+        for (Piece i: currentPieces) {
+            output = output + ", " + i;
+        }
+        return  output;
     }
 }
