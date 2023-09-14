@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Stack {
 
@@ -103,10 +104,24 @@ public class Stack {
     }
 
 
-    /*Chooses given amount of random tiles for refilling construction site*/
-    private Piece[] choose (int numberOfTiles) {
-
-        return new Piece[0];
+    /*Chooses a random tile to give to constructionSite*/
+    public static Piece choose() {
+        if (pieceCount == 0) {
+            return null;
+        }
+        int pieceIndex = (int) Math.floor(Math.random()*(pieceCount+1));
+        Piece output = currentPieces[pieceIndex];
+        pieceCount -= 1;
+        Piece[] holdr = new Piece[pieceCount];
+        for (int i = 0; i < pieceCount; i++) {
+            if (i > pieceIndex - 1) {
+                holdr[i] = currentPieces[i+1];
+            } else {
+                holdr[i] = currentPieces[i];
+            }
+        }
+        currentPieces = holdr;
+        return output;
     }
 
     public static int getPieceCount() {

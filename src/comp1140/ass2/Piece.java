@@ -4,6 +4,7 @@ public class Piece {
     /* Tile array of the tiles associated to the piece from top left,
        bottom left and bottom right                                */
     private Tile[] tiles = new Tile[3];
+    private int pieceID;
 
     /* Missing position field
        Requires more than just the pieceID to match the position field transform
@@ -23,6 +24,7 @@ public class Piece {
         for (int i = 0; i < 3; i++) {
             this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i));
         }
+        this.pieceID = Integer.parseInt(pieceID);
     }
 
     /*move the piece by replacing position with you Transform
@@ -34,5 +36,14 @@ public class Piece {
     }
     public Tile[] getTiles() {
         return this.tiles;
+    }
+
+    public int getPieceID() {
+        return pieceID;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(pieceID);
     }
 }

@@ -8,41 +8,91 @@ public class ConstructionSite {
 
     public static Piece[] currentPieces;
 
-    public ConstructionSite (int size, Piece[] initialPieces) {
-        //An exception could go here
-        this.size = size;
-        this.currentPieces = initialPieces;
+    public ConstructionSite (int playercount, Piece[] initialPieces) {
+        this.size = playercount + 2;
+        this.currentPieces = new Piece[this.size];
+        for (int i =0; i < initialPieces.length; i++) {
+            this.currentPieces[i] = initialPieces[i];
+        }
     }
     /*Constructor from string input*/
     public ConstructionSite (String gamestate) {
-        char[][] pieceIDs = formatPieceIDs(isolateConstructionSite(gamestate));
-        this.size = pieceIDs.length;
-        this.currentPieces = new Piece[size];
-        for (int i = 0; i < size; i++) {
-            this.currentPieces[i] = new Piece(new String(pieceIDs[i]));
+        Piece[] pieceIDs = isolateConstructionSite(gamestate);
+        int playerCount = findPlayerCount(gamestate);
+        this.size = playerCount + 2;
+        this.currentPieces = new Piece[this.size];
+        for (int i =0; i < pieceIDs.length; i++) {
+            this.currentPieces[i] = pieceIDs[i];
         }
     }
 
-    /*Produces char array just of piece ids in the construction site
+    /*Finds the Pieces in the construction site from the gameState string
     * @Param String gamestate
-    * @Return Char[] pieceIDs the IDs of the pieces in the constructions site*/
-    private static char[] isolateConstructionSite (String gamestate) {
-        String shared = gamestate.split(";")[1];
-        char[] pieceIDs = new char[shared.length() - 1];
-        for (int i = 1; i < shared.length(); i++) {
-            pieceIDs[i] = shared.charAt(i);
+    * @Return Piece[] the pieces in the constructions site*/
+    private static Piece[] isolateConstructionSite (String gameState) {
+        String shared = gameState.split(";")[1];
+        Piece[] initialPieces = new Piece[(shared.length() - 1)/2];
+        for (int i  = 0; i < initialPieces.length; i++) {
+            initialPieces[i] = new Piece(shared.substring(i+1,i+3));
         }
-        return pieceIDs;
+        return initialPieces;
     }
 
-    /*Groups numbers part of the same Piece ID together into a 2 dimensional array*/
-    private static char[][] formatPieceIDs (char[] pieceIDs) {
-        char[][] formatedPieceIDs = new char[pieceIDs.length/2][2];
-        for (int i = 0; i < pieceIDs.length; i++) {
-            formatedPieceIDs[(Math.floorDiv(i,2))][i%2] = pieceIDs[i];
-        }
-        return formatedPieceIDs;
+    /*Extracts playerCount from gameState String
+    * @Param String gameState
+    * @Return int playerCount*/
+    private static int findPlayerCount (String gameState) {
+        return Integer.parseInt(gameState.substring(0,1));
     }
+
+    public static void resupply () {
+        if (!isEmpty()) {
+            return;
+        }
+        order();
+        for (int i = countPieces(); i < size; i++) {
+            currentPieces[i] = addPiece();
+        }
+    }
+
+    /*Evaluates whether refilling is needed
+    * @Return True if only one piece in construction site*/
+    private static boolean isEmpty() {
+        if (countPieces() < 2) {
+            return true;
+        }
+        return false;
+    }
+
+    private static int countPieces() {
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            if (currentPieces[i] != null) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    /*Order the pieces so that all null instances are at the highest indexes of the currentPiece array*/
+    private static void order() {
+        int index = 0;
+        while (index < size) {
+            if (currentPieces[index] == null) {
+                int i = 0;
+                while (index + i < size) {
+                    if (currentPieces[index + i] != null) {
+                        Piece holdr = currentPieces[index + i];
+                        currentPieces[index + i] = null;
+                        currentPieces[index] = holdr;
+                        break;
+                    }
+                }
+            }
+            index ++;
+        }
+    }
+
     /*Removes an amount of Pieces from the construction site from the left
     * @Param nuber of pieces to be removed*/
     private static void removePieces(int numberOfPieces) {
@@ -51,7 +101,17 @@ public class ConstructionSite {
 
     /*Adds pieces to the construction Site
     * @Param pieces to be added*/
-    private static void addPieces(Piece[] piecesToAdd) {
-
+    private static Piece addPiece() {
+        return Stack.choose();
+    }
+    @Override
+    public String toString() {
+        String output = "";
+        for (Piece piece : currentPieces) {
+            if (piece != null) {
+                output += piece.toString();
+            }
+        }
+        return output;
     }
 }
