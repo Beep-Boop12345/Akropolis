@@ -153,6 +153,8 @@ public class Akropolis {
     public static String resupplyConstructionSite(String gameState) {
         /*make Construction site*/
         ConstructionSite constructionSite = new ConstructionSite(gameState);
+        /*Needs to make stack to pull from*/
+        Stack stack = new Stack(gameState);
         /*reSupplies it*/
         constructionSite.resupply();
         /*gets the new string representation and incorporates it into the gameState string*/

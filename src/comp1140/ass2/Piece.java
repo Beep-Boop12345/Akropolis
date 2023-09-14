@@ -23,7 +23,6 @@ public class Piece {
         int index = globalTilePool.indexOf(pieceID);
         for (int i = 0; i < 3; i++) {
             this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i));
-            System.out.println(globalTilePool.charAt(index+2+i));
         }
         this.pieceID = Integer.parseInt(pieceID);
     }

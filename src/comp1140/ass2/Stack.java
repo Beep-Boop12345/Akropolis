@@ -15,17 +15,22 @@ public class Stack {
     }
 
     public Stack (String gamestate) {
-        char[][] constructionSiteIDs = formatPieceIDs(isolateConstructionSite(gamestate));
-        char[][] movedPieceIDs = isolateIDs(isolatePLayers(gamestate));
-        int[] activePieces = new int[constructionSiteIDs.length + movedPieceIDs.length];
-        for (int i = 0; i < constructionSiteIDs.length; i++) {
-            activePieces[i] = Integer.parseInt(new String(constructionSiteIDs[i]));
+        int[] pieceIDsConstructionSite = constructionSitePieces(gamestate);
+        int[] pieceIDsActive = activePieces(gamestate);
+        /*Combine the two arrays into 1*/
+        int[] allPieceIDs = new int[pieceIDsActive.length + pieceIDsConstructionSite.length];
+        if (pieceIDsConstructionSite.length > 0) {
+            for (int i = 0; i < pieceIDsConstructionSite.length; i++) {
+                allPieceIDs[i] = pieceIDsConstructionSite[i];
+            }
         }
-        for (int i = 0; i < movedPieceIDs.length; i++) {
-            activePieces[i + constructionSiteIDs.length] = Integer.parseInt(new String(movedPieceIDs[i]));
+        if (pieceIDsActive.length > 0) {
+            for (int i = 0; i < pieceIDsActive.length; i++) {
+                allPieceIDs[i + pieceIDsConstructionSite.length] = pieceIDsActive[i];
+            }
         }
-        Arrays.sort(activePieces);
-        int playerCount = gamestate.charAt(0);
+        /*Find what pieces can be in the game*/
+        int playerCount = Integer.parseInt(gamestate.substring(0,1));
         int idCap = 0;
         switch (playerCount) {
             case 2:
@@ -38,81 +43,76 @@ public class Stack {
                 idCap = 61;
                 break;
         }
-        pieceCount = idCap - activePieces.length;
+        pieceCount = idCap - allPieceIDs.length;
         currentPieces = new Piece[pieceCount];
         int index = 0;
-        for (int i = 1; i <= idCap; i++) {
-            if (Arrays.binarySearch(activePieces, i) < 0) {
-                String id = String.valueOf(i);
-                if (id.length() == 1) {
-                    id = "0" + id;
+        for (int i = 0; i < idCap; i++) {
+            if (!in(allPieceIDs,i+1)) {
+                String pieceIDString = String.valueOf(i+1);
+                if (pieceIDString.length() == 1) {
+                    pieceIDString = "0" + pieceIDString;
                 }
-                currentPieces[index] = new Piece(id);
-                index++;
+                currentPieces[index] = new Piece(pieceIDString);
+                index ++;
             }
         }
     }
 
-    /*Produces char array just of piece ids in the construction site
+    /*Produces int array for all the piece IDs of pieces in the constructionSite
      * @Param String gamestate
-     * @Return Char[] pieceIDs the IDs of the pieces in the constructions site*/
-    private static char[] isolateConstructionSite (String gamestate) {
+     * @Return int[] pieceIDs the IDs of the pieces in the constructions site*/
+    private static int[] constructionSitePieces (String gamestate) {
         String shared = gamestate.split(";")[1];
-        char[] pieceIDs = new char[shared.length() - 1];
-        for (int i = 1; i < shared.length(); i++) {
-            pieceIDs[i] = shared.charAt(i);
+        int[] pieceIDs = new int[(shared.length() -1)/2];
+        for (int i = 0; i < pieceIDs.length; i++) {
+            pieceIDs[i] = Integer.parseInt(shared.substring((i*2)+1,(i*2)+3));
         }
         return pieceIDs;
     }
 
-    /*Groups numbers part of the same Piece ID together into a 2 dimensional array*/
-    private static char[][] formatPieceIDs (char[] pieceIDs) {
-        char[][] formatedPieceIDs = new char[pieceIDs.length/2][2];
-        for (int i = 0; i < pieceIDs.length; i++) {
-            formatedPieceIDs[(Math.floorDiv(i,2))][i%2] = pieceIDs[i];
+    /*Finds the pieceID of all placed pieces from a gameState
+    * @Param String gameState
+    * @Return int[] for all the activePieceIDs*/
+    private static int[] activePieces (String gameState) {
+        int activePieceCount = 0;
+        String[] gameStateAsArray = gameState.split(";");
+        String[] playerStrings = new String[gameStateAsArray.length - 2];
+        for (int i = 0; i < playerStrings.length; i ++) {
+            playerStrings[i] = gameStateAsArray[i+2];
         }
-        return formatedPieceIDs;
+        /*Sums works through all player strings to count how many active pieces there are*/
+        for (String i: playerStrings) {
+            activePieceCount += (i.length() - 4)/10;
+        }
+        int[] activePieceIDs = new int[activePieceCount];
+        int index = 0;
+        for (String i : playerStrings) {
+            for (int j = 0; j < (i.length() - 4)/10; j++) {
+                activePieceIDs[index] = Integer.parseInt(i.substring((j*10)+4,(j*10)+6));
+                index ++;
+            }
+        }
+        return activePieceIDs;
     }
 
-    /*Isolates player strings from string representation*/
-    private static String[] isolatePLayers (String gamestate) {
-        String[] blocks = gamestate.split(";");
-        String[] players = new String[blocks.length - 2];
-        for (int i = 0; i < players.length; i++) {
-            players[i] = blocks[i + 2];
+    private static boolean in(int[] arr, int key) {
+        for(int i:arr) {
+            if (i == key) {
+                return true;
+            }
         }
-        return players;
-    }
-
-    private static char[][] isolateIDs (String[] players) {
-        char[] holdr;
-        int amountOfMoves = 0;
-        for (int i = 0; i < players.length; i ++) {
-            holdr = new char[players[i].length() - 4];
-            amountOfMoves = amountOfMoves + players[i].length() - 4;
-            players[i].getChars(4,4+holdr.length, holdr,0);
-            players[i] = new String(holdr);
-        }
-        String allMoves = String.join("",players);
-        amountOfMoves = Math.floorDiv(amountOfMoves, 10);
-        char[][] movedPieces = new char[amountOfMoves][2];
-        for (int i =0; i < amountOfMoves; i++) {
-            movedPieces[i][0] = allMoves.charAt(i*10);
-            movedPieces[i][1] = allMoves.charAt(i*10+1);
-        }
-        return movedPieces;
+        return false;
     }
 
 
     /*Chooses a random tile to give to constructionSite*/
     public static Piece choose() {
         if (pieceCount == 0) {
-            System.out.println("I am empty");
             return null;
         }
-        int pieceIndex = (int) Math.floor(Math.random()*(pieceCount+1));
+        int pieceIndex = (int) Math.floor(Math.random()*(pieceCount));
         Piece output = currentPieces[pieceIndex];
-        pieceCount -= 1;
+        pieceCount = pieceCount - 1;
         Piece[] holdr = new Piece[pieceCount];
         for (int i = 0; i < pieceCount; i++) {
             if (i > pieceIndex - 1) {

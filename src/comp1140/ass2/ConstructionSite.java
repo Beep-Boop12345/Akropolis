@@ -8,8 +8,10 @@ public class ConstructionSite {
 
     public static Piece[] currentPieces;
 
-    public ConstructionSite (int playercount, Piece[] initialPieces) {
+    public static Stack stack;
+    public ConstructionSite (int playercount, Piece[] initialPieces, Stack stack) {
         this.size = playercount + 2;
+        this.stack = stack;
         this.currentPieces = new Piece[this.size];
         for (int i =0; i < initialPieces.length; i++) {
             this.currentPieces[i] = initialPieces[i];
@@ -24,6 +26,7 @@ public class ConstructionSite {
         for (int i =0; i < pieces.length; i++) {
             this.currentPieces[i] = pieces[i];
         }
+        this.stack = stack;
     }
 
     /*Finds the Pieces in the construction site from the gameState string
@@ -34,7 +37,6 @@ public class ConstructionSite {
         Piece[] initialPieces = new Piece[(shared.length() - 1)/2];
         for (int i  = 0; i < initialPieces.length; i ++) {
             initialPieces[i] = new Piece(shared.substring((i*2)+1,(i*2)+3));
-            System.out.println(shared.substring((i*2)+1,(i*2)+3));
         }
         return initialPieces;
     }
@@ -48,7 +50,6 @@ public class ConstructionSite {
 
     public static void resupply () {
         if (!isEmpty()) {
-            System.out.println("it is empty");
             return;
         }
         /*order();*/
@@ -87,7 +88,6 @@ public class ConstructionSite {
                         Piece holdr = currentPieces[index + i];
                         currentPieces[index + i] = null;
                         currentPieces[index] = holdr;
-                        System.out.println("swap made");
                         break;
                     }
                 }
@@ -105,7 +105,8 @@ public class ConstructionSite {
     /*Adds pieces to the construction Site
     * @Param pieces to be added*/
     private static Piece addPiece() {
-        return Stack.choose();
+        Piece output = stack.choose();
+        return output;
     }
     @Override
     public String toString() {
