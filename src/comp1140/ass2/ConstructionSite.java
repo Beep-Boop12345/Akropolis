@@ -95,6 +95,17 @@ public class ConstructionSite {
             index ++;
         }
     }
+    /*Returns the price of a piece if it is to be purchased
+    * @Param Piece purchase piece to be purchased
+    * @Return int price price of selection, -1 if not possible*/
+    public int findPrice(Piece purchase) {
+        for (int i = 0; i < size; i++) {
+            if (currentPieces[i].isEqual(purchase)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     /*Removes an amount of Pieces from the construction site from the left
     * @Param nuber of pieces to be removed*/
