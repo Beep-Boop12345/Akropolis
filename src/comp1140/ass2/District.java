@@ -19,6 +19,7 @@ public enum District {
      *
      * @return the number of stars associated with the district
      */
+    //Test
     public Integer getStars() {
         return switch (this) {
             case HOUSES -> 1;
