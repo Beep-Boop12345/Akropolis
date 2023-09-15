@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 public class HexCoord {
 
-    // The horizontal and vertical positions as integers x and y
+    // The horizontal and vertical positions as integers x and y.
     private final int x;
     private final int y;
 
