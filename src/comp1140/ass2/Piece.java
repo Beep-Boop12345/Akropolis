@@ -21,10 +21,10 @@ public class Piece {
     public Piece(String pieceID) {
         String globalTilePool = Akropolis.TILE_POOL;
         int index = globalTilePool.indexOf(pieceID);
-        for (int i = 0; i < 3; i++) {
-            this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i));
-        }
         this.pieceID = Integer.parseInt(pieceID);
+        for (int i = 0; i < 3; i++) {
+            this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i), this.pieceID);
+        }
     }
 
     /*move the piece by replacing position with you Transform

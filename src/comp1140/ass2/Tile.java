@@ -9,20 +9,25 @@ public class Tile {
 
     private Boolean isOccupied;
 
-    public Tile(District districtType, Boolean isPlaza) {
+    /*The piece that it came from*/
+    private int piece;
+
+    public Tile(District districtType, Boolean isPlaza, int pieceID) {
         this.districtType = districtType;
         this.isPlaza = isPlaza;
         this.height = 0;
         this.isOccupied = false;
+        this.piece = pieceID;
     }
 
     //Character Constructor for a tile
-    public Tile(char tileChar) {
+    public Tile(char tileChar, int pieceID) {
 
         this.districtType = characterToDistrict(tileChar);
         this.isPlaza = Character.isUpperCase(tileChar);
         this.height = 0;
         this.isOccupied = false;
+        this.piece = pieceID;
 
     };
 
@@ -56,6 +61,10 @@ public class Tile {
 
     public District getDistrictType() {
         return districtType;
+    }
+
+    public int getPiece() {
+        return piece;
     }
 
     @Override
@@ -107,17 +116,17 @@ public class Tile {
 
     //Constructor testing code
     public static void main(String[] args) {
-        System.out.println(new Tile('h'));
-        System.out.println(new Tile('H'));
-        System.out.println(new Tile('m'));
-        System.out.println(new Tile('M'));
-        System.out.println(new Tile('b'));
-        System.out.println(new Tile('B'));
-        System.out.println(new Tile('t'));
-        System.out.println(new Tile('T'));
-        System.out.println(new Tile('g'));
-        System.out.println(new Tile('G'));
-        System.out.println(new Tile('q'));
+        System.out.println(new Tile('h',0));
+        System.out.println(new Tile('H',0));
+        System.out.println(new Tile('m',0));
+        System.out.println(new Tile('M',0));
+        System.out.println(new Tile('b',0));
+        System.out.println(new Tile('B',0));
+        System.out.println(new Tile('t',0));
+        System.out.println(new Tile('T',0));
+        System.out.println(new Tile('g',0));
+        System.out.println(new Tile('G',0));
+        System.out.println(new Tile('q',0));
 
     }
 }

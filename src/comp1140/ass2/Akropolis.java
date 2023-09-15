@@ -89,7 +89,7 @@ public class Akropolis {
      */
     // Dependency on isSettingsStringWellFormed, isSharedStringWellFormed, and isPlayerStringWellFormed
     public static boolean isStateStringWellFormed(String gameState) {
-        // Parse the gameState string into its components
+        // Parse the gameState string into its components 3hmbtg;01432;P00141S01E02R3;P10118S01W03R1;P20310S00W02R3;
         String[] components = gameState.split(";");
         if (components.length < 4) { return false; }
 
@@ -116,10 +116,10 @@ public class Akropolis {
     }
 
     // Helper functions for Task 5
-    public static boolean isSettingsStringWellFormed(String settingsString) { return false; } // todo
-    public static boolean isSharedStringWellFormed(String sharedString) { return false; } // todo
+    public static boolean isSettingsStringWellFormed(String settingsString) { return true; } // todo
+    public static boolean isSharedStringWellFormed(String sharedString) { return true; } // todo
 
-    public static boolean isPlayerStringWellFormed(String playerString) { return false; } //todo
+    public static boolean isPlayerStringWellFormed(String playerString) { return true; } //todo
 
 
     /**
