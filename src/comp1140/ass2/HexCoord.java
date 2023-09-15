@@ -61,7 +61,7 @@ public class HexCoord {
         neigbours[4] = new HexCoord(x-1,y-1+offset);
         neigbours[5] = new HexCoord(x-1,y+offset);
         return neigbours;
-    } // Todo
+    }
 
     @Override
     public String toString() { return "Position: " + "(" + x +", " + y + ")"; }

@@ -94,13 +94,34 @@ public class Board {
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
     private Boolean isValidPlacement(Move moveToMake) {
+        /*Check if move correctly represents a piece*/
         if (moveToMake == null) {
             return false;
         }
         if (moveToMake.getPiece() == null) {
             return false;
         }
-        return true;
+        HexCoord[] positions = findTilePosition(moveToMake);
+        /*We check if piece is on surface, and if so, that the entire peice is on surface*/
+        if (getTile(positions[0]) == null) {
+            /*Makes sure all the pieces are on the surface*/
+            if (getTile(positions[1]) != null || getTile(positions[2]) != null) {
+                return false;
+            }
+            /*Makes sure there is atleast one adjacent tile*/
+            for (HexCoord i : positions) {
+                for (HexCoord j : i.getSurroundings()) {
+                    if (getTile(j) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        /*Checks if all piece is level*/
+        boolean heightEq = true;
+        heightEq = heightEq && (getTile(positions[0]).getHeight() == getTile(positions[1]).getHeight());
+        heightEq = heightEq && (getTile(positions[2]).getHeight() == getTile(positions[1]).getHeight());
+        return heightEq;
     }
 
     /*Decides if there is a tile at a given position
@@ -111,6 +132,14 @@ public class Board {
     /*Returns tile at given position
     * @Param HexCoord*/
     public Tile getTile (HexCoord position) {
-        return surfaceTiles[100+ position.getX()][100+ position.getY()];
+        int xPos = 100 + position.getX();
+        int yPos = 100 + position.getY();
+        if (xPos > 199 || xPos < 0) {
+            return null;
+        }
+        if (yPos > 199|| yPos < 0) {
+            return null;
+        }
+        return surfaceTiles[xPos][100+ position.getY()];
     }
 }
