@@ -100,7 +100,7 @@ public class ConstructionSite {
     * @Return int price price of selection, -1 if not possible*/
     public int findPrice(Piece purchase) {
         for (int i = 0; i < size; i++) {
-            if (currentPieces[i].isEqual(purchase)) {
+            if (currentPieces[i].equals(purchase)) {
                 return i;
             }
         }

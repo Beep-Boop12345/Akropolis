@@ -45,9 +45,23 @@ public class HexCoord {
 
     /**
      *
-     * @return all adjacent HexCoords that are within the board
+     * @return all adjacent HexCoords. Clockwise starting from North.
      */
-    public HexCoord[] getSurroundings(){ return null; } // Todo
+    public HexCoord[] getSurroundings(){
+        /*Offset to account for hexagonal grid, rotations work differently for odd columns*/
+        int offset = 0;
+        if (Math.abs(x) % 2 == 1) {
+            offset = 1;
+        }
+        HexCoord[] neigbours = new HexCoord[6];
+        neigbours[0] = new HexCoord(x,y+1);
+        neigbours[1] = new HexCoord(x+1,y+offset);
+        neigbours[2] = new HexCoord(x+1,y-1+offset);
+        neigbours[3] = new HexCoord(x,y-1);
+        neigbours[4] = new HexCoord(x-1,y-1+offset);
+        neigbours[5] = new HexCoord(x-1,y+offset);
+        return neigbours;
+    } // Todo
 
     @Override
     public String toString() { return "Position: " + "(" + x +", " + y + ")"; }
@@ -64,6 +78,7 @@ public class HexCoord {
         HexCoord position = (HexCoord) o;
         return x == position.x && y == position.y;
     }
+
 
     public int getX() {
         return x;

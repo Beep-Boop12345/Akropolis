@@ -45,7 +45,7 @@ public class Piece {
     /*Checks if this piece object is equal to another peice
     * @Param Piece compare piece to be compared to
     * @return true if both objects refer to the same piece*/
-    public boolean isEqual(Piece compare) {
+    public boolean equals(Piece compare) {
         if (compare == null) {
             return false;
         }
