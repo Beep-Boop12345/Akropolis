@@ -42,6 +42,19 @@ public class Piece {
         return pieceID;
     }
 
+    /*Checks if this piece object is equal to another peice
+    * @Param Piece compare piece to be compared to
+    * @return true if both objects refer to the same piece*/
+    public boolean isEqual(Piece compare) {
+        if (compare == null) {
+            return false;
+        }
+        if (compare.getPieceID() == pieceID) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         String output = String.valueOf(pieceID);
