@@ -93,7 +93,7 @@ public class Board {
 
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
-    private Boolean isValidPlacement(Move moveToMake) {
+    public Boolean isValidPlacement(Move moveToMake) {
         /*Check if move correctly represents a piece*/
         if (moveToMake == null) {
             return false;
