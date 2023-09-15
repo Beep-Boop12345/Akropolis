@@ -108,6 +108,7 @@ public class IsMoveStringWellFormedTest {
     }
 
     @Test
+    @Timeout(value = 3000, unit = TimeUnit.MILLISECONDS)
     public void testInvalidPiece() {
         // Guard against case where false returned by default for everything
         testTrue(allGames.get(0).get(1));
@@ -123,6 +124,7 @@ public class IsMoveStringWellFormedTest {
     }
 
     @Test
+    @Timeout(value = 3000, unit = TimeUnit.MILLISECONDS)
     public void testInvalidRotation() {
         // Guard against case where false returned by default for everything
         testTrue(allGames.get(0).get(1));
