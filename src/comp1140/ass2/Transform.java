@@ -16,12 +16,11 @@ public class Transform {
      * ignores the pieceID (current tile transform is applied to)
      */
     public Transform(String transformString) {
-
         // Split the moveString into parts using "R" as the delimiter
         String[] parts = transformString.split("R");
 
         // Extract the position and rotation parts
-        String positionPart = parts[0].substring(2); // Skip the ID part
+        String positionPart = parts[0];
         String rotationPart = parts[1];
         this.pos = new HexCoord(positionPart);
         // Parse the rotation part
