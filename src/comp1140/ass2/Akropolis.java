@@ -1,5 +1,7 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gittest.C;
+
 import java.util.Set;
 
 public class Akropolis {
@@ -236,6 +238,11 @@ public class Akropolis {
      * @return true if the move can be played, false otherwise.
      */
     public static boolean isMoveValid(String gameState, String move) {
+        /*Creates the objects needed for computation*/
+        Move moveObject = new Move(move);
+        ConstructionSite constructionSite = new ConstructionSite(gameState);
+        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
+        Player player = new Player(gameState.split(";")[2+playerID]);
         return false; // FIXME Task 11
     }
 
