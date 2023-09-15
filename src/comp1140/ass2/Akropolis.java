@@ -160,7 +160,7 @@ public class Akropolis {
         /*gets the new string representation and incorporates it into the gameState string*/
         String[] gameStateAsArray = gameState.split(";");
         gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + constructionSite.toString();
-        return String.join(";", gameStateAsArray) + ";"; // FIXME Task 7
+        return String.join(";", gameStateAsArray) + ";";
     }
 
     /**
