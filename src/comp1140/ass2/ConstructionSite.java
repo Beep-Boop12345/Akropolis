@@ -99,8 +99,11 @@ public class ConstructionSite {
     * @Param Piece purchase piece to be purchased
     * @Return int price price of selection, -1 if not possible*/
     public int findPrice(Piece purchase) {
+        if (countPieces() < 2) {
+            return -1;
+        }
         for (int i = 0; i < size; i++) {
-            if (currentPieces[i].equals(purchase)) {
+            if (purchase.equals(currentPieces[i])) {
                 return i;
             }
         }
