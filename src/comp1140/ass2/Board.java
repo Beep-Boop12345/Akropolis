@@ -20,10 +20,10 @@ public class Board {
     public Board(int player, String movesString) {
         this.player = player;
         Move[] move = movesFromString(movesString);
-        this.surfaceTiles[100][100] = new Tile(District.HOUSES, true);
-        this.surfaceTiles[101][99] = new Tile(District.QUARRY, false);
-        this.surfaceTiles[100][101] = new Tile(District.QUARRY, false);
-        this.surfaceTiles[99][99] = new Tile(District.QUARRY, false);
+        this.surfaceTiles[100][100] = new Tile(District.HOUSES, true, 0);
+        this.surfaceTiles[101][99] = new Tile(District.QUARRY, false, 0);
+        this.surfaceTiles[100][101] = new Tile(District.QUARRY, false, 0 );
+        this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
         for (int i = 0; i < move.length; i++) {
             placePiece(move[i]);
         }
@@ -94,6 +94,7 @@ public class Board {
     /*Decides if piece can be placed legally
     * @Param Piece to be placed*/
     public Boolean isValidPlacement(Move moveToMake) {
+        System.out.println("________________________");
         /*Check if move correctly represents a piece*/
         if (moveToMake == null) {
             return false;
@@ -102,25 +103,48 @@ public class Board {
             return false;
         }
         HexCoord[] positions = findTilePosition(moveToMake);
-        /*We check if piece is on surface, and if so, that the entire peice is on surface*/
-        if (getTile(positions[0]) == null) {
-            /*Makes sure all the pieces are on the surface*/
-            if (getTile(positions[1]) != null || getTile(positions[2]) != null) {
-                return false;
+        /*The tiles that will be covered if the piece is placed*/
+        Tile[] tilesToBeCovered = new Tile[3];
+        /*Counting to see how many of the pieces hexagons will not cover another piece*/
+        int nullCount = 0;
+        for (int i = 0; i < 3; i++) {
+            tilesToBeCovered[i] = getTile(positions[i]);
+            if (tilesToBeCovered[i] == null) {
+                nullCount ++;
             }
-            /*Makes sure there is atleast one adjacent tile*/
+        }
+        /*returns false if some pieces are on the ground but not all of them*/
+        if (nullCount > 0 && nullCount < 3) {
+            System.out.println("Failed because some parts but not all on ground");
+            return false;
+        }
+        /*Given the case that the entire piece is on the ground return true if there is an adjacent tile*/
+        if (nullCount == 3) {
             for (HexCoord i : positions) {
                 for (HexCoord j : i.getSurroundings()) {
                     if (getTile(j) != null) {
+                        System.out.println("Passed because all on ground and adjacent tile");
                         return true;
                     }
                 }
             }
+            System.out.println("Failed because all on ground but no adjacent");
+            return false;
         }
         /*Checks if all piece is level*/
         boolean heightEq = true;
-        heightEq = heightEq && (getTile(positions[0]).getHeight() == getTile(positions[1]).getHeight());
-        heightEq = heightEq && (getTile(positions[2]).getHeight() == getTile(positions[1]).getHeight());
+        heightEq = heightEq && (tilesToBeCovered[0].getHeight() == tilesToBeCovered[1].getHeight());
+        heightEq = heightEq && (tilesToBeCovered[2].getHeight() == tilesToBeCovered[1].getHeight());
+        System.out.println("Result is because all parts raised");
+        for (Tile i : tilesToBeCovered) {
+            System.out.println(i.getHeight()+",");
+        }
+        if (heightEq) {
+            boolean samePiece = true;
+            samePiece = samePiece && (tilesToBeCovered[0].getPiece() == tilesToBeCovered[1].getPiece());
+            samePiece = samePiece && (tilesToBeCovered[2].getPiece() == tilesToBeCovered[1].getPiece());
+            return !samePiece;
+        }
         return heightEq;
     }
 
