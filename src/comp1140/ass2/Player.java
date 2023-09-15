@@ -46,4 +46,8 @@ public class Player {
     public Board getBoard() {
         return board;
     }
+
+    public int getStones() {
+        return stones;
+    }
 }

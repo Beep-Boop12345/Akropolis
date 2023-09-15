@@ -243,6 +243,11 @@ public class Akropolis {
         ConstructionSite constructionSite = new ConstructionSite(gameState);
         int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
         Player player = new Player(gameState.split(";")[2+playerID]);
+        /*Determines if the piece can be played*/
+        int price = constructionSite.findPrice(moveObject.getPiece());
+        if (price < 0 || price > player.getStones()) {
+            return false;
+        }
         return false; // FIXME Task 11
     }
 
