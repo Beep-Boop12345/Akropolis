@@ -24,6 +24,7 @@ public enum District {
         return switch (this) {
             case HOUSES -> 1;
             case GARDENS -> 3;
+            case QUARRY -> 0;
             default -> 2;
         };
     }

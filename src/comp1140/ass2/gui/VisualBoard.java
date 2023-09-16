@@ -5,19 +5,21 @@ import comp1140.ass2.District;
 import comp1140.ass2.Tile;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class VisualBoard extends Group {
 
+    /*Backend board that this visual board corresponds to*/
     Board board;
 
     ArrayList<VisualTile> tiles;
 
+    int boardHeight = 0;
 
-
-    /*Backend board that this visual board corresponds to*/
     VisualBoard(Board board) {
         this.board = board;
         this.tiles = new ArrayList<>();
@@ -39,26 +41,15 @@ public class VisualBoard extends Group {
                     double xPos = 1.5 * xCoord * sideLength;
                     double yPos = -2 * yCoord * yLength - xOffset * yLength;
 
-                    District tileDistrict = tiles[i][j].getDistrictType();
-                    Color districtColor = districtToColour(tileDistrict);
+                    VisualTile newTile = new VisualTile(xPos, yPos, sideLength, tiles[i][j]);
+
+                    this.tiles.add(newTile);
+
                     int tileHeight = tiles[i][j].getHeight();
 
-                    System.out.println(districtColor + ": " + districtColor.getBrightness() );
-
-
-
-                    for (int k = 0; k < tileHeight; k++) {
-                        districtColor = districtColor.darker();
+                    if (tileHeight > boardHeight) {
+                        boardHeight = tileHeight;
                     }
-
-                    double strokeLength = sideLength * 0.1 * (1 + tileHeight/2);
-
-
-                    VisualTile newTile = new VisualTile(xPos, yPos,sideLength * 0.9, districtColor);
-                    newTile.setStroke(Color.BLACK);
-                    newTile.setStrokeWidth(strokeLength);
-                    //newTile.setStrokeType(StrokeType.OUTSIDE);
-                    this.tiles.add(newTile);
 
                 }
             }
@@ -66,25 +57,50 @@ public class VisualBoard extends Group {
 
         this.getChildren().addAll(this.tiles);
 
+        heightDarken();
+        connectPieces(sideLength);
+
     }
 
-    private Color districtToColour(District d) {
-        switch (d) {
-            case MARKETS:
-                return Color.GOLD;
-            case GARDENS:
-                return Color.LIMEGREEN;
-            case BARRACKS:
-                return Color.ORANGERED;
-            case TEMPLES:
-                return Color.DARKORCHID;
-            case QUARRY:
-                return Color.LINEN;
-            default:
-                return Color.DODGERBLUE;
+    private void heightDarken() {
+        for (VisualTile vTile : tiles) {
+            int metaTileHeight = vTile.getTile().getHeight();
+            for (int i = 0; i < boardHeight - metaTileHeight; i++) {
+                vTile.updateColor();
+            }
         }
-
     }
+
+    private void connectPieces(int sideLength) {
+        for (VisualTile vTile : tiles) {
+            int metaTilePieceId = vTile.getTile().getPiece();
+            for (VisualTile otherVTile : tiles) {
+                if (otherVTile.equals(vTile)) continue;
+
+                int otherMetaTilePieceId = otherVTile.getTile().getPiece();
+
+                double startPosX = vTile.getLayoutX();
+                double startPosY = vTile.getLayoutY();
+
+                double endPosX = otherVTile.getLayoutX();
+                double endPosY = otherVTile.getLayoutY();
+
+                double xDiff = endPosX - startPosX;
+                double yDiff = endPosY - startPosY;
+
+                double distance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+
+                if (metaTilePieceId == otherMetaTilePieceId && distance < 2 * sideLength) {
+                    Line connectorLine = new Line(startPosX, startPosY, endPosX, endPosY);
+                    connectorLine.setStrokeWidth(sideLength);
+                    connectorLine.setStroke(Color.LIGHTSLATEGRAY);
+                    this.getChildren().add(0, connectorLine);
+                }
+            }
+        }
+    }
+
+
 
     /*Places piece on board*/
     private void piecePlacement(MovablePiece piece) {

@@ -67,6 +67,10 @@ public class Tile {
         return piece;
     }
 
+    public Boolean getPlaza() {
+        return isPlaza;
+    }
+
     @Override
     public String toString() {
         return "Tile( " + districtType + " | isPlaza: " + isPlaza + " | height: " + height + " | isOccupied: " + isOccupied + ")";
