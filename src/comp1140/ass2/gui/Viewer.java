@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import org.w3c.dom.css.Rect;
 
 public class Viewer extends Application {
 
@@ -52,7 +53,10 @@ public class Viewer extends Application {
         root.getChildren().remove(currentView);
         Group newView  = new Group();
 
-        //newView.getChildren().add(new Rectangle(100, 100));
+        //Rectangle testRect = new Rectangle(100, 100);
+        //testRect.setLayoutY(100);
+        //testRect.setLayoutX(100);
+        //newView.getChildren().add(testRect);
 
         String[] components = state.split(";");
         String[] playerStrings = new String[components.length - 2];
@@ -86,6 +90,9 @@ public class Viewer extends Application {
         String movesString = currentPlayerString.substring(4);
 
         VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString));
+
+        currentBoard.setLayoutX(VIEWER_WIDTH/2);
+        currentBoard.setLayoutY(VIEWER_HEIGHT/2);
 
         newView.getChildren().add(currentBoard);
 

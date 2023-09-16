@@ -1,11 +1,14 @@
 package comp1140.ass2.gui;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 import static javafx.scene.paint.Color.LIGHTGREY;
 
 public class VisualTile extends Polygon {
-    VisualTile(double x, double y, double side) {
+
+
+    VisualTile(double x, double y, double side, Color color) {
 
         Double[] pointArray = new Double[12];
         for (int i = 0; i < 6; i++) {
@@ -17,6 +20,6 @@ public class VisualTile extends Polygon {
         this.getPoints().addAll(pointArray);
         this.setLayoutX(x);
         this.setLayoutY(y);
-        this.setFill(LIGHTGREY);
+        this.setFill(color);
     }
 }

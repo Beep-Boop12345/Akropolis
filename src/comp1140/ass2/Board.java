@@ -6,6 +6,9 @@ public class Board {
 
     /*100 100 is origin*/
     private Tile[][] surfaceTiles = new Tile[200][200];
+    public Tile[][] getSurfaceTiles() {
+        return surfaceTiles;
+    }
 
     /*Player ID 0 to P-1 inclusive, P is number of players*/
     private int player;
