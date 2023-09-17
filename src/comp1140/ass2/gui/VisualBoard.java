@@ -20,6 +20,9 @@ public class VisualBoard extends Group {
 
     int boardHeight = 0;
 
+    private Double mousex;
+    private Double mousey;
+
     VisualBoard(Board board) {
         this.board = board;
         this.tiles = new ArrayList<>();
@@ -27,6 +30,8 @@ public class VisualBoard extends Group {
         Tile[][] tiles = board.getSurfaceTiles();
 
         int sideLength = 30;
+
+
 
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -59,6 +64,30 @@ public class VisualBoard extends Group {
 
         heightDarken();
         connectPieces(sideLength);
+
+        this.setOnMousePressed(event -> {
+            this.mousex = event.getSceneX();
+            this.mousey = event.getSceneY();
+            this.toBack();
+        });
+        this.setOnMouseDragged(event -> {
+            double newX = event.getSceneX() - mousex;
+            double newY = event.getSceneY() - mousey;
+            this.setLayoutX(this.getLayoutX() + newX);
+            this.setLayoutY(this.getLayoutY() + newY);
+            this.mousex = event.getSceneX();
+            this.mousey = event.getSceneY();
+            this.toBack();
+        });
+        this.setOnMouseReleased(event -> {
+            double newX = event.getSceneX() - mousex;
+            double newY = event.getSceneY() - mousey;
+            this.setLayoutX(this.getLayoutX() + newX);
+            this.setLayoutY(this.getLayoutY() + newY);
+            this.mousex = event.getSceneX();
+            this.mousey = event.getSceneY();
+            this.toBack();
+        });
 
     }
 
