@@ -131,7 +131,23 @@ public class Akropolis {
      * @return true if the game is over, false otherwise.
      */
     public static boolean isGameOver(String gameState) {
-        return false; // FIXME Task 6
+        var newConstructionSite = new ConstructionSite(gameState);
+        var pieces = newConstructionSite.getCurrentPieces();
+        int pieceCount = 0;
+
+        for (Piece piece:pieces) {
+            if (piece != null) pieceCount += 1;
+        }
+
+        var siteEmpty = pieceCount <= 1;
+        //System.out.println("Site: " + siteEmpty);
+
+        var newStack = new Stack(gameState);
+        var stackEmpty = newStack.getPieceCount() <= 0;
+        //System.out.println("Stack: " + stackEmpty);
+
+        return (siteEmpty && stackEmpty);
+
     }
 
     /**
