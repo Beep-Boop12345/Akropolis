@@ -2,6 +2,7 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.Akropolis;
 import comp1140.ass2.Board;
+import comp1140.ass2.ConstructionSite;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -60,9 +62,7 @@ public class Viewer extends Application {
 
         String[] components = state.split(";");
         String[] playerStrings = new String[components.length - 2];
-        for (int i = 2; i < components.length; i++) {
-            playerStrings[i-2] = components[i];
-        }
+        System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
         for (String s : playerStrings) {
             System.out.println(s);
         }
@@ -96,6 +96,17 @@ public class Viewer extends Application {
 
         newView.getChildren().add(currentBoard);
 
+        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(VIEWER_WIDTH*0.85,VIEWER_HEIGHT*0.05,new ConstructionSite(state));
+        newView.getChildren().add(currentConstructionSite);
+
+        Label playerLabel = new Label("Player " + (currentTurnId + 1));
+        playerLabel.setTextAlignment(TextAlignment.CENTER);
+        playerLabel.setFont(Font.font(40));
+        System.out.println("W: " + playerLabel.getWidth());
+        newView.getChildren().add(playerLabel);
+        playerLabel.setLayoutX((VIEWER_WIDTH/2) - 70);
+        playerLabel.setLayoutY(10);
+
 
         root.getChildren().add(newView);
         currentView = newView;
@@ -112,7 +123,9 @@ public class Viewer extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+
                 displayState(gameTextField.getText());
+                controls.toFront();
             }
         });
         HBox hb = new HBox();

@@ -132,4 +132,8 @@ public class ConstructionSite {
         }
         return output;
     }
+
+    public static Piece[] getCurrentPieces() {
+        return currentPieces;
+    }
 }

@@ -140,7 +140,7 @@ public class VisualTile extends Group {
                 pointArray.add(outerYPos);
 
                 Double innerXPos = (length / 2) * Math.cos(Math.toRadians(i*72 + 18));
-                Double innerYPos =(length / 2) * Math.sin(Math.toRadians(i*72 + 18));
+                Double innerYPos = (length / 2) * Math.sin(Math.toRadians(i*72 + 18));
 
                 pointArray.add(innerXPos);
                 pointArray.add(innerYPos);
@@ -149,7 +149,7 @@ public class VisualTile extends Group {
             this.getPoints().addAll(pointArray);
             this.setFill(color);
 
-            this.setStroke(Color.WHITE);
+            this.setStroke(Color.BLACK);
             this.setStrokeWidth(length * 0.1);
 
             this.setLayoutX(x);
