@@ -1,7 +1,8 @@
 package comp1140.ass2;
 
-import comp1140.ass2.gittest.C;
 
+
+import java.util.HashSet;
 import java.util.Set;
 
 public class Akropolis {
@@ -87,40 +88,103 @@ public class Akropolis {
      * @param gameState a state string.
      * @return true if the state string is well-formed, false otherwise.
      */
-    // Dependency on isSettingsStringWellFormed, isSharedStringWellFormed, and isPlayerStringWellFormed
+
     public static boolean isStateStringWellFormed(String gameState) {
-        // Parse the gameState string into its components 3hmbtg;01432;P00141S01E02R3;P10118S01W03R1;P20310S00W02R3;
+        // Parse the gameState string into its components, eg: 3hmbtg;01432;P00141S01E02R3;P10118S01W03R1;P20310S00W02R3;
         String[] components = gameState.split(";");
-        if (components.length < 4) { return false; }
+        if (components.length < 3) {  return false; }
 
         // Check settings string
         String settings = components[0];
-        if (!isSettingsStringWellFormed(settings)) { return false; }
+        if (settings.isEmpty() || !Character.isDigit(settings.charAt(0))) {
+            return false;
+        }
+
+        int noOfPlayers = Integer.parseInt(settings.substring(0, 1));
+        if (components.length != noOfPlayers + 2) {
+            return false;
+        }
+
+        String scoring = settings.substring(1);
+        if (!scoring.equalsIgnoreCase("hmbtg")) {
+            return false;
+        }
+
+        // Initialize maximumTileID based on player count & hashset of all seen tileIDs
+        int maxTileID;
+        switch (noOfPlayers) {
+            case 2: maxTileID = 37; break;
+            case 3: maxTileID = 49; break;
+            case 4: maxTileID = 61; break;
+            default: return false;
+        }
+        Set<String> seenTileIDs = new HashSet<>();
 
         // Check shared string
         String shared = components[1];
-        if (!isSharedStringWellFormed(shared)) { return false; }
+        if (shared.isEmpty() || !Character.isDigit(shared.charAt(0))) {
+            return false;
+        }
+        int turn = Integer.parseInt(shared.substring(0, 1));
+        if (turn < 0 || turn > noOfPlayers - 1) {
+            return false;
+        }
 
-        // Check all player strings
-        for (int i = 2; i < components.length; i++) {
-            String playerString = components[i];
-            if (!isPlayerStringWellFormed(playerString)) {
+        String constructionSite = shared.substring(1);
+        if (constructionSite.length() % 2 == 1 || constructionSite.length() > 13) {
+            return false;
+        }
+
+        for (int i = 0; i < constructionSite.length(); i += 2) {
+            String tileID = constructionSite.substring(i, i + 2);
+            if (seenTileIDs.contains(tileID)) {
+                return false; // Duplicate tile found
+            } else {
+                seenTileIDs.add(tileID);
+            }
+
+            // Error handling
+            if (!Character.isDigit(constructionSite.charAt(i))
+                    || !Character.isDigit(constructionSite.charAt(i + 1))) {
+                return false;
+            }
+
+            // Check tileID
+            int numTileID = Integer.parseInt(constructionSite.substring(i, i + 2));
+            if (numTileID < 1 || numTileID > maxTileID) {
                 return false;
             }
         }
 
-        // todo isSettingStringWellFormed, isSharedStringWellFormed,
-        //  isPlayerStringWellFormed, duplicateTiles, playableTilesForPlayerCount
+        // Check all player strings
+        for (int i = 2; i < components.length; i++) {
+            String playerString = components[i];
+            if (!playerString.startsWith("P")) {
+                return false;
+            }
 
+            // Check ID, Stones (also accounts for negatives)
+            if (playerString.length() < 4) { return false; }
+            for (int j = 1; j < 4; j++) {
+                if (!Character.isDigit(playerString.charAt(j))) {
+                    return false;
+                }
+            }
+
+            // Check the moveStrings
+            String moves = playerString.substring(4);
+            if (moves.length() % 10 != 0) { return  false; }
+            for (int j = 0; j < moves.length()/8 ; j+=8) {
+                String moveString = moves.substring(j,j+8);
+                if (!isMoveStringWellFormed(moveString)) {
+                    return false;
+                }
+            }
+        }
+
+        // Passes all checks
         return true;
     }
-
-    // Helper functions for Task 5
-    public static boolean isSettingsStringWellFormed(String settingsString) { return true; } // todo
-    public static boolean isSharedStringWellFormed(String sharedString) { return true; } // todo
-
-    public static boolean isPlayerStringWellFormed(String playerString) { return true; } //todo
-
 
     /**
      * Given a state string, checks whether the game has ended.
