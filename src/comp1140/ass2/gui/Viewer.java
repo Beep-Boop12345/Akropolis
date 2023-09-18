@@ -3,9 +3,11 @@ package comp1140.ass2.gui;
 import comp1140.ass2.Akropolis;
 import comp1140.ass2.Board;
 import comp1140.ass2.ConstructionSite;
+import comp1140.ass2.Stack;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -39,36 +42,29 @@ public class Viewer extends Application {
      * @param state the String representation of the current game state
      */
     void displayState(String state) {
+
+        //Fails to show state when state cannot be shown
         if (!Akropolis.isStateStringWellFormed(state)) {
-            FlowPane failPane = new FlowPane();
-            failPane.setPrefWidth(VIEWER_WIDTH);
-            failPane.setPrefHeight(VIEWER_HEIGHT);
+
             Text failText = new Text();
             failText.setText("Please Enter A Valid State String!");
-            //failPane.getChildren().add(failText);
-            failText.setLayoutX(VIEWER_WIDTH/2);
-            failText.setLayoutY(VIEWER_HEIGHT/2);
-            failText.setTextOrigin(VPos.CENTER);
+            failText.setLayoutX(VIEWER_WIDTH/2 - 100);
+            failText.setLayoutY(VIEWER_HEIGHT/2 - 10);
             currentView.getChildren().add(failText);
             return;
+
         }
+
+        //Reset The View
         root.getChildren().remove(currentView);
         Group newView  = new Group();
 
-        //Rectangle testRect = new Rectangle(100, 100);
-        //testRect.setLayoutY(100);
-        //testRect.setLayoutX(100);
-        //newView.getChildren().add(testRect);
-
+        //Breaks string to construct objects
         String[] components = state.split(";");
         String[] playerStrings = new String[components.length - 2];
         System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
-        for (String s : playerStrings) {
-            System.out.println(s);
-        }
 
         int currentTurnId = Character.getNumericValue(components[1].charAt(0));
-        System.out.println(currentTurnId);
 
         String currentPlayerString = playerStrings[0];
 
@@ -79,16 +75,17 @@ public class Viewer extends Application {
             }
         }
 
-        System.out.println(currentPlayerString);
-
+        //Displays Stones
         int stones = Integer.parseInt(currentPlayerString.substring(2,4));
         System.out.println(stones);
 
-        StoneLabel stoneLabel = new StoneLabel(stones, currentTurnId);
+        StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
         newView.getChildren().add(stoneLabel);
 
+        //Isolates Move String
         String movesString = currentPlayerString.substring(4);
 
+        //Constructs A Visual Board Object by Creating the String Instanced Board Object
         VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString));
 
         currentBoard.setLayoutX(VIEWER_WIDTH/2);
@@ -96,18 +93,31 @@ public class Viewer extends Application {
 
         newView.getChildren().add(currentBoard);
 
-        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(VIEWER_WIDTH*0.85,VIEWER_HEIGHT*0.05,new ConstructionSite(state));
+        //Constructs A Visual Construction Site Object by Instancing the Construction Site Class
+        var sitePosX = VIEWER_WIDTH * 0.85;
+        var sitePosY = VIEWER_HEIGHT*0.05;
+        var subSite = new ConstructionSite(state);
+
+        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX, sitePosY, subSite);
         newView.getChildren().add(currentConstructionSite);
 
+        //Creates A Label to Display Current Turn
         Label playerLabel = new Label("Player " + (currentTurnId + 1));
         playerLabel.setTextAlignment(TextAlignment.CENTER);
         playerLabel.setFont(Font.font(40));
-        System.out.println("W: " + playerLabel.getWidth());
-        newView.getChildren().add(playerLabel);
         playerLabel.setLayoutX((VIEWER_WIDTH/2) - 70);
         playerLabel.setLayoutY(10);
+        newView.getChildren().add(playerLabel);
 
+        //Creates A Label to Display Board Instructions
+        Label instructionLabel = new Label("Click and Drag Map With Mouse");
+        instructionLabel.setTextAlignment(TextAlignment.CENTER);
+        instructionLabel.setFont(Font.font(20));
+        instructionLabel.setLayoutX(50);
+        instructionLabel.setLayoutY(20);
+        newView.getChildren().add(instructionLabel);
 
+        //Completes Task by Adding the New View to the Scene
         root.getChildren().add(newView);
         currentView = newView;
     }

@@ -16,10 +16,13 @@ public class VisualBoard extends Group {
     /*Backend board that this visual board corresponds to*/
     Board board;
 
+    // Keeps a store of all currently placed tiles
     ArrayList<VisualTile> tiles;
 
+    // The max height of all tiles
     int boardHeight = 0;
 
+    // Tracks mouse movement
     private Double mousex;
     private Double mousey;
 
@@ -31,8 +34,7 @@ public class VisualBoard extends Group {
 
         int sideLength = 30;
 
-
-
+        //Generates and places all tiles from the backend board as visual tiles
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (tiles[i][j] != null) {
@@ -55,7 +57,6 @@ public class VisualBoard extends Group {
                     if (tileHeight > boardHeight) {
                         boardHeight = tileHeight;
                     }
-
                 }
             }
         }
@@ -65,6 +66,7 @@ public class VisualBoard extends Group {
         heightDarken();
         connectPieces(sideLength);
 
+        //Drag Functionality
         this.setOnMousePressed(event -> {
             this.mousex = event.getSceneX();
             this.mousey = event.getSceneY();
@@ -91,6 +93,7 @@ public class VisualBoard extends Group {
 
     }
 
+    //Lower height tiles are displayed as darker
     private void heightDarken() {
         for (VisualTile vTile : tiles) {
             int metaTileHeight = vTile.getTile().getHeight();
@@ -100,9 +103,12 @@ public class VisualBoard extends Group {
         }
     }
 
+    //Connectors are placed between tile that came from the same piece
     private void connectPieces(int sideLength) {
         for (VisualTile vTile : tiles) {
+
             int metaTilePieceId = vTile.getTile().getPiece();
+
             for (VisualTile otherVTile : tiles) {
                 if (otherVTile.equals(vTile)) continue;
 
@@ -128,12 +134,4 @@ public class VisualBoard extends Group {
             }
         }
     }
-
-
-
-    /*Places piece on board*/
-    private void piecePlacement(MovablePiece piece) {
-
-    }
-
 }

@@ -15,12 +15,14 @@ public class PurchasablePiece extends Group {
 
     ArrayList<VisualTile> vTiles;
 
+    //A visual piece that is used in the visual construction site
     PurchasablePiece(double x, double y, Piece piece, double sideLength) {
         this.piece = piece;
         this.vTiles = new ArrayList<>();
 
         Tile[] tiles = piece.getTiles();
 
+        //Generates the three tiles in correct positions
         for (int i = 0; i < tiles.length; i++) {
             var tile = tiles[i];
             VisualTile newTile;
@@ -31,6 +33,7 @@ public class PurchasablePiece extends Group {
             else if (i == 1) newTile = new VisualTile(0,-2 * yLength,sideLength, tile);
             else newTile = new VisualTile(1.5*sideLength, -yLength, sideLength, tile);
 
+            //Connects the tiles to form a piece
             for (VisualTile vTile : vTiles) {
                 Line connectorLine = new Line(newTile.getLayoutX(), newTile.getLayoutY(), vTile.getLayoutX(), vTile.getLayoutY());
                 connectorLine.setStrokeWidth(sideLength);
@@ -44,11 +47,6 @@ public class PurchasablePiece extends Group {
 
         this.setLayoutX(x);
         this.setLayoutY(y);
-
-    }
-
-    /*How the constructionSite representation responds to a click*/
-    private void onClick() {
 
     }
 }

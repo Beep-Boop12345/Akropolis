@@ -8,14 +8,13 @@ import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
 
-import static javafx.scene.paint.Color.LIGHTGREY;
 
+// Creates a Visual Representation of a Backend Tile
 public class VisualTile extends Group {
 
     Tile tile;
     Color currentColor;
     Hexagon currentHexagon;
-
     ArrayList<StarIcon> currentStars;
     VisualTile(double x, double y, double side, Tile tile) {
 
@@ -30,9 +29,12 @@ public class VisualTile extends Group {
         Boolean isPlaza = this.tile.getPlaza();
         this.currentStars = new ArrayList<>();
 
+        //Draws plaza stars (Needs Repeated Code Removed)
         if (isPlaza) {
+
             int starCount = tileDistrict.getStars();
             double starSideLength = side * 0.33;
+
             switch (starCount) {
                 case 1:
                     StarIcon newStar = new StarIcon(0,0,starSideLength, districtColor.darker());
@@ -104,6 +106,7 @@ public class VisualTile extends Group {
 
     }
 
+    //Makes the colours darker due to height difference
     public void updateColor() {
         currentColor = currentColor.darker();
         currentHexagon.setFill(currentColor);
@@ -113,6 +116,7 @@ public class VisualTile extends Group {
 
     }
 
+    //Creates the desired hexagon tile shape
     private class Hexagon extends Polygon {
         Hexagon(double side, Color color) {
             Double[] pointArray = new Double[12];
@@ -128,6 +132,8 @@ public class VisualTile extends Group {
             this.setStrokeWidth(side * 0.1);
         }
     }
+
+    //Creates the desired star shape
     private class StarIcon extends Polygon {
         StarIcon(double x, double y, double length, Color color) {
 
