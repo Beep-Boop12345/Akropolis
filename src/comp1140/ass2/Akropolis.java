@@ -2,6 +2,7 @@ package comp1140.ass2;
 
 
 
+import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -138,6 +139,7 @@ public class Akropolis {
             return false;
         }
 
+        // Check the tileIDs in constructionSite
         for (int i = 0; i < constructionSite.length(); i += 2) {
             String tileID = constructionSite.substring(i, i + 2);
             if (seenTileIDs.contains(tileID)) {
@@ -152,7 +154,6 @@ public class Akropolis {
                 return false;
             }
 
-            // Check tileID
             int numTileID = Integer.parseInt(constructionSite.substring(i, i + 2));
             if (numTileID < 1 || numTileID > maxTileID) {
                 return false;
@@ -174,7 +175,6 @@ public class Akropolis {
                 }
             }
 
-            // Check ID
             int playerID = Integer.parseInt(playerString.substring(1,2));
             if (playerID < 0 || playerID > noOfPlayers-1) { return false; }
 
@@ -184,7 +184,6 @@ public class Akropolis {
             for (int j = 0; j < moves.length(); j += 10) {
                 String moveString = moves.substring(j, j + 10);
 
-                // Check tileID
                 String tileID = moveString.substring(0,2);
                 if (!Character.isDigit(moveString.charAt(0))
                         || !Character.isDigit(moveString.charAt(1))) {
@@ -192,16 +191,14 @@ public class Akropolis {
                 }
                 int numTileID = Integer.parseInt(moveString.substring(0,2));
                 if (seenTileIDs.contains(tileID)) {
-                    return false;
+                    return false; // Duplicate tile found
                 } else {
                     seenTileIDs.add(tileID);
                 }
 
-                if (numTileID < 1 || numTileID > maxTileID) { return false; }
 
-                if (!isMoveStringWellFormed(moveString)) {
-                    return false;
-                }
+                if (numTileID < 1 || numTileID > maxTileID) { return false; }
+                if (!isMoveStringWellFormed(moveString)) { return false; }
             }
 
         }
@@ -209,10 +206,6 @@ public class Akropolis {
         // Passes all checks
         return true;
     }
-
-
-
-
 
     /**
      * Given a state string, checks whether the game has ended.
