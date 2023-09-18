@@ -92,7 +92,10 @@ public class Akropolis {
     public static boolean isStateStringWellFormed(String gameState) {
         // Parse the gameState string into its components, eg: 3hmbtg;01432;P00141S01E02R3;P10118S01W03R1;P20310S00W02R3;
         String[] components = gameState.split(";");
-        if (components.length < 3) {  return false; }
+        if (components.length < 3) { return false; }
+        if (gameState.isEmpty() || !gameState.endsWith(";")) {
+            return false;
+        }
 
         // Check settings string
         String settings = components[0];
@@ -163,7 +166,7 @@ public class Akropolis {
                 return false;
             }
 
-            // Check ID, Stones (also accounts for negatives)
+            // Error handling & Check Stones
             if (playerString.length() < 4) { return false; }
             for (int j = 1; j < 4; j++) {
                 if (!Character.isDigit(playerString.charAt(j))) {
@@ -171,20 +174,45 @@ public class Akropolis {
                 }
             }
 
+            // Check ID
+            int playerID = Integer.parseInt(playerString.substring(1,2));
+            if (playerID < 0 || playerID > noOfPlayers-1) { return false; }
+
             // Check the moveStrings
             String moves = playerString.substring(4);
-            if (moves.length() % 10 != 0) { return  false; }
-            for (int j = 0; j < moves.length()/8 ; j+=8) {
-                String moveString = moves.substring(j,j+8);
+            if (moves.length() % 10 != 0) { return false; }
+            for (int j = 0; j < moves.length(); j += 10) {
+                String moveString = moves.substring(j, j + 10);
+
+                // Check tileID
+                String tileID = moveString.substring(0,2);
+                if (!Character.isDigit(moveString.charAt(0))
+                        || !Character.isDigit(moveString.charAt(1))) {
+                    return false;
+                }
+                int numTileID = Integer.parseInt(moveString.substring(0,2));
+                if (seenTileIDs.contains(tileID)) {
+                    return false;
+                } else {
+                    seenTileIDs.add(tileID);
+                }
+
+                if (numTileID < 1 || numTileID > maxTileID) { return false; }
+
                 if (!isMoveStringWellFormed(moveString)) {
                     return false;
                 }
             }
+
         }
 
         // Passes all checks
         return true;
     }
+
+
+
+
 
     /**
      * Given a state string, checks whether the game has ended.
