@@ -21,22 +21,19 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
 code:
-  - comment:
-    url:
-    licence:
+  - comment: Visual Board Skeleton was written in deliverable B by Koen Dubrow
+    url: https://gitlab.cecs.anu.edu.au/u7683699/comp1140-ass2/-/blob/main/src/comp1140/ass2/gui/VisualBoard.java#L14-20
+    licence: Group Member Consent
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
 class:
-   - 
-   - 
+   - VisualBoard
 
-# I wish to submit the following methods as entirely my own (remove this if
-# you want to just submit classes):
-method:
-   - 
-   - 
+# A link to this section of the code is below:
+link:
+  - https://gitlab.cecs.anu.edu.au/u7683699/comp1140-ass2/-/blob/main/src/comp1140/ass2/gui/VisualBoard.java#L14-137
 
 # sign *your* name and uid here
-name:
-uid:
+name: Oliver Ross
+uid: u7683699
