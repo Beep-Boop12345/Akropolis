@@ -8,10 +8,9 @@ public class ConstructionSite {
 
     public static Piece[] currentPieces;
 
-    public static Stack stack;
+
     public ConstructionSite (int playercount, Piece[] initialPieces, Stack stack) {
         this.size = playercount + 2;
-        this.stack = stack;
         this.currentPieces = new Piece[this.size];
         for (int i =0; i < initialPieces.length; i++) {
             this.currentPieces[i] = initialPieces[i];
@@ -26,7 +25,6 @@ public class ConstructionSite {
         for (int i =0; i < pieces.length; i++) {
             this.currentPieces[i] = pieces[i];
         }
-        this.stack = stack;
     }
 
     /*Finds the Pieces in the construction site from the gameState string
@@ -48,13 +46,13 @@ public class ConstructionSite {
         return Integer.parseInt(gameState.substring(0,1));
     }
 
-    public static void resupply () {
+    public static void resupply (Stack stack) {
         if (!isEmpty()) {
             return;
         }
         /*order();*/
         for (int i = countPieces(); i < size; i++) {
-            currentPieces[i] = addPiece();
+            currentPieces[i] = addPiece(stack);
         }
     }
 
@@ -118,7 +116,7 @@ public class ConstructionSite {
 
     /*Adds pieces to the construction Site
     * @Param pieces to be added*/
-    private static Piece addPiece() {
+    private static Piece addPiece(Stack stack) {
         Piece output = stack.choose();
         return output;
     }

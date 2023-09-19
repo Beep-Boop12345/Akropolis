@@ -259,7 +259,7 @@ public class Akropolis {
         /*Needs to make stack to pull from*/
         Stack stack = new Stack(gameState);
         /*reSupplies it*/
-        constructionSite.resupply();
+        constructionSite.resupply(stack);
         /*gets the new string representation and incorporates it into the gameState string*/
         String[] gameStateAsArray = gameState.split(";");
         gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + constructionSite.toString();
