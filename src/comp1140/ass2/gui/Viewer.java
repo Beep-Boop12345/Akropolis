@@ -156,7 +156,7 @@ public class Viewer extends Application {
 
 
         // SETUP
-        Setup.display("Setup", "Choose the number of players");
+        Setup.display("Setup", "Choose how many players");
 
         makeControls();
 
