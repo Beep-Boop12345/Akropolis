@@ -155,6 +155,9 @@ public class Viewer extends Application {
         root.getChildren().add(currentView);
 
 
+        // SETUP
+        Setup.display("Setup", "Choose how many players");
+
         makeControls();
 
         primaryStage.setScene(scene);
