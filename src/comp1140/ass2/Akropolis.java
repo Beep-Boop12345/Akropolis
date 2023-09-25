@@ -339,6 +339,7 @@ public class Akropolis {
      * @return true if the move can be played, false otherwise.
      */
     public static boolean isMoveValid(String gameState, String move) {
+        System.out.println(gameState);
         /*Creates the objects needed for computation*/
         Move moveObject = new Move(move);
         ConstructionSite constructionSite = new ConstructionSite(gameState);
