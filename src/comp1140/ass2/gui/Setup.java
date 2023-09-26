@@ -13,9 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-
-
-
+import static javafx.application.Application.launch;
 
 
 public class Setup {
