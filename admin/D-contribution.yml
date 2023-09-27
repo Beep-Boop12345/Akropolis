@@ -10,8 +10,8 @@ declaration: >-
 contributions:
   - uid: u73300006
     contribution: 33
-  - uid:
-    contribution:
+  - uid: u7683699
+    contribution: 33
   - uid:
     contribution:
 
@@ -20,7 +20,7 @@ contributions:
 signatures:
   - name: Andrew Nguyen
     uid: u7330006
-  - name:
-    uid:
+  - name: Oliver Ross
+    uid: u7683699
   - name:
     uid:
