@@ -1,5 +1,6 @@
 package comp1140.ass2;
 
+import java.util.Set;
 public class HexCoord {
 
     // The horizontal and vertical positions as integers x and y.
@@ -61,6 +62,15 @@ public class HexCoord {
         neigbours[4] = new HexCoord(x-1,y-1+offset);
         neigbours[5] = new HexCoord(x-1,y+offset);
         return neigbours;
+    }
+
+    public Set<HexCoord> getSurroundingsSet(){
+        HexCoord[] neighbours = getSurroundings();
+        Set<HexCoord> output = null;
+        for (HexCoord pos : neighbours) {
+            output.add(pos);
+        }
+        return output;
     }
 
     @Override

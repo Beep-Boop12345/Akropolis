@@ -651,11 +651,4 @@ public class Akropolis {
         return new Piece[0];
     }
 
-    public static void main(String[] args) {
-        createPieceArray(3);
-    }
-    public static Piece getPieceFromId(int pieceId) {
-        return null;
-    }
-
 }

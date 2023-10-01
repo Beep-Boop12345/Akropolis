@@ -1,8 +1,7 @@
 package comp1140.ass2;
 
-import static comp1140.ass2.District.HOUSES;
-import static comp1140.ass2.District.QUARRY;
-
+import java.util.Iterator;
+import java.util.Set;
 public class Board {
 
     /*100 100 is origin, Array of all the tiles appearing on the surface*/
@@ -12,6 +11,12 @@ public class Board {
     private int player;
 
     private int stonesInHold;
+
+    private final static HexCoord[] initialEdges = {new HexCoord(0,2), new HexCoord(1,1),
+            new HexCoord(1,0), new HexCoord(2,0), new HexCoord(2,-1), new HexCoord(1,-2),
+            new HexCoord(0,-1), new HexCoord(-1,-2), new HexCoord(-2,-1), new HexCoord(-2,0),
+            new HexCoord(-1,0), new HexCoord(-1,1)};
+    private Set<HexCoord> edges = null;
 
 
     /*Constructs board form player ID and tiles. Trusts that the tile arrangement is possible.*/
@@ -32,6 +37,9 @@ public class Board {
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
+        for (HexCoord pos : initialEdges) {
+            edges.add(pos);
+        }
         /*Makes all the moves listed in the moveString*/
         for (int i = 0; i < move.length; i++) {
             placePiece(move[i], true);
@@ -63,6 +71,11 @@ public class Board {
                 if (getTile(tilePositions[i]).getDistrictType() == District.QUARRY && !setup) {
                     stonesInHold ++;
                 }
+            } else {
+                /*Here we know that piece is extending edge so it must be updated*/
+                Set<HexCoord> pieceEdge = setXOR(tilePositions[0].getSurroundingsSet(),
+                        setXOR(tilePositions[1].getSurroundingsSet(), tilePositions[2].getSurroundingsSet()));
+                edges = setXOR(pieceEdge, edges);
             }
             this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
         }
@@ -161,11 +174,38 @@ public class Board {
         return false;
     }
 
+    /*Will return false positive if not used on edge. This is to make it more computationally effecient*/
+    public boolean isLake(HexCoord point) {
+        if (getTile(point) != null) {
+            return false;
+        }
+        if (edges.contains(point)) {
+            return false;
+        }
+        return true;
+    }
+
     /*Called by player to collect the stones generated due to move*/
     public int collectStones() {
         int stonesHldr = stonesInHold;
         stonesInHold = 0;
         return stonesHldr;
+    }
+
+    /*given 2 sets retursn new set with elements in union and not intersection*/
+    private <T> Set<T> setXOR(Set<T> set1, Set<T> set2) {
+        Set<T> output = null;
+        Iterator<T> iterator = set1.iterator();
+        while (iterator.hasNext()) {
+            /*Most likely uses == not .equals, will likely have to make custom method for this*/
+            if (set2.contains(iterator.next())) {
+                set2.remove(iterator.next());
+            } else {
+                output.add(iterator.next());
+            }
+        }
+        output.addAll(set2);
+        return output;
     }
 
 
