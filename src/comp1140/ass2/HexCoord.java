@@ -64,7 +64,30 @@ public class HexCoord {
     }
 
     @Override
-    public String toString() { return "Position: " + "(" + x +", " + y + ")"; }
+    public String toString() {
+        String yString = String.valueOf(y);
+        /*adds "0" to front if single digit int*/
+        if (yString.length() == 1) {
+            yString = "0" + yString;
+        }
+        String xString = String.valueOf(x);
+        /*adds "0" to front if single digit int*/
+        if (xString.length() == 1) {
+            xString = "0" + xString;
+        }
+        String dirY;
+        String dirX;
+        if (y > 0) {
+            dirY = "N";
+        } else {
+            dirY = "S";
+        }
+        if (x < 0) {
+            dirX = "W";
+        } else {
+            dirX = "E";
+        }
+        return dirY + yString + dirX + xString;}
 
     /**
      * Method to ensure equals compares objects of HexCoord correctly

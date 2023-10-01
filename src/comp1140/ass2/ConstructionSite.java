@@ -110,7 +110,7 @@ public class ConstructionSite {
 
     /*Removes an amount of Pieces from the construction site from the left
     * @Param piece to be removed*/
-    private static void removePiece(Piece piece) {
+    public static void removePiece(Piece piece) {
         /*this round about way of removing is to make sure all nulls remain at the end*/
         boolean hasReachedPieceToBeRemoved = false;
         Piece[] currentPiecesHldr = new Piece[size];
@@ -119,10 +119,14 @@ public class ConstructionSite {
             if (hasReachedPieceToBeRemoved) {
                 currentPieces[i-1] = currentPiecesHldr[i];
             }
-            if (currentPiecesHldr[i].equals(piece)) {
-                hasReachedPieceToBeRemoved = true;
-            } else {
+            if (currentPiecesHldr[i] == null) {
                 currentPieces[i] = currentPiecesHldr[i];
+            } else {
+                if (currentPiecesHldr[i].equals(piece)) {
+                    hasReachedPieceToBeRemoved = true;
+                } else {
+                    currentPieces[i] = currentPiecesHldr[i];
+                }
             }
         }
         if (hasReachedPieceToBeRemoved) {

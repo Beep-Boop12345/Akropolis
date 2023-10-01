@@ -69,7 +69,7 @@ public enum Rotation {
 
     @Override
     public String toString() {
-        return "Rotation: " + value + " degrees";
+        return String.valueOf((int) (value / 60));
     }
 }
 

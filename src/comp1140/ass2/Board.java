@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
 import static comp1140.ass2.District.HOUSES;
+import static comp1140.ass2.District.QUARRY;
 
 public class Board {
 
@@ -10,17 +11,20 @@ public class Board {
     /*Player ID 0 to P-1 inclusive, P is number of players*/
     private int player;
 
+    private int stonesInHold;
 
 
     /*Constructs board form player ID and tiles. Trusts that the tile arrangement is possible.*/
     public Board(int player, Tile[][] surfaceTiles) {
         this.player = player;
         this.surfaceTiles = surfaceTiles;
+        stonesInHold = 0;
     }
 
     /*Constructs board from playerID and moves applied to it*/
     public Board(int player, String movesString) {
         this.player = player;
+        this.stonesInHold = 0;
         /*Converts string of moves into Array of move objects*/
         Move[] move = movesFromString(movesString);
         /*Places the initial tiles*/
@@ -30,7 +34,7 @@ public class Board {
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
         /*Makes all the moves listed in the moveString*/
         for (int i = 0; i < move.length; i++) {
-            placePiece(move[i]);
+            placePiece(move[i], true);
         }
     }
 
@@ -46,7 +50,7 @@ public class Board {
     }
     /*Places piece on Board incorporating the piece tiles into surfaceTiles if possible
     * @Param move*/
-    private void placePiece(Move moveToMake){
+    public void placePiece(Move moveToMake, boolean setup){
         if (! isValidPlacement(moveToMake)) {
             return;
         }
@@ -56,6 +60,9 @@ public class Board {
             /*Sets the tile's height as one below the tile above it*/
             if (getTile(tilePositions[i]) != null) {
                 tiles[i].setHeight(getTile(tilePositions[i]).getHeight() + 1);
+                if (getTile(tilePositions[i]).getDistrictType() == District.QUARRY && !setup) {
+                    stonesInHold ++;
+                }
             }
             this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
         }
@@ -152,6 +159,13 @@ public class Board {
             return !samePiece;
         }
         return false;
+    }
+
+    /*Called by player to collect the stones generated due to move*/
+    public int collectStones() {
+        int stonesHldr = stonesInHold;
+        stonesInHold = 0;
+        return stonesHldr;
     }
 
 

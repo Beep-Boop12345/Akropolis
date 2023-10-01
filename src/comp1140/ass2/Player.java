@@ -24,6 +24,15 @@ public class Player {
         this.board = new Board(this.id, movesMade);
     }
 
+    /*Applies a move to a board and/pays collects stones*/
+    public void applyMove(ConstructionSite constructionSite, Move move) {
+        int price = constructionSite.findPrice(move.getPiece());
+        constructionSite.removePiece(move.getPiece());
+        board.placePiece(move, false);
+        int profit = board.collectStones();
+        stones = stones - price + profit;
+    }
+
     // To string method that displays player id and current stone count
     @Override
     public String toString() {

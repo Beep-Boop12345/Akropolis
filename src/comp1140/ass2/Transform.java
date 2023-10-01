@@ -53,7 +53,8 @@ public class Transform {
     }
 
     @Override
-    public String toString() { return pos.toString() + " " + rot.toString(); }
+    public String toString() {
+        return pos + "R" + rot; }
 
 
     // Main method for testing

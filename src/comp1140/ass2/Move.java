@@ -32,6 +32,6 @@ public class Move {
 
     @Override
     public String toString() {
-       return position.toString();
+       return piece + position.toString();
     }
 }

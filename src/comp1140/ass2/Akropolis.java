@@ -235,6 +235,24 @@ public class Akropolis {
 
     }
 
+    /*Same method using object inputs*/
+    public static boolean isGameOver(ConstructionSite site, Stack stack) {
+        var pieces = site.getCurrentPieces();
+        int pieceCount = 0;
+
+        for (Piece piece:pieces) {
+            if (piece != null) pieceCount += 1;
+        }
+
+        var siteEmpty = pieceCount <= 1;
+
+        var stackEmpty = stack.getPieceCount() <= 0;
+        //System.out.println("Stack: " + stackEmpty);
+
+        return (siteEmpty && stackEmpty);
+
+    }
+
     /**
      * Given a state string, checks whether the Construction Site needs to be resupplied. If it does, resupplies the
      * Construction Site, otherwise does nothing.
@@ -366,12 +384,46 @@ public class Akropolis {
      * @return The state string after applying the move.
      */
     public static String applyMove(String gameState, String move) {
-        /*not required but will be useful later*/
+        /*not required but will be useful when game becomes object reliant*/
         if (!isMoveValid(gameState,move)) {
             return gameState;
         }
+        /*Initialize objects*/
         int turn = Integer.parseInt(gameState.split(";")[1].substring(0,1));
-        return ""; // FIXME Task 12
+        int playerCount = Integer.parseInt(gameState.substring(0,1));
+        Move moveObj = new Move(move);
+        ConstructionSite constructionSite = new ConstructionSite(gameState);
+        Stack stack = new Stack(gameState);
+        /*Player not needed for string based method but useful when game becomes object reliant*/
+        Player player = new Player(gameState.split(";")[2+turn]);
+        /*Compute changes to objects*/
+        player.applyMove(constructionSite, moveObj);
+        constructionSite.resupply(stack);
+        /*create new gameState string*/
+        String[] gameStateArr = gameState.split(";");
+        for (int i = 0; i < playerCount; i++) {
+            if (i == turn) {
+                /*Account for stone cost*/
+                String stoneString = String.valueOf(player.getStones());
+                if (stoneString.length() == 1) {
+                    stoneString = "0" + stoneString;
+                }
+                String purchasedPlayer = gameStateArr[i + 2].substring(0,2) +
+                        stoneString +
+                        gameStateArr[i + 2].substring(4);
+                gameStateArr[i + 2] = purchasedPlayer + move;
+            }
+        }
+        /*Update turn if needed*/
+        if (!isGameOver(constructionSite,stack)) {
+            turn = (turn + 1) % playerCount;
+        }
+        gameStateArr[1] = String.valueOf(turn) + constructionSite;
+        String newGameState = "";
+        for (String gameStringComponent : gameStateArr) {
+            newGameState = newGameState + gameStringComponent + ";";
+        }
+        return newGameState;
     }
 
     /**
