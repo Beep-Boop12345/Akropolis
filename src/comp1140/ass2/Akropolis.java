@@ -339,7 +339,6 @@ public class Akropolis {
      * @return true if the move can be played, false otherwise.
      */
     public static boolean isMoveValid(String gameState, String move) {
-        System.out.println(gameState);
         /*Creates the objects needed for computation*/
         Move moveObject = new Move(move);
         ConstructionSite constructionSite = new ConstructionSite(gameState);
@@ -526,7 +525,30 @@ public class Akropolis {
      * @return An array containing the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateCompleteScores(String gameState) {
-        return new int[0]; // FIXME Task 20 & 23F
+        /*Finds how many players*/
+        int playerCount = Integer.parseInt(gameState.substring(0,1));
+        int[] completeScores = new int[playerCount];
+        int[] houseScores = calculateHouseScores(gameState);
+        int[] marketScores = calculateMarketScores(gameState);
+        int[] barrackScores = calculateBarracksScores(gameState);
+        int[] templeScores = calculateTempleScores(gameState);
+        int[] gardenScores = calculateGardenScores(gameState);
+        int[] stones = new int[playerCount];
+        for (int i = 0; i < playerCount; i ++) {
+            /*Will retrieve stone count from player object*/
+            Player hldrPlayer = new Player(gameState.split(";")[2+i]);
+            stones[i] = hldrPlayer.getStones();
+        }
+        /*Will calculate final scores*/
+        for (int i = 0; i < playerCount; i++) {
+            completeScores[i] = houseScores[i] +
+                    marketScores[i] +
+                    barrackScores[i] +
+                    templeScores[i] +
+                    gardenScores[i] +
+                    stones[i];
+        }
+        return completeScores;
     }
 
     /**

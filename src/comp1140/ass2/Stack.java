@@ -105,7 +105,7 @@ public class Stack {
     }
 
 
-    /*Chooses a random tile to give to constructionSite*/
+    /*Chooses a random tile to give to constructionSite. Give choose a more descriptive name*/
     public static Piece choose() {
         if (pieceCount == 0) {
             return null;
