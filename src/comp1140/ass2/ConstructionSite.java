@@ -109,9 +109,25 @@ public class ConstructionSite {
     }
 
     /*Removes an amount of Pieces from the construction site from the left
-    * @Param nuber of pieces to be removed*/
-    private static void removePieces(int numberOfPieces) {
-
+    * @Param piece to be removed*/
+    private static void removePiece(Piece piece) {
+        /*this round about way of removing is to make sure all nulls remain at the end*/
+        boolean hasReachedPieceToBeRemoved = false;
+        Piece[] currentPiecesHldr = new Piece[size];
+        System.arraycopy(currentPieces, 0, currentPiecesHldr, 0, size);
+        for (int i = 0; i < size; i ++) {
+            if (hasReachedPieceToBeRemoved) {
+                currentPieces[i-1] = currentPiecesHldr[i];
+            }
+            if (currentPiecesHldr[i].equals(piece)) {
+                hasReachedPieceToBeRemoved = true;
+            } else {
+                currentPieces[i] = currentPiecesHldr[i];
+            }
+        }
+        if (hasReachedPieceToBeRemoved) {
+            currentPieces[size-1] = null;
+        }
     }
 
     /*Adds pieces to the construction Site

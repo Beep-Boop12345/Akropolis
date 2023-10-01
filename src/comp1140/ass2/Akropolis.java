@@ -366,6 +366,11 @@ public class Akropolis {
      * @return The state string after applying the move.
      */
     public static String applyMove(String gameState, String move) {
+        /*not required but will be useful later*/
+        if (!isMoveValid(gameState,move)) {
+            return gameState;
+        }
+        int turn = Integer.parseInt(gameState.split(";")[1].substring(0,1));
         return ""; // FIXME Task 12
     }
 
