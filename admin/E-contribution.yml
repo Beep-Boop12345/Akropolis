@@ -10,7 +10,7 @@ declaration: >-
 contributions:
   - uid: u7646615
     contribution: 33
-  - uid:
+  - uid: u7330006
     contribution: 33
   - uid:
     contribution: 33
@@ -20,7 +20,7 @@ contributions:
 signatures:
   - name: Koen Dubrow
     uid: u7646615
-  - name:
-    uid:
+  - name: Andrew Nguyen
+    uid: u7330006
   - name:
     uid:
