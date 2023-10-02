@@ -1,5 +1,6 @@
 package comp1140.ass2;
 
+import java.util.Set;
 public class HexCoord {
 
     // The horizontal and vertical positions as integers x and y.
@@ -63,8 +64,40 @@ public class HexCoord {
         return neigbours;
     }
 
+    public Set<HexCoord> getSurroundingsSet(){
+        HexCoord[] neighbours = getSurroundings();
+        Set<HexCoord> output = null;
+        for (HexCoord pos : neighbours) {
+            output.add(pos);
+        }
+        return output;
+    }
+
     @Override
-    public String toString() { return "Position: " + "(" + x +", " + y + ")"; }
+    public String toString() {
+        String yString = String.valueOf(y);
+        /*adds "0" to front if single digit int*/
+        if (yString.length() == 1) {
+            yString = "0" + yString;
+        }
+        String xString = String.valueOf(x);
+        /*adds "0" to front if single digit int*/
+        if (xString.length() == 1) {
+            xString = "0" + xString;
+        }
+        String dirY;
+        String dirX;
+        if (y > 0) {
+            dirY = "N";
+        } else {
+            dirY = "S";
+        }
+        if (x < 0) {
+            dirX = "W";
+        } else {
+            dirX = "E";
+        }
+        return dirY + yString + dirX + xString;}
 
     /**
      * Method to ensure equals compares objects of HexCoord correctly
