@@ -1,6 +1,6 @@
 package comp1140.ass2;
 
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Set;
 public class Board {
 
@@ -12,11 +12,6 @@ public class Board {
 
     private int stonesInHold;
 
-    private final static HexCoord[] initialEdges = {new HexCoord(0,2), new HexCoord(1,1),
-            new HexCoord(1,0), new HexCoord(2,0), new HexCoord(2,-1), new HexCoord(1,-2),
-            new HexCoord(0,-1), new HexCoord(-1,-2), new HexCoord(-2,-1), new HexCoord(-2,0),
-            new HexCoord(-1,0), new HexCoord(-1,1)};
-    private Set<HexCoord> edges = null;
 
 
     /*Constructs board form player ID and tiles. Trusts that the tile arrangement is possible.*/
@@ -37,9 +32,6 @@ public class Board {
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
-        for (HexCoord pos : initialEdges) {
-            edges.add(pos);
-        }
         /*Makes all the moves listed in the moveString*/
         for (int i = 0; i < move.length; i++) {
             placePiece(move[i], true);
@@ -71,11 +63,6 @@ public class Board {
                 if (getTile(tilePositions[i]).getDistrictType() == District.QUARRY && !setup) {
                     stonesInHold ++;
                 }
-            } else {
-                /*Here we know that piece is extending edge so it must be updated*/
-                Set<HexCoord> pieceEdge = setXOR(tilePositions[0].getSurroundingsSet(),
-                        setXOR(tilePositions[1].getSurroundingsSet(), tilePositions[2].getSurroundingsSet()));
-                edges = setXOR(pieceEdge, edges);
             }
             this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
         }
@@ -174,15 +161,56 @@ public class Board {
         return false;
     }
 
-    /*Will return false positive if not used on edge. This is to make it more computationally effecient*/
+    /*given a hexCoord will decide if it is a part of a lake*/
     public boolean isLake(HexCoord point) {
         if (getTile(point) != null) {
             return false;
         }
-        if (edges.contains(point)) {
+        /*This quick way of checking if it is not a lake, failing this does not mean that it cannot be a lake*/
+        boolean hasReachedTileCardinally = false;
+        hasReachedTileCardinally = hasReachedTileCardinally || !cardinalSearchForTile(new HexCoord(0,1),point);
+        hasReachedTileCardinally = hasReachedTileCardinally || !cardinalSearchForTile(new HexCoord(0,-1),point);
+        hasReachedTileCardinally = hasReachedTileCardinally || !cardinalSearchForTile(new HexCoord(1,0),point);
+        hasReachedTileCardinally = hasReachedTileCardinally || !cardinalSearchForTile(new HexCoord(-1,0),point);
+        if (hasReachedTileCardinally) {
+            return false;
+        }
+        /*This tries to build the largest set of empty coordinates, if it reaches a sie of 20, it will stop adding
+        * elements, in this case we assume it is not a lake*/
+        Set<HexCoord> noTileGroup = new HashSet<>();
+        groupOfNoTiles(point, noTileGroup);
+        if (noTileGroup.size() > 20) {
             return false;
         }
         return true;
+    }
+
+    /*given a direction and a point will return true if tile is reached ,moving in given direction from point*/
+    private boolean cardinalSearchForTile(HexCoord direction, HexCoord point) {
+        if (point.getX() < -100 || point.getX() > 99 || point.getY() < -100 || point.getY() > 99) {
+            return false;
+        }
+        if (getTile(point) != null) {
+            return true;
+        }
+        return cardinalSearchForTile(direction, point.add(direction));
+    }
+
+    /*Given a point will build largest set of coordinates with no tile as possible up to 20 elements*/
+    private void groupOfNoTiles(HexCoord point, Set<HexCoord> noTileGroup) {
+        if (noTileGroup.size() > 20) {
+            return;
+        }
+        if (getTile(point) != null) {
+            return;
+        }
+        noTileGroup.add(point);
+        HexCoord[] neighbours = point.getSurroundings();
+        for (HexCoord neighbour : neighbours) {
+            if (!noTileGroup.contains(neighbour)) {
+                groupOfNoTiles(neighbour, noTileGroup);
+            }
+        }
     }
 
     /*Called by player to collect the stones generated due to move*/
@@ -190,22 +218,6 @@ public class Board {
         int stonesHldr = stonesInHold;
         stonesInHold = 0;
         return stonesHldr;
-    }
-
-    /*given 2 sets retursn new set with elements in union and not intersection*/
-    private <T> Set<T> setXOR(Set<T> set1, Set<T> set2) {
-        Set<T> output = null;
-        Iterator<T> iterator = set1.iterator();
-        while (iterator.hasNext()) {
-            /*Most likely uses == not .equals, will likely have to make custom method for this*/
-            if (set2.contains(iterator.next())) {
-                set2.remove(iterator.next());
-            } else {
-                output.add(iterator.next());
-            }
-        }
-        output.addAll(set2);
-        return output;
     }
 
 
