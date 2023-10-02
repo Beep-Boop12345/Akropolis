@@ -1,8 +1,8 @@
 ## Code Review
 
-Reviewed by: <your full name>, <your uid>
+Reviewed by: <Andrew>, <Nguyen>
 
-Reviewing code written by: <the other person's full name> <other uid>
+Reviewing code written by: <Oliver Ross> <u7683699>
 
 Component: <the component being reviewed>
 
