@@ -42,8 +42,8 @@ public class Setup extends Application {
     public void makeControls() {
         // Label for displaying "Number of Players" text
         Label playerCountLabel = new Label("Number of Players");
-        playerCountLabel.setTextFill(Color.WHITE); // Set text color to white
-        playerCountLabel.setStyle("-fx-font-weight: bold;"); // Make text bold
+        playerCountLabel.setTextFill(Color.WHITE);
+        playerCountLabel.setStyle("-fx-font-weight: bold;");
 
         // Buttons to adjust the number of players
         incrementPlayersButton = new Button("+");
@@ -57,21 +57,8 @@ public class Setup extends Application {
         decrementPlayersButton.setPrefHeight(25);
 
         // Create a label for displaying the player count
-        Label playerCountDisplay = new Label(Integer.toString(playerCount)); // Initial player count
-        playerCountDisplay.setStyle("-fx-font-weight: bold;"); // Make text bold
-
-        // Add event handlers for increment and decrement buttons
-        incrementPlayersButton.setOnAction(event -> {
-            playerCount++;
-            playerCountDisplay.setText(Integer.toString(playerCount)); // Update the displayed player count
-        });
-
-        decrementPlayersButton.setOnAction(event -> {
-            if (playerCount > 2) { // Ensure player count doesn't go below 2
-                playerCount--;
-                playerCountDisplay.setText(Integer.toString(playerCount)); // Update the displayed player count
-            }
-        });
+        Label playerCountDisplay = new Label(Integer.toString(playerCount));
+        playerCountDisplay.setStyle("-fx-font-weight: bold;");
 
         // Checkbox buttons for scoring variants
         housesVariant = new CheckBox("Houses Scoring Variant");
@@ -88,30 +75,30 @@ public class Setup extends Application {
         gardensVariant.setStyle("-fx-font-weight: bold;");
 
         // Create an HBox for the increment and decrement buttons, along with the player count
-        HBox playerButtonsHBox = new HBox(50); // 20 pixels spacing
+        HBox playerButtonsHBox = new HBox(50);
         playerButtonsHBox.setAlignment(Pos.CENTER);
         playerButtonsHBox.getChildren().addAll(decrementPlayersButton, playerCountDisplay, incrementPlayersButton);
-        playerButtonsHBox.setLayoutX(300); // Set X-coordinate
-        playerButtonsHBox.setLayoutY(400); // Set Y-coordinate
+        playerButtonsHBox.setLayoutX(300);
+        playerButtonsHBox.setLayoutY(400);
 
         // Create a VBox for the checkboxes and adjust its position
-        VBox checkboxVBox = new VBox(10); // 10 pixels spacing
+        VBox checkboxVBox = new VBox(10);
         checkboxVBox.setAlignment(Pos.CENTER);
         checkboxVBox.getChildren().addAll(housesVariant, marketsVariant, barracksVariant, templesVariant, gardensVariant);
-        checkboxVBox.setLayoutX(500); // Set X-coordinate
-        checkboxVBox.setLayoutY(200); // Set Y-coordinate
+        checkboxVBox.setLayoutX(500);
+        checkboxVBox.setLayoutY(200);
 
         // Create a VBox to organize the controls and set its background color to grey
-        VBox greyBox = new VBox(0); // 20 pixels spacing
+        VBox greyBox = new VBox(0);
         greyBox.setAlignment(Pos.CENTER);
         greyBox.setStyle("-fx-background-color: grey;");
         greyBox.getChildren().addAll(playerCountLabel, playerButtonsHBox, checkboxVBox);
 
-        // Create a StackPane to center the grey VBox in the middle of the screen
+
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(greyBox);
 
-        // Add the StackPane to the root group
+
         controls.getChildren().add(stackPane);
     }
 
