@@ -9,7 +9,7 @@ import java.util.Set;
 public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
 
-    public static int numberOfPlayers; // Code to find numberOfPlayers given stateString is commented out in GameState
+    public static int numberOfPlayers;
 
     public static Player[] currentPlayers;
 
@@ -25,7 +25,7 @@ public class Akropolis {
 
     public static GameState gameStage;
 
-    public static int curentTurn;
+    public static int currentTurn;
 
     /*Cycles turn*/
     public static void nextTurn() {
@@ -334,7 +334,6 @@ public class Akropolis {
             return null;
         }
         return tile.toStringRep();
-
     }
 
     /**
@@ -368,7 +367,7 @@ public class Akropolis {
             return false;
         }
         /*Determines if piece can be placed on the board at given postion*/
-        return player.getBoard().isValidPlacement(moveObject); // FIXME Task 11
+        return player.getBoard().isValidPlacement(moveObject);
     }
 
     /**
@@ -431,8 +430,24 @@ public class Akropolis {
      *
      * @param gameState a state string.
      * @return A set containing all moves that can be played.
-     */
+ */
     public static Set<String> generateAllValidMoves(String gameState) {
+        int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
+
+        // Set maxPieceID based on numberOfPlayers
+        int maxPieceID;
+        switch (numberOfPlayers) {
+            case 2:
+                maxPieceID = 37;
+                break;
+            case 3:
+                maxPieceID = 49;
+                break;
+            default:
+                maxPieceID = 61;
+        }
+
+
         return null; // FIXME Task 14
     }
 
@@ -460,6 +475,7 @@ public class Akropolis {
      * @return An array containing the "House" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateHouseScores(String gameState) {
+
         return new int[0]; // FIXME Task 15 & 23A
     }
 
@@ -511,7 +527,36 @@ public class Akropolis {
      * @return An array containing the "Barracks" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateBarracksScores(String gameState) {
-        return new int[0]; // FIXME Task 17 & 23C
+        int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
+        int[] barrackScores = new int[numberOfPlayers];
+        // An assumption made is that the gameState string is well formed
+        boolean barrackScoringVar = Character.isUpperCase(gameState.charAt(3));
+
+        /*
+        2hmbtg;008050336;P001;P102;
+        05S01W03R2
+        2hmbtg;1080336;P00005S01W03R2;P102;
+        03S00E01R1
+        2hmbtg;00836;P00005S01W03R2;P10103S00E01R1;
+        08S02E03R4
+        2hmbtg;136091823;P00005S01W03R208S02E03R4;P10103S00E01R1;
+
+         */
+
+
+        // Iterate through all the player strings to calculate each player's score
+        for (int i = 0; i < numberOfPlayers ; i++) {
+            String playerString = gameState.split(";")[i + 2];
+            Player player = new Player(playerString);
+            Tile[][] playerTiles = player.getBoard().getSurfaceTiles();
+
+
+        }
+
+
+
+
+        return barrackScores; // FIXME Task 17 & 23C
     }
 
     /**
@@ -650,5 +695,7 @@ public class Akropolis {
 
         return new Piece[0];
     }
+
+
 
 }

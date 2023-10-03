@@ -31,10 +31,6 @@ public enum GameState {
         int turn = Integer.parseInt(shared.substring(0, 1));
         this.turn = turn+1;
 
-        /* Parse the player string to find the number of players
-        String player = statements[2];
-        this.numPlayers = Integer.parseInt(player.substring(0, 1)); */
-
     }
 
     // Method to update the game state
