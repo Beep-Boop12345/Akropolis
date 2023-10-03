@@ -4,6 +4,7 @@ import comp1140.ass2.Akropolis;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 // FIXME Task 13  - Basic Playable Game
@@ -26,6 +27,8 @@ public class Game extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        root.getChildren().add(new StoneLabel(100, 100, 3, 2));
+
         Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
