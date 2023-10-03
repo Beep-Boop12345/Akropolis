@@ -153,7 +153,7 @@ public class Viewer extends Application {
 
         root.getChildren().add(controls);
         root.getChildren().add(currentView);
-
+        Setup.display();
 
 
 
