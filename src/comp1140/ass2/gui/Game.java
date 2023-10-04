@@ -27,11 +27,14 @@ public class Game extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        root.getChildren().add(new StoneLabel(100, 100, 3, 2));
 
-        Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        stage.setScene(scene);
-        stage.show();
+        //root.getChildren().add(new StoneLabel(100, 100, 3, 2));
+
+        Setup.display("Setup", "Choose how many players");
+
+        //Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        //stage.setScene(scene);
+        //stage.show();
     }
 
     /*Initializes the start of a newGame*/
