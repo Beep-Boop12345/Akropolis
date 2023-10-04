@@ -30,7 +30,7 @@ public class Game extends Application {
 
         //root.getChildren().add(new StoneLabel(100, 100, 3, 2));
 
-        Setup.display("Setup", "Choose how many players");
+        Setup.display();
 
         //Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
         //stage.setScene(scene);
