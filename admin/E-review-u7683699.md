@@ -1,85 +1,24 @@
 ## Code Review
 
-Reviewed by: Koen Dubrow, u7646615
+Reviewed by: Oliver Ross, u7683699
 
-Reviewing code written by: Andrew Nguyen u7330006
-Component: isStateStringWellFormed method in Akropolos class
+Reviewing code written by: Koen Dubrow u7646615
+Component: isValidPlacement method in the Board class
 
 ### Comments 
 
--There are many nitpicks in this review. There are only about 3 real issues or points of improvement, that should be properly 
-considered. I have attempted to stress throughout the review but the code is very well-written, and a good example of effective
-and stylish code.
+Objective -- This function is an integral part of checking if a piece can be placed in a certain spot on the board.
 
-Best features of the Code:
-Line 201: Reference to method isMoveStringWellFormed
--This is a very good of encapsulation and avoid repetetion
-Line 125: use of set
--The way you use set is a key example of where it is best not to use an array and significantly reduces accidental complexity
--The code overall works, and the way that it works it clear, hence the code does its job excellenlty.
+Functionality -- This method is used in the isMoveValid method in the Akropolis class to run. This method is only concerned with a single move so through using is isValidPlacement this function separates the class based computations from the string based input manipulation of the isMoveValid function. This goes on to prevent an end-user from making an invalid move and ensures that each board state given to the gui is a possible board state. This removes the need for edge-case checks elsewhere in the program.
 
-Documentation:
-Yes. Comments are concise and indicate to reader what check is being performed or why something is occuring.
-Nit (nitpick): 
--not all checks are commented with what they are checking (e.g. line 112 to 115). This is not really an issue as
-its function is very self-explanatory. In practise I had no problem following the code. 
-Good feature:
--I appreciate how you were sure to make comment explaining which part of the stateString was being checked
-Nit:
--you introduce maxTileID and seenTileIDs together. While this is reasonable because they are both used to check if a pieceID
-is valid, it was the only part of the code I had to think about when reading. I would like to stress that this is the only
-part of the code I struggled to read. Your code is incredibly easy to follow otherwise.
+Tests -- Since isValidPlacement is nearly exclusively used in the isMoveValid method it is sufficient to test it using the given tests for isMoveValid. However if this function is utilised in other areas outside of the implementation in isMoveValid it may be worth constructing unit tests specifically for it.
 
-Java conventions and encapsulation:
--Variable names are informative.
-Nit:
--"components" in isolation is not a particularly informative variable name.
--Method names are not relevant here, they have all been chosen for you.
--Style is consistent. In general the code follow the very simple style of if X the return false. This is again very easy to follow,
-and much appreciated.
-Nit (very minor):
--At line 144 tileID is declared a substring of constructionSite. This substring is used repeatedly by taking the same substring
-again instead of referencing tileID.
-I (Issue):
--This method is centered around string manipulation. This is very reasonable as it is checking if a string is valid, and is
-unlikely to cause issues later on, as our object orientated backend will not need this method. However this does go against the style
-of Java's object orientated paradigm. However if this method were to written by checking that constructors can succeed and that
-objects have values in line with the game rules then it could be used to check if a state of Akropolos encoded as objects is in a
-valid state, which would be very useful especially for testing. An aproach that could be taken to make the method more object 
-orientated could be to first attempt to construct the relevant game objects and then check that they have legal values (like 
-each piece only occuring once).
-MI (mild issue):
--The method is very long. This could be ammended by creating private methods which check that each component of the stateString is
-wellFormed. This has the added benefit of reducing the complexity of methods that are interfaced with.
--I would like to make it clear that I find the codes style to be very good, in consistency and convention (as I understand it).
-My only real issue is in the exclusive use of String manipulation, however there is even a good arguement as to why this
-is an appropriate decision for this method.
+Complexity -- Overall the function completes the task that's required from it in a logical way but there are some small improvements that could be made. One good way the method reduces complexity is by breaking the overall tasks into smaller tasks. It follows a process of checking that the move given contains the necessary information, adjacency of pieces, height of pieces and finally if there are two or more pieces being played on top of. This structure makes it clear to any reader what each part of the code is doing. There are also good uses of return statements to prevent uneeded code from running in certain cases preventing potential side effects. This is a good design that attempts to minimise complexity. A possible improvement would be to section each part into its own method. While on a small scale this may not be worth the effort, if similar tests need to be performed in isolation outside of the isValidPlacement function having them separate prevents repeated code. It also makes understanding the function even easier given the submethods are named well. When testing for bugs it also allows for more isolation of code. For example you could have hasAdjacentTile, sameHeight or samePiece methods all of which may be useful elsewhere. As the project stands however it is a good implementation.
 
-Redundancy:
--As far as I can tell no check is unnesarry.
-Nit: 
--The method is very long (100+ lines). This is not really a problem because as a result the method is very easy to follow. 
-However, I believe there is some redundancy in your code that could be adressed to bring down the methods length, hence this redundancy section which is really a subsection of Java conventions and encapsulation.
-Suggestion:
--It is required multiple times to check that a segment of the string represents a positive number in natural language. In same cases
-these regions are as large 3 elements (line 172). An alternative aproach could be try Integer.parseInt.
-Point of Improvement:
--To expand on the last comment the check that a region of the gameState contains a two digit integer is repeated thoroughout the code.
-The method would benefit for this check to be encapsulated into a private method.
-Nit, line 133:
--It has already been checked that turn is positive (shared.charAt(0) would not return a digit if this was the case and
-the method would reutrn false). Checking again is completely redundant. That said it is pretty trivial and a bit of a non-issue.
+Good names -- All variable names are descriptive and clear in purpose. e.g. tilesToBeCovered explicitely states which tiles currently occupy the space being placed on. As a minor note I found the naming of findTilePosition to be a little misleading as it returns an array of multiple tile positions. Maybe findTilePositions would be more useful.
 
-Testing/Edge-cases:
--Method is extremely thorough. It also passes all the pre-made unit tests.
-Nit:
--There are some edge casses that I believe would produce a false positive. I will list the below, it is important to keep in mind that 
-I read the code with the intention of trying to spot even the most unlikely edge casses.
-  -The amount of piece the constructionSite may hold is dependent on how many players ther are. A stateString describing a 2 player
-  game with 5 pieces in the constructionSite would pass the test, but it should be illegal. There is an arguement to make that
-the method does not need to determine if a state is legal in the rules, just that the string is well formed. However, the
-specifications require some aspects of a legal state be tested (e.g. no piece double ups).
-  -The code does not check that there are no two playerStrings with the same ID.
+Comments -- Comments are well used to explain each section of the function and its goal. It made understanding each part very easy and provided no misunderstandings.
 
-Overall comments:
--Code is highly effective, reasonable and logical. It only seems likely to fail on the most minor of edge casses.
+Style -- The method exhibits good style and is easily readable.
+
+Final Comments -- This is a very good implementation of this method. It is suitably tested, completes its purpose and is easily understood. While some code sections would vary slightly from my own approach to them they are not noticably different to make a significant improvement. My main recommendation is to reduce the size of the method using subfunctions which makes for easier comprehension, testing and resuse of code.
