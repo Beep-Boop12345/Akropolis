@@ -2,6 +2,7 @@ package comp1140.ass2;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Iterator;
 public class Board {
 
     /*100 100 is origin, Array of all the tiles appearing on the surface*/
@@ -250,12 +251,29 @@ public class Board {
         noTileGroup.add(point);
         HexCoord[] neighbours = point.getSurroundings();
         for (HexCoord neighbour : neighbours) {
-            if (!noTileGroup.contains(neighbour)) {
+            if (!containsIdentical(noTileGroup,neighbour)) {
                 groupOfNoTiles(neighbour, noTileGroup);
             }
         }
     }
 
+    /**Checks if set of HexCoord contains an identical element to another HexCoord. @u7646615
+     * <p>
+     * Does not check if set contains an element, but if it holds an element that is equal to another
+     *
+     * @param set the set to be checked for identical elements
+     * @param element the element that may be equal to an element in the set
+     * @return boolean true if the set has an element equal to the element given.
+     **/
+    private boolean containsIdentical(Set<HexCoord> set, HexCoord element) {
+        Iterator<HexCoord> setIterator = set.iterator();
+        while (setIterator.hasNext()) {
+            if (element.equals(setIterator.next())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     /**
