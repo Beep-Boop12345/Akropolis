@@ -214,6 +214,29 @@ public class Board {
         return true;
     }
 
+    /**Checks if a tile is a lake according to the definition of the test casses. @u7646615
+     * <p>
+     * The game rules consider empty tiles surronding by pieces to be a lake.
+     * The test case definition requires that a lake be only 1 tile large
+     *
+     * @param point the point to be tested if it is a lake
+     * @return boolean, true if it is a lake
+     * */
+    public boolean isLakeSingleTile(HexCoord point) {
+        // Confirms that the tile is empty
+        if (getTile(point) != null) {
+            return false;
+        }
+        // Checks that all neighbours are non-empty
+        HexCoord[] neighbours = point.getSurroundings();
+        for (HexCoord neighbour : neighbours) {
+            if (getTile(neighbour) == null || !inBounds(neighbour)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * searches from a point in a given direction checking if a piece or edge is reached. @u76466615
      *
@@ -304,6 +327,22 @@ public class Board {
         return surfaceTiles[xPos][100+ position.getY()];
     }
 
+    /** Given a position checks if it is in the bounds of the board. @u7646615
+     *
+     * @param point the point to be checked if it is in the bounds of the board
+     * @return boolean true if it is in the bounds of the board
+     * */
+    private boolean inBounds(HexCoord point) {
+        int xPos = 100 + point.getX();
+        int yPos = 100 + point.getY();
+        if (xPos > 199 || xPos < 0) {
+            return false;
+        }
+        if (yPos > 199|| yPos < 0) {
+            return false;
+        }
+        return true;
+    }
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
     }
