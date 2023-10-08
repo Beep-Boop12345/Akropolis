@@ -71,6 +71,23 @@ public class Tile {
         return isPlaza;
     }
 
+
+    // Getter method to retrieve stars from a tile (Useful for scores calculations Tasks 15-20, 23A-F)
+    public int getStars(Tile tile) {
+        // Only Plaza's have stars
+        if (tile.isPlaza) {
+            switch (tile.districtType) {
+                case HOUSES: return 1;
+                case MARKETS: case BARRACKS: case TEMPLES: return 2;
+                case GARDENS: return 3;
+                // Return 0 if it doesn't match a district
+                default: return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "Tile( " + districtType + " | isPlaza: " + isPlaza + " | height: " + height + " | isOccupied: " + isOccupied + ")";
