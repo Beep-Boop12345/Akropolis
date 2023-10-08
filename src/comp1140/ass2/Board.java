@@ -68,11 +68,12 @@ public class Board {
         }
     }
 
-    /*Returns the position of the individual tiles given the transformation of the piece.
+    /* Returns the position of the individual tiles given the transformation of the piece.
     * The order of the positions is the same s the order of tiles
     * @Param Move moveToMake
     * @Return HexCoord[] array of HexCoords (object describing a position of the board)
-    * of the position each tile will be.*/
+    * of the position each tile will be.
+    * */
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
         HexCoord basePos = moveToMake.getPosition().getPos();

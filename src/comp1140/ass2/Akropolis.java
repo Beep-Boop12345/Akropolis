@@ -1,7 +1,5 @@
 package comp1140.ass2;
 
-
-
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
