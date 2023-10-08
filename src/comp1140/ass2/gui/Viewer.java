@@ -153,6 +153,8 @@ public class Viewer extends Application {
 
         root.getChildren().add(controls);
         root.getChildren().add(currentView);
+
+        // Invokes Setup class to get initial stateString
         Setup.display();
 
 
