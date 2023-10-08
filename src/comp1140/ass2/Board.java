@@ -13,7 +13,8 @@ public class Board {
 
     private int stonesInHold;
 
-
+    private int boardRadiusX;
+    private int boardRadiusY;
 
     /**Constructs board form internal objects. @u7646615
      *
@@ -23,6 +24,9 @@ public class Board {
         this.player = player;
         this.surfaceTiles = surfaceTiles;
         stonesInHold = 0;
+        //Default to max now, will change in future
+        boardRadiusX = 100;
+        boardRadiusY = 100;
     }
 
     /**Constructs board from String. @u7646615
@@ -39,6 +43,8 @@ public class Board {
         this.surfaceTiles[101][99] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[100][101] = new Tile(District.QUARRY, false, 0);
         this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
+        this.boardRadiusX = 2;
+        this.boardRadiusY = 2;
         /*Makes all the moves listed in the moveString*/
         for (int i = 0; i < move.length; i++) {
             placePiece(move[i], true);
@@ -78,6 +84,13 @@ public class Board {
                 if (getTile(tilePositions[i]).getDistrictType() == District.QUARRY && !setup) {
                     stonesInHold ++;
                 }
+            }
+            //We update board active board radius as pieces are placed. This makes checks much faster.
+            if (Math.abs(tilePositions[i].getY()) > boardRadiusY) {
+                boardRadiusY = Math.abs(tilePositions[i].getY());
+            }
+            if (Math.abs(tilePositions[i].getX()) > boardRadiusX) {
+                boardRadiusX = Math.abs(tilePositions[i].getX());
             }
             this.surfaceTiles[100+tilePositions[i].getX()][100+tilePositions[i].getY()] = tiles[i];
         }
@@ -335,10 +348,10 @@ public class Board {
     private boolean inBounds(HexCoord point) {
         int xPos = 100 + point.getX();
         int yPos = 100 + point.getY();
-        if (xPos > 199 || xPos < 0) {
+        if (xPos > 99 + boardRadiusX || xPos < 100 - boardRadiusX) {
             return false;
         }
-        if (yPos > 199|| yPos < 0) {
+        if (yPos > 99 + boardRadiusY || yPos < 100 - boardRadiusY) {
             return false;
         }
         return true;
