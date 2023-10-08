@@ -66,7 +66,7 @@ public class Board {
      *@param setup true when the method is called by the constructor. Stones already generated should not be counted
      **/
     public void placePiece(Move moveToMake, boolean setup){
-        if (! isValidPlacement(moveToMake)) {
+        if (!isValidPlacement(moveToMake)) {
             return;
         }
         HexCoord[] tilePositions = findTilePosition(moveToMake);
@@ -169,6 +169,7 @@ public class Board {
             }
             return false;
         }
+
         /*Checks if the whole piece is on the one level*/
         boolean heightEq = true;
         heightEq = heightEq && (tilesToBeCovered[0].getHeight() == tilesToBeCovered[1].getHeight());
@@ -236,6 +237,7 @@ public class Board {
         }
         return true;
     }
+
 
     /**
      * searches from a point in a given direction checking if a piece or edge is reached. @u76466615
@@ -324,7 +326,7 @@ public class Board {
         if (yPos > 199|| yPos < 0) {
             return null;
         }
-        return surfaceTiles[xPos][100+ position.getY()];
+        return surfaceTiles[xPos][yPos];
     }
 
     /** Given a position checks if it is in the bounds of the board. @u7646615

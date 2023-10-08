@@ -231,7 +231,7 @@ public class Setup {
     public static void makeBackground() {
         // Create background image
         Image backgroundImage = new Image("https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg",
-                SETUP_WIDTH, SETUP_HEIGHT, false, true);
+                SETUP_WIDTH, SETUP_HEIGHT, false, false);
         BackgroundImage BI = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background BG = new Background(BI);

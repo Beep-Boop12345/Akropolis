@@ -437,15 +437,12 @@ public class Akropolis {
         // Set maxPieceID based on numberOfPlayers
         int maxPieceID;
         switch (numberOfPlayers) {
-            case 2:
-                maxPieceID = 37;
-                break;
-            case 3:
-                maxPieceID = 49;
-                break;
-            default:
-                maxPieceID = 61;
+            case 2: maxPieceID = 37; break;
+            case 3: maxPieceID = 49; break;
+            default: maxPieceID = 61; break;
         }
+
+
 
 
         return null; // FIXME Task 14
@@ -553,9 +550,6 @@ public class Akropolis {
 
         }
 
-
-
-
         return barrackScores; // FIXME Task 17 & 23C
     }
 
@@ -582,14 +576,59 @@ public class Akropolis {
      * @return An array containing the "Temple" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateTempleScores(String gameState) {
-        return new int[0]; // FIXME Task 18 & 23D
+        int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
+        int[] templeScores = new int[numberOfPlayers];
+        boolean templeScoringVar = Character.isUpperCase(gameState.charAt(4));
+
+        // Iterate through all the player strings to calculate each player's score
+        for (int i = 0; i < numberOfPlayers ; i++) {
+            String playerString = gameState.split(";")[i + 2];
+            Player player = new Player(playerString);
+            Tile[][] playerTiles = player.getBoard().getSurfaceTiles();
+
+            // Initialise the temples and templeStars to be zero for each player
+            int totalTempleStars = 0;
+            int totalValidTemples = 0;
+
+            // Iterate through the playerTiles to find templePlazas stars and temple districts to calculate scores
+            for (int m = 0; m < playerTiles.length; m++) {
+                for (int n = 0; n < playerTiles[m].length; n++) {
+                    Tile tile = playerTiles[m][n];
+
+                    // If the tile is null ignore the current iteration
+                    if (tile == null) { continue; }
+
+                    // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
+                    if (tile.getPlaza() && tile.getDistrictType() == District.TEMPLES) {
+                        totalTempleStars += tile.getStars(tile);
+                        continue;
+                    }
+
+                    // Increment the totalValidTemples if they are valid for scoring and via the height multiplier
+                    if (templeScoringVar) {
+                        if (tile.getDistrictType() == District.TEMPLES) {
+                            // TILE HEXCOORD IS LAKE TODO LATER
+                        }
+                    }
+                    else {
+                        if (tile.getDistrictType() == District.TEMPLES) {
+                            totalValidTemples += tile.getHeight();
+                        }
+                    }
+                }
+            }
+            int templeScore = totalTempleStars * totalValidTemples;
+            templeScores[i] = templeScore;
+        }
+
+        return templeScores; // FIXME Task 18 & 23D
     }
 
     /**
      * Given a state string, calculates the "Garden" component of the score for each player.
      * <p>
      * Task 18 only considers the standard scoring rules, Task 23 considers the variant scoring.
-     * Hint: Check the settings component of the state.
+     * Hint: Check the settings component of the state.     q
      * <p>
      * To get full marks for the variant, the users playing your game must be able to select it as an option in the GUI.
      * <p>
