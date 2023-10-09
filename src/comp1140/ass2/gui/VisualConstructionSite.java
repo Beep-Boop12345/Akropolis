@@ -31,7 +31,7 @@ public class VisualConstructionSite extends Group {
         this.getChildren().add(box);
 
         //VBox used to order purchasable pieces automatically
-        VBox pieceVBox = new VBox();
+        /*VBox pieceVBox = new VBox();
         pieceVBox.setLayoutX(sideLength);
         pieceVBox.setLayoutY(sideLength * 0.7);
 
@@ -48,7 +48,21 @@ public class VisualConstructionSite extends Group {
             var newVisualPiece = new PurchasablePiece(0,sideLength*i*4, piece, sideLength);
             purchasablePieces.add(newVisualPiece);
             pieceVBox.getChildren().add(newVisualPiece);
+        }*/
+
+        Piece[] pieces = this.site.getCurrentPieces();
+        for (int i = 0; i < pieces.length; i++) {
+            if (pieces[i] == null) {
+                continue;
+            }
+            PurchasablePiece nextVisualPiece = new PurchasablePiece(1.8*sideLength,
+                    sideLength*i*4+sideLength * 3.5,
+                    pieces[i],
+                    sideLength);
+            purchasablePieces.add(nextVisualPiece);
+            this.getChildren().add(nextVisualPiece);
         }
+
 
         this.setLayoutX(x);
         this.setLayoutY(y);
