@@ -2,7 +2,9 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.Piece;
 import comp1140.ass2.Tile;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -15,7 +17,12 @@ public class PurchasablePiece extends Group {
 
     ArrayList<VisualTile> vTiles;
 
-    //A visual piece that is used in the visual construction site
+    //Fields to track movement
+    //Mouse position
+    private double mousePositionX;
+    private double mousePositionY;
+
+    //A visual piece that is used in the visual construction site.@u7683699, @u7646615
     PurchasablePiece(double x, double y, Piece piece, double sideLength) {
         this.piece = piece;
         this.vTiles = new ArrayList<>();
@@ -48,5 +55,26 @@ public class PurchasablePiece extends Group {
         this.setLayoutX(x);
         this.setLayoutY(y);
 
+        /*Dragging functionality for Purchasable Piece*/
+        this.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mousePositionX = event.getSceneX();
+                mousePositionY = event.getSceneY();
+                toFront();
+            }
+        });
+
+        this.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                double originalPositionX = getLayoutX();
+                double originalPositionY = getLayoutY();
+                double moveX = event.getSceneX() - mousePositionX;
+                double moveY = event.getSceneY() - mousePositionY;
+                setLayoutX(moveX + originalPositionX);
+                setLayoutY(moveY + originalPositionY);
+            }
+        });
     }
 }
