@@ -228,7 +228,7 @@ public class Board {
         return true;
     }
 
-    /**Checks if a tile is a lake according to the definition of the test casses. @u7646615
+    /**Checks if a tile is a lake according to the definition of the test cases. @u7646615
      * <p>
      * The game rules consider empty tiles surronding by pieces to be a lake.
      * The test case definition requires that a lake be only 1 tile large
@@ -339,7 +339,7 @@ public class Board {
         if (yPos > 199|| yPos < 0) {
             return null;
         }
-        return surfaceTiles[xPos][yPos];
+        return surfaceTiles[xPos][yPos];  // HEXCOORD is surfaceTile xIndex-100, yIndex-100
     }
 
     /** Given a position checks if it is in the bounds of the board. @u7646615
@@ -358,6 +358,8 @@ public class Board {
         }
         return true;
     }
+
+
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
     }
