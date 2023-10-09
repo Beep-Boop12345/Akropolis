@@ -78,7 +78,7 @@ public class Tile {
         if (tile.isPlaza) {
             switch (tile.districtType) {
                 case HOUSES: return 1;
-                case MARKETS: case BARRACKS: case TEMPLES: return 2;
+                case MARKETS, TEMPLES, BARRACKS: return 2;
                 case GARDENS: return 3;
                 // Return 0 if it doesn't match a district
                 default: return 0;
@@ -87,6 +87,7 @@ public class Tile {
             return 0;
         }
     }
+
 
     @Override
     public String toString() {
