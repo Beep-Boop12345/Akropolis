@@ -498,7 +498,79 @@ public class Akropolis {
      * @return An array containing the "Market" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateMarketScores(String gameState) {
-        return new int[0]; // FIXME Task 16 & 23B
+        int numberOfPlayers = Integer.parseInt(gameState.substring(0, 1));
+        int[] marketScores = new int[numberOfPlayers];
+        boolean marketScoringVar = Character.isUpperCase(gameState.charAt(3));
+
+        // Iterate through all the player strings to calculate each player's score
+        for (int i = 0; i < numberOfPlayers; i++) {
+            String playerString = gameState.split(";")[i + 2];
+            Player player = new Player(playerString);
+            Board board = player.getBoard();
+            Tile[][] playerTiles = board.getSurfaceTiles();
+
+            // Initialize the markets and marketStars to be zero for each player
+            int totalMarketStars = 0;
+            int totalValidMarkets = 0;
+
+            // Iterate through the playerTiles to find marketPlazas stars and market districts to calculate scores
+            for (int m = 0; m < playerTiles.length; m++) {
+                for (int n = 0; n < playerTiles[m].length; n++) {
+                    Tile tile = playerTiles[m][n];
+                    HexCoord point = new HexCoord(m - 100, n - 100);
+
+                    // If the tile is null, ignore the current iteration
+                    if (tile == null) {
+                        continue;
+                    }
+
+                    // Increment the totalMarketStars if they are a plaza and don't count plazas for districts
+                    if (tile.getPlaza() && tile.getDistrictType() == District.MARKETS) {
+                        totalMarketStars += tile.getStars(tile);
+                        continue;
+                    }
+
+                    // Count the emptySpaces of the current tile
+                    HexCoord[] surroundingHexCoords = point.getSurroundings();
+                    int adjacentMarketDistricts = 0;
+                    int adjacentMarketPlazas = 0;
+                    // Count how many of the surrounding spaces are empty
+                    for (int j = 0; j < surroundingHexCoords.length; j++) {
+                        Tile surroundingTile = board.getTile(surroundingHexCoords[j]);
+                        if (surroundingTile == null) { continue; }
+                        if (surroundingTile.getDistrictType() == District.MARKETS) {
+                            if (surroundingTile.getPlaza()) {
+                                adjacentMarketPlazas++;
+                            }
+                            else {
+                                adjacentMarketDistricts++;
+                            }
+                        }
+                    }
+
+                    // Increment the district count
+                    if (tile.getDistrictType() == District.MARKETS) {
+                        if (adjacentMarketDistricts == 0) {
+                            if (marketScoringVar) {
+                                // If the market has 3 or 4 adjacent empty spaces, the market is valid for scoring
+                                if (adjacentMarketPlazas >= 1) {
+                                    totalValidMarkets += 2 * (tile.getHeight() + 1);
+                                }
+                                else {
+                                    totalValidMarkets += tile.getHeight()+1;
+                                }
+                            }
+                            else {
+                                totalValidMarkets += tile.getHeight()+1;
+                            }
+                        }
+                    }
+                }
+            }
+            int marketScore = totalMarketStars * totalValidMarkets;
+            marketScores[i] = marketScore;
+        }
+        return marketScores;
     }
 
     /**
