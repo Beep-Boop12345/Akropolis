@@ -16,14 +16,18 @@ public class VisualTile extends Group {
     Color currentColor;
     Hexagon currentHexagon;
     ArrayList<StarIcon> currentStars;
+
+    double sideLength;
     VisualTile(double x, double y, double side, Tile tile) {
 
         this.tile = tile;
 
+        this.sideLength = side;
+
         District tileDistrict = this.tile.getDistrictType();
         Color districtColor = districtToColour(tileDistrict);
 
-        currentHexagon = new Hexagon(side * 0.9, districtColor);
+        currentHexagon = new Hexagon(sideLength * 0.9, districtColor);
         this.getChildren().add(currentHexagon);
 
         Boolean isPlaza = this.tile.getPlaza();
@@ -33,7 +37,7 @@ public class VisualTile extends Group {
         if (isPlaza) {
 
             int starCount = tileDistrict.getStars();
-            double starSideLength = side * 0.33;
+            double starSideLength = sideLength * 0.33;
 
             switch (starCount) {
                 case 1:
@@ -163,4 +167,7 @@ public class VisualTile extends Group {
         }
     }
 
+    public void setSideLength(double sideLength) {
+        this.sideLength = sideLength;
+    }
 }

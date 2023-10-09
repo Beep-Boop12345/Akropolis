@@ -17,6 +17,7 @@ public class PurchasablePiece extends Group {
 
     ArrayList<VisualTile> vTiles;
 
+
     //Fields to track movement
     //difference in mouse position and original position
     private double mousePosDiffX;
@@ -66,6 +67,7 @@ public class PurchasablePiece extends Group {
                 mousePositionY = event.getSceneY();
                 mousePosDiffX = mousePositionX - getLayoutX();
                 mousePosDiffY = mousePositionY - getLayoutY();
+                reSize(30);
                 toFront();
             }
         });
@@ -80,5 +82,11 @@ public class PurchasablePiece extends Group {
                 toFront();
             }
         });
+    }
+
+    private void reSize(double side) {
+        for (VisualTile vTile : vTiles) {
+            vTile.setSideLength(side);
+        }
     }
 }
