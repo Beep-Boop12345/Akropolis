@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 public enum GameState {
     ENDED(0),
-    PLAYER1MOVE(1),
+    PLAYER1MOVE(0),
     PLAYER2MOVE(2),
     PLAYER3MOVE(3),
     PLAYER4MOVE(4),

@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
-
+import comp1140.ass2.gui.StoneLabel;
+import comp1140.ass2.gui.VisualBoard;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -26,6 +27,36 @@ public class Akropolis {
     public static GameState gameStage;
 
     public static int currentTurn;
+
+    Akropolis(String gamestate) {
+
+        if (isStateStringWellFormed(gamestate)) {
+            //Breaks string to construct objects
+            String[] components = gamestate.split(";");
+            String[] playerStrings = new String[components.length - 2];
+            System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
+
+            int currentTurnId = Character.getNumericValue(components[1].charAt(0));
+
+            String currentPlayerString = playerStrings[0];
+
+            currentTurn = currentTurnId;
+
+            currentPlayers = new Player[playerStrings.length];
+
+            for (int i = 0; i < playerStrings.length; i++) {
+                currentPlayers[i] = new Player(playerStrings[i]);
+            }
+
+            numberOfPlayers = playerStrings.length;
+
+            constructionSite = new ConstructionSite(gamestate);
+
+            stack = new Stack(gamestate);
+
+        }
+
+    }
 
     /*Cycles turn*/
     public static void nextTurn() {
@@ -472,6 +503,10 @@ public class Akropolis {
      * @return An array containing the "House" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateHouseScores(String gameState) {
+
+        var game = new Akropolis(gameState);
+
+        var houseScoreArray = new int[game.numberOfPlayers];
 
         return new int[0]; // FIXME Task 15 & 23A
     }
