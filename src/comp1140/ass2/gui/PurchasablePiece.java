@@ -18,6 +18,9 @@ public class PurchasablePiece extends Group {
     ArrayList<VisualTile> vTiles;
 
     //Fields to track movement
+    //difference in mouse position and original position
+    private double mousePosDiffX;
+    private double mousePosDiffY;
     //Mouse position
     private double mousePositionX;
     private double mousePositionY;
@@ -61,6 +64,8 @@ public class PurchasablePiece extends Group {
             public void handle(MouseEvent event) {
                 mousePositionX = event.getSceneX();
                 mousePositionY = event.getSceneY();
+                mousePosDiffX = mousePositionX - getLayoutX();
+                mousePosDiffY = mousePositionY - getLayoutY();
                 toFront();
             }
         });
@@ -68,12 +73,11 @@ public class PurchasablePiece extends Group {
         this.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                double originalPositionX = getLayoutX();
-                double originalPositionY = getLayoutY();
                 double moveX = event.getSceneX() - mousePositionX;
                 double moveY = event.getSceneY() - mousePositionY;
-                setLayoutX(moveX + originalPositionX);
-                setLayoutY(moveY + originalPositionY);
+                setLayoutX(moveX+mousePositionX-mousePosDiffX);
+                setLayoutY(moveY+mousePositionY-mousePosDiffY);
+                toFront();
             }
         });
     }
