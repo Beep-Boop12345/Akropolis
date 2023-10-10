@@ -244,7 +244,7 @@ public class Board {
         // Checks that all neighbours are non-empty
         HexCoord[] neighbours = point.getSurroundings();
         for (HexCoord neighbour : neighbours) {
-            if (getTile(neighbour) == null) {
+            if (getTile(neighbour) == null || !withinEdge(neighbour)) {
                 return false;
             }
         }
@@ -354,6 +354,24 @@ public class Board {
             return false;
         }
         if (yPos > 99 + boardRadiusY || yPos < 100 - boardRadiusY) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Given a position decides if it is within the maximum possible bounds of the board ([1,199]x[1,199])
+     *
+     * @param point the point to be checked if it is in the maximum bounds of the board
+     * @return boolean true if it is in the maximum bounds of the board
+     * */
+    private boolean withinEdge(HexCoord point) {
+        int xPos = 100 + point.getX();
+        int yPos = 100 + point.getY();
+        if (xPos > 199 || xPos < 0) {
+            return false;
+        }
+        if (yPos > 199 || yPos < 0) {
             return false;
         }
         return true;
