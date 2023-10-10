@@ -38,7 +38,7 @@ public class PurchasablePiece extends Group {
     private boolean isPressed;
 
     //A visual piece that is used in the visual construction site.@u7683699, @u7646615
-    PurchasablePiece(double x, double y, Piece piece, double sideLength) {
+    PurchasablePiece(double x, double y, Piece piece, double sideLength){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
