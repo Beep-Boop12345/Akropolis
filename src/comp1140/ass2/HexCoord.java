@@ -77,12 +77,12 @@ public class HexCoord {
 
     @Override
     public String toString() {
-        String yString = String.valueOf(y);
+        String yString = String.valueOf(Math.abs(y));
         /*adds "0" to front if single digit int*/
         if (yString.length() == 1) {
             yString = "0" + yString;
         }
-        String xString = String.valueOf(x);
+        String xString = String.valueOf(Math.abs(x));
         /*adds "0" to front if single digit int*/
         if (xString.length() == 1) {
             xString = "0" + xString;

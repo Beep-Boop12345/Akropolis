@@ -350,10 +350,10 @@ public class Board {
     private boolean inBounds(HexCoord point) {
         int xPos = 100 + point.getX();
         int yPos = 100 + point.getY();
-        if (xPos > 99 + boardRadiusX || xPos < 100 - boardRadiusX) {
+        if (xPos > 99 + boardRadiusX + 3 || xPos < 100 - boardRadiusX - 3) {
             return false;
         }
-        if (yPos > 99 + boardRadiusY || yPos < 100 - boardRadiusY) {
+        if (yPos > 99 + boardRadiusY + 3|| yPos < 100 - boardRadiusY - 3) {
             return false;
         }
         return true;
@@ -380,5 +380,13 @@ public class Board {
 
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
+    }
+
+    public int getBoardRadiusX() {
+        return boardRadiusX;
+    }
+
+    public int getBoardRadiusY() {
+        return boardRadiusY;
     }
 }

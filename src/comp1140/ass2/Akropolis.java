@@ -393,6 +393,19 @@ public class Akropolis {
         /*Determines if piece can be placed on the board at given postion*/
         return player.getBoard().isValidPlacement(moveObject);
     }
+    public static boolean isMoveValid(String gameState, Move move) {
+        /*Creates the objects needed for computation*/
+        ConstructionSite constructionSite = new ConstructionSite(gameState);
+        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
+        Player player = new Player(gameState.split(";")[2+playerID]);
+        /*Determines if the piece can be chosen from constructionSite*/
+        int price = constructionSite.findPrice(move.getPiece());
+        if (price < 0 || price > player.getStones()) {
+            return false;
+        }
+        /*Determines if piece can be placed on the board at given postion*/
+        return player.getBoard().isValidPlacement(move);
+    }
 
     /**
      * Given a state string and a move string, apply the move to the board.
@@ -456,6 +469,34 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
+        // Initializes set with possible legal moves
+        Set<String> validMoves = new HashSet<>();
+        //Initialize objects
+        ConstructionSite constructionSite = new ConstructionSite(gameState);
+        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
+        Player player = new Player(gameState.split(";")[2+playerID]);
+        int boardRadiusX = player.getBoard().getBoardRadiusX();
+        int boardRadiusY = player.getBoard().getBoardRadiusY();
+        System.out.println("radius x: " + boardRadiusX);
+        System.out.println("radius y: " + boardRadiusY);
+        // Iterate through all finite moves
+        for (Piece piece : constructionSite.getCurrentPieces()) {
+            if (piece != null) {
+                for (Rotation rotation : Rotation.values()) {
+                    for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
+                        for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
+                            Move move = new Move (piece, new Transform(new HexCoord(x,y) ,rotation));
+                            if(isMoveValid(gameState,move)){
+                                validMoves.add(move.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
         int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
 
         // Set maxPieceID based on numberOfPlayers
@@ -468,7 +509,7 @@ public class Akropolis {
 
 
 
-        return null; // FIXME Task 14
+        return validMoves; // FIXME Task 14
     }
 
     /**
