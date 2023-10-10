@@ -11,6 +11,7 @@ public class HexCoord {
      * Constructor for instances of HexCoordinates
      * @param x the horizontal displacement
      * @param y the vertical displacement
+     * @u7330006
      */
 
     public HexCoord(int x, int y) {
@@ -37,6 +38,7 @@ public class HexCoord {
      * Creates a new Hex Coordinate from the resulting addition of two hex coordinates.
      * @param other HexCoordinate added
      * @return a new HexCoord which is the resulting addition of the two.
+     * @u7330006
      */
     public HexCoord add(HexCoord other) {
         int sumX = this.x + other.x;

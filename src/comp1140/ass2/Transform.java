@@ -56,22 +56,4 @@ public class Transform {
     public String toString() {
         return pos + "R" + rot; }
 
-
-    // Main method for testing
-    public static void main(String[] args) {
-        // Test move strings
-        String moveString1 = "02S01E03R5";
-        String moveString2 = "01N02W01R2";
-
-        // Create Transform objects and print them using toString
-        Transform transform1 = new Transform(moveString1);
-        Transform transform2 = new Transform(moveString2);
-
-        System.out.println("Move String 1: " + moveString1);
-        System.out.println(transform1);
-
-        System.out.println("\nMove String 2: " + moveString2);
-        System.out.println(transform2);
-
-    }
 }

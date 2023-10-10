@@ -28,11 +28,11 @@ public class Akropolis {
 
     public static int currentTurn;
 
-    Akropolis(String gamestate) {
+    Akropolis(String gameState) {
 
-        if (isStateStringWellFormed(gamestate)) {
+        if (isStateStringWellFormed(gameState)) {
             //Breaks string to construct objects
-            String[] components = gamestate.split(";");
+            String[] components = gameState.split(";");
             String[] playerStrings = new String[components.length - 2];
             System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
 
@@ -50,9 +50,14 @@ public class Akropolis {
 
             numberOfPlayers = playerStrings.length;
 
-            constructionSite = new ConstructionSite(gamestate);
+            constructionSite = new ConstructionSite(gameState);
 
-            stack = new Stack(gamestate);
+            stack = new Stack(gameState);
+
+            // Find the score variants for h,m,b,t,g
+            for (int i = 0; i < scoreVariants.length; i++) {
+                scoreVariants[i] = Character.isUpperCase(gameState.charAt(i + 1));
+            }
 
         }
 
@@ -65,7 +70,7 @@ public class Akropolis {
 
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
-     *
+     * @u7330006
      * @param move a move string.
      * @return true is the move string is well-formed, false otherwise.
      */
@@ -80,14 +85,9 @@ public class Akropolis {
         // Set maxPieceID based on numberOfPlayers
         int maxPieceID;
         switch (numberOfPlayers) {
-            case 2:
-                maxPieceID = 37;
-                break;
-            case 3:
-                maxPieceID = 49;
-                break;
-            default:
-                maxPieceID = 61;
+            case 2: maxPieceID = 37; break;
+            case 3: maxPieceID = 49; break;
+            default: maxPieceID = 61;
         }
 
         // Get the pieceID
@@ -98,17 +98,10 @@ public class Akropolis {
             return false;
         }
 
-
         boolean validPieceID = pieceID > 0 && pieceID <= maxPieceID;
-
 
         return move.matches(pattern) && !hasInvalidCharacters && validPieceID;
     }
-
-
-
-
-
 
     /**
      * Given a state string, checks whether it is well-formed according to the specified rules.
@@ -116,7 +109,7 @@ public class Akropolis {
      * In addition to the specified formatting rules, there are two additional things you must check.
      * 1. No duplicate tiles are contained within the state string (based on the tile ids).
      * 2. The tiles in the string must be playable for the given player count (Hint: use the TILE_POOL).
-     *
+     * @u7330006
      * @param gameState a state string.
      * @return true if the state string is well-formed, false otherwise.
      */
@@ -475,7 +468,6 @@ public class Akropolis {
 
 
 
-
         return null; // FIXME Task 14
     }
 
@@ -503,13 +495,51 @@ public class Akropolis {
      * @return An array containing the "House" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateHouseScores(String gameState) {
+        Akropolis akropolis = new Akropolis(gameState);
+        int numberOfPlayers = akropolis.numberOfPlayers;
+        int[] houseScores = new int[numberOfPlayers];
+        boolean houseScoringVar = akropolis.scoreVariants[0];
 
-        var game = new Akropolis(gameState);
+        // Iterate through all the player strings to calculate each player's score
+        for (int i = 0; i < numberOfPlayers; i++) {
+            Player player = Akropolis.currentPlayers[i];
+            Board board = player.getBoard();
+            Tile[][] playerTiles = board.getSurfaceTiles();
 
-        var houseScoreArray = new int[game.numberOfPlayers];
+            // Initialize the houses and houseStars to be zero for each player
+            int totalHouseStars = 0;
+            int totalValidHouses = 0;
 
-        return new int[0]; // FIXME Task 15 & 23A
+            // Iterate through the playerTiles to first find the largest group of adjacent Houses
+            for (int m = 0; m < playerTiles.length; m++) {
+                for (int n = 0; n < playerTiles[m].length; n++) {
+                    Tile tile = playerTiles[m][n];
+                    HexCoord point = new HexCoord(m - 100, n - 100);
+
+
+                    // If the tile is null, ignore the current iteration
+                    if (tile == null) {
+                        continue;
+                    }
+
+                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
+                    if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
+                        totalHouseStars += tile.getStars(tile);
+                        continue;
+                    }
+
+                    // Count the emptySpaces of the current tile
+                    HexCoord[] surroundingHexCoords = point.getSurroundings();
+
+
+                }
+            }
+            int houseScore = totalHouseStars * totalValidHouses;
+            houseScores[i] = houseScore;
+        }
+        return houseScores;
     }
+
 
     /**
      * Given a state string, calculates the "Market" component of the score for each player.
@@ -528,19 +558,19 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Market district is adjacent to a Market plaza, its points are doubled.
-     *
+     * @u7330006
      * @param gameState a state string.
      * @return An array containing the "Market" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateMarketScores(String gameState) {
-        int numberOfPlayers = Integer.parseInt(gameState.substring(0, 1));
+        Akropolis akropolis = new Akropolis(gameState);
+        int numberOfPlayers = akropolis.numberOfPlayers;
         int[] marketScores = new int[numberOfPlayers];
-        boolean marketScoringVar = Character.isUpperCase(gameState.charAt(3));
+        boolean marketScoringVar = akropolis.scoreVariants[1];
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            String playerString = gameState.split(";")[i + 2];
-            Player player = new Player(playerString);
+            Player player = Akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -626,19 +656,19 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Barracks district has 3 or 4 adjacent empty spaces, its points are doubled.
-     *
+     * @u7330006
      * @param gameState a state string.
      * @return An array containing the "Barracks" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateBarracksScores(String gameState) {
-        int numberOfPlayers = Integer.parseInt(gameState.substring(0, 1));
+        Akropolis akropolis = new Akropolis(gameState);
+        int numberOfPlayers = akropolis.numberOfPlayers;
         int[] barrackScores = new int[numberOfPlayers];
-        boolean barrackScoringVar = Character.isUpperCase(gameState.charAt(3));
+        boolean barrackScoringVar = akropolis.scoreVariants[2];
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            String playerString = gameState.split(";")[i + 2];
-            Player player = new Player(playerString);
+            Player player = Akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -694,7 +724,7 @@ public class Akropolis {
             int barrackScore = totalBarrackStars * totalValidBarracks;
             barrackScores[i] = barrackScore;
         }
-        return barrackScores; // FIXME Task 17 & 23C
+        return barrackScores;
     }
 
 
@@ -717,19 +747,19 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Temple is on a level higher than 1, its points are doubled.
-     *
+     * @u7330006
      * @param gameState a state string.
      * @return An array containing the "Temple" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateTempleScores(String gameState) {
-        int numberOfPlayers = Integer.parseInt(gameState.substring(0, 1));
+        Akropolis akropolis = new Akropolis(gameState);
+        int numberOfPlayers = akropolis.numberOfPlayers;
         int[] templeScores = new int[numberOfPlayers];
-        boolean templeScoringVar = Character.isUpperCase(gameState.charAt(4));
+        boolean templeScoringVar = akropolis.scoreVariants[3];
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            String playerString = gameState.split(";")[i + 2];
-            Player player = new Player(playerString);
+            Player player = Akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -809,23 +839,23 @@ public class Akropolis {
      * For the variant, if a Garden is adjacent to a "lake", its points are doubled.
      * <p>
      * A lake is an empty space that is completely surrounded by tiles.
-     *
+     * @u7330006
      * @param gameState a state string.
      * @return An array containing the "Garden" component of the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateGardenScores(String gameState) {
-        int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
+        Akropolis akropolis = new Akropolis(gameState);
+        int numberOfPlayers = akropolis.numberOfPlayers;
         int[] gardenScores = new int[numberOfPlayers];
-        boolean gardenScoringVar = Character.isUpperCase(gameState.charAt(5));
+        boolean gardenScoringVar = akropolis.scoreVariants[4];
 
         // Iterate through all the player strings to calculate each player's score
-        for (int i = 0; i < numberOfPlayers ; i++) {
-            String playerString = gameState.split(";")[i + 2];
-            Player player = new Player(playerString);
+        for (int i = 0; i < numberOfPlayers; i++) {
+            Player player = Akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
-            // Initialise the gardens and gardenStars to be zero for each player
+            // Initialize the gardens and gardenStars to be zero for each player
             int totalGardenStars = 0;
             int totalValidGardens = 0;
 
@@ -837,6 +867,7 @@ public class Akropolis {
 
                     // If the tile is null ignore the current iteration
                     if (tile == null) { continue; }
+
 
                     // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
                     if (tile.getPlaza() && tile.getDistrictType() == District.GARDENS) {

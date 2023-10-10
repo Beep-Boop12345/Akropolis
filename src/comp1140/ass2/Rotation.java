@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+/**
+ * This enum is responsible for representation degrees of rotation that is applied when I move is made.
+ * It holds many methods that allow for addition of rotations and ensuring that rotations cycle 360 degrees.
+ * @u7330006
+ */
 public enum Rotation {
     DEG_0(0),
     DEG_60(60),

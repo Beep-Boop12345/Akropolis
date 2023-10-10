@@ -72,7 +72,10 @@ public class Tile {
     }
 
 
-    // Getter method to retrieve stars from a tile (Useful for scores calculations Tasks 15-20, 23A-F)
+    /**
+     * Getter method to retrieve stars from a tile (Useful for scores calculations Tasks 15-20, 23A-F)
+     * @u7330006
+    */
     public int getStars(Tile tile) {
         // Only Plaza's have stars
         if (tile.isPlaza) {

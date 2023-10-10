@@ -1,5 +1,9 @@
 package comp1140.ass2;
 
+/**
+ * This enum is responsible for representing district objects from a string representation.
+ * @u7330006
+ */
 public enum District {
     HOUSES("Houses"),
     MARKETS("Markets"),
@@ -19,7 +23,6 @@ public enum District {
      *
      * @return the number of stars associated with the district
      */
-    //Test
     public Integer getStars() {
         return switch (this) {
             case HOUSES -> 1;
