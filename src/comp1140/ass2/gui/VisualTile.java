@@ -119,6 +119,12 @@ public class VisualTile extends Group {
         }
 
     }
+    /**Changes the size of the tile. @u7646615
+     *
+     * @param size the new size of the tile*/
+    public void resizeTile(double size) {
+        this.currentHexagon.resizeHexagon(size*0.9);
+    }
 
     //Creates the desired hexagon tile shape
     private class Hexagon extends Polygon {
@@ -134,6 +140,22 @@ public class VisualTile extends Group {
             this.setFill(color);
             this.setStroke(Color.BLACK);
             this.setStrokeWidth(side * 0.1);
+        }
+
+        /** Chnages the size of the hexagon. @u7646615
+         *
+         * @param size the new size
+        * */
+        private void resizeHexagon(double size) {
+            this.getPoints().remove(0,12);
+            Double[] pointArray = new Double[12];
+            for (int i = 0; i < 6; i++) {
+                Double xPos = Math.cos(Math.toRadians(i*60))*size;
+                Double yPos = Math.sin(Math.toRadians(i*60))*size;
+                pointArray[2*i] = xPos;
+                pointArray[2*i + 1] = yPos;
+            }
+            this.getPoints().addAll(pointArray);
         }
     }
 
