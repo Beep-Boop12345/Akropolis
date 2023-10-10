@@ -149,13 +149,6 @@ public class Board {
     * @param moveToMake the move being concidered
      * @return boolean, true if the piece can be legally placed on the board*/
     public Boolean isValidPlacement(Move moveToMake) {
-        /*Check if move correctly represents a piece that could be placed of the board*/
-        if (moveToMake == null) {
-            return false;
-        }
-        if (moveToMake.getPiece() == null) {
-            return false;
-        }
         HexCoord[] positions = findTilePosition(moveToMake);
         /*The tiles that will be covered if the piece is placed*/
         Tile[] tilesToBeCovered = new Tile[3];
@@ -171,6 +164,9 @@ public class Board {
         if (nullCount > 0 && nullCount < 3) {
             return false;
         }
+
+
+
         /*Given the case that the entire piece is on the ground return true if there is an adjacent tile*/
         if (nullCount == 3) {
             for (HexCoord i : positions) {
@@ -181,7 +177,7 @@ public class Board {
                 }
             }
             return false;
-        }
+        } //FIXME potential optimization
 
         /*Checks if the whole piece is on the one level*/
         boolean heightEq = true;
