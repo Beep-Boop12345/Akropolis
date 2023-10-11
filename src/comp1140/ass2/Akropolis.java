@@ -117,10 +117,7 @@ public class Akropolis {
     public static boolean isStateStringWellFormed(String gameState) {
         // Parse the gameState string into its components, eg: 3hmbtg;01432;P00141S01E02R3;P10118S01W03R1;P20310S00W02R3;
         String[] components = gameState.split(";");
-        if (components.length < 3) { return false; }
-        if (gameState.isEmpty() || !gameState.endsWith(";")) {
-            return false;
-        }
+        if (!gameState.endsWith(";")) {return false; }
 
         // Check settings string
         String settings = components[0];
@@ -146,17 +143,22 @@ public class Akropolis {
             case 4: maxTileID = 61; break;
             default: return false;
         }
+
         Set<String> seenTileIDs = new HashSet<>();
 
         // Check shared string
         String shared = components[1];
-        if (shared.isEmpty() || !Character.isDigit(shared.charAt(0))) {
+        if (shared.isEmpty()) { return false; }
+
+        try {
+            int turn = Integer.parseInt(shared.substring(0, 1));
+            if (turn < 0 || turn > noOfPlayers - 1) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
             return false;
         }
-        int turn = Integer.parseInt(shared.substring(0, 1));
-        if (turn < 0 || turn > noOfPlayers - 1) {
-            return false;
-        }
+
 
         String constructionSite = shared.substring(1);
         if (constructionSite.length() % 2 == 1 || constructionSite.length() > 13) {
@@ -172,14 +174,10 @@ public class Akropolis {
                 seenTileIDs.add(tileID);
             }
 
-            // Error handling
-            if (!Character.isDigit(constructionSite.charAt(i))
-                    || !Character.isDigit(constructionSite.charAt(i + 1))) {
-                return false;
-            }
-
-            int numTileID = Integer.parseInt(constructionSite.substring(i, i + 2));
-            if (numTileID < 1 || numTileID > maxTileID) {
+            try {
+                int numTileID = Integer.parseInt(constructionSite.substring(i, i + 2));
+                if (numTileID < 1 || numTileID > maxTileID) { return false; }
+            } catch (NumberFormatException e) {
                 return false;
             }
         }
@@ -191,12 +189,14 @@ public class Akropolis {
                 return false;
             }
 
-            // Error handling & Check Stones
+            // Check stones
             if (playerString.length() < 4) { return false; }
-            for (int j = 1; j < 4; j++) {
-                if (!Character.isDigit(playerString.charAt(j))) {
-                    return false;
+            try {
+                for (int j = 1; j < 4; j++) {
+                    Integer.parseInt(String.valueOf(playerString.charAt(j)));
                 }
+            } catch (NumberFormatException e) {
+                return false;
             }
 
             int playerID = Integer.parseInt(playerString.substring(1,2));
@@ -208,20 +208,18 @@ public class Akropolis {
             for (int j = 0; j < moves.length(); j += 10) {
                 String moveString = moves.substring(j, j + 10);
 
-                String tileID = moveString.substring(0,2);
-                if (!Character.isDigit(moveString.charAt(0))
-                        || !Character.isDigit(moveString.charAt(1))) {
+                String tileID = moveString.substring(0, 2);
+                try {
+                    int numTileID = Integer.parseInt(tileID);
+                    if (numTileID < 1 || numTileID > maxTileID) { return false; }
+                    if (seenTileIDs.contains(tileID)) {
+                        return false; // Duplicate tile found
+                    } else {
+                        seenTileIDs.add(tileID);
+                    }
+                } catch (NumberFormatException e) {
                     return false;
                 }
-                int numTileID = Integer.parseInt(moveString.substring(0,2));
-                if (seenTileIDs.contains(tileID)) {
-                    return false; // Duplicate tile found
-                } else {
-                    seenTileIDs.add(tileID);
-                }
-
-
-                if (numTileID < 1 || numTileID > maxTileID) { return false; }
                 if (!isMoveStringWellFormed(moveString)) { return false; }
             }
 
@@ -466,7 +464,7 @@ public class Akropolis {
     }
 
     /**
-     * Given a state string, returns a set of move strings containing all the moves that can be played. @u7646615
+     * Given a state string, returns a set of move strings containing all the moves that can be played.
      *
      * @param gameState a state string.
      * @return A set containing all moves that can be played.
@@ -534,16 +532,9 @@ public class Akropolis {
 
             }
         }
-        return validMoves;
+        return validMoves; // FIXME Task 14
     }
-    /**
-     * Given a piece checks all the valid moves that can be played with it. @u7646615
-     *
-     * @param piece piece to be played
-     * @param player player who is making this move
-     * @return Set<Move> all the moves that can be played
-    * */
-     //FIXME waiting for Akropolis reboot to be writeable
+
     /**
      * Given a state string, calculates the "House" component of the score for each player.
      * <p>

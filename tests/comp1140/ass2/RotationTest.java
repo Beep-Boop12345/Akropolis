@@ -98,8 +98,8 @@ public class RotationTest {
     @Test
     @DisplayName("Tests the toString method with valid angles")
     public void testToStringValidAngles() {
-        assertEquals("Rotation: 0 degrees", Rotation.DEG_0.toString());
-        assertEquals("Rotation: 60 degrees", Rotation.DEG_60.toString());
-        assertEquals("Rotation: 180 degrees", Rotation.DEG_180.toString());
+        assertEquals("R0", Rotation.DEG_0.toString());
+        assertEquals("R1", Rotation.DEG_60.toString());
+        assertEquals("R3", Rotation.DEG_180.toString());
     }
 }
