@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -25,6 +26,8 @@ public class PurchasablePiece extends Group {
     private Rotation rotation;
 
     private double size;
+
+    private boolean reflected;
 
     //Fields to track movement
     //difference in mouse position and original position
@@ -45,6 +48,7 @@ public class PurchasablePiece extends Group {
         this.isPressed = false;
         this.rotation = Rotation.DEG_0;
         this.size = sideLength;
+        this.reflected = false;
 
         Tile[] tiles = piece.getTiles();
 
@@ -72,6 +76,7 @@ public class PurchasablePiece extends Group {
             this.getChildren().add(newTile);
         }
         System.out.println("There are: " + connectors.size() + "lines ");
+        requestFocus();
 
         this.setLayoutX(x);
         this.setLayoutY(y);
@@ -87,6 +92,8 @@ public class PurchasablePiece extends Group {
                 size = 30;
                 resizePiece();
                 isPressed =true;
+                reflected = !event.isPrimaryButtonDown();
+                reflect(mousePositionX);
                 toFront();
             }
         });
@@ -108,8 +115,7 @@ public class PurchasablePiece extends Group {
                 isPressed = false;
             }
         });
-
-        setOnKeyTyped(new EventHandler<KeyEvent>() {
+        this.setOnKeyTyped(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 System.out.println("anything!!!!");
@@ -154,6 +160,36 @@ public class PurchasablePiece extends Group {
             line.setEndY(vTiles.get(j).getLayoutY());
         }
             // FIXME Correct top right connector line
+    }
+
+    /** updates the connectors. @u7646615
+     *
+     * */
+    private void updateConnectors(){
+        for (int i = 0; i < 3; i++) {
+            // resize lines
+            int j = (i+1) % 3;
+            System.out.println("(j: " + j + ",i: " + i + ")");
+            Line line = connectors.get(i);
+            line.setStrokeWidth(size);
+            line.setStartX(vTiles.get(i).getLayoutX());
+            line.setStartY(vTiles.get(i).getLayoutY());
+            line.setEndX(vTiles.get(j).getLayoutX());
+            line.setEndY(vTiles.get(j).getLayoutY());
+        }
+    }
+
+    /**
+     * Reflects the piece. @u7646615
+     *
+     * */
+    private void reflect(double axis){
+        if (reflected) {
+            vTiles.get(2).setLayoutX(-1.5*size);
+        } else {
+            vTiles.get(2).setLayoutX(1.5*size);
+        }
+        updateConnectors();
     }
 
     /**Rotates the piece. @u7646615

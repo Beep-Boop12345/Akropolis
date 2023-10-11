@@ -1,9 +1,6 @@
 package comp1140.ass2.gui;
 
-import comp1140.ass2.Akropolis;
-import comp1140.ass2.Board;
-import comp1140.ass2.ConstructionSite;
-import comp1140.ass2.Stack;
+import comp1140.ass2.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +20,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.w3c.dom.css.Rect;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class Viewer extends Application {
 
@@ -164,4 +163,6 @@ public class Viewer extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+
 }

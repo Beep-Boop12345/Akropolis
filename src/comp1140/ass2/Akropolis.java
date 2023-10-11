@@ -466,7 +466,7 @@ public class Akropolis {
     }
 
     /**
-     * Given a state string, returns a set of move strings containing all the moves that can be played.
+     * Given a state string, returns a set of move strings containing all the moves that can be played. @u7646615
      *
      * @param gameState a state string.
      * @return A set containing all moves that can be played.
@@ -534,9 +534,16 @@ public class Akropolis {
 
             }
         }
-        return validMoves; // FIXME Task 14
+        return validMoves;
     }
-
+    /**
+     * Given a piece checks all the valid moves that can be played with it. @u7646615
+     *
+     * @param piece piece to be played
+     * @param player player who is making this move
+     * @return Set<Move> all the moves that can be played
+    * */
+     //FIXME waiting for Akropolis reboot to be writeable
     /**
      * Given a state string, calculates the "House" component of the score for each player.
      * <p>

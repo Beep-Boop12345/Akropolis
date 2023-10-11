@@ -3,7 +3,9 @@ package comp1140.ass2.gui;
 import comp1140.ass2.Board;
 import comp1140.ass2.District;
 import comp1140.ass2.Tile;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
@@ -89,6 +91,12 @@ public class VisualBoard extends Group {
             this.mousex = event.getSceneX();
             this.mousey = event.getSceneY();
             this.toBack();
+        });
+        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println("pressed");
+            }
         });
 
     }
