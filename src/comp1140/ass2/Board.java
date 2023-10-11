@@ -74,9 +74,9 @@ public class Board {
      *@param setup true when the method is called by the constructor. Stones already generated should not be counted
      **/
     public void placePiece(Move moveToMake, boolean setup){
-        if (!isValidPlacement(moveToMake)) {
+        /*if (!isValidPlacement(moveToMake)) {
             return;
-        }
+        }*/
         HexCoord[] tilePositions = findTilePosition(moveToMake);
         Tile[] tiles = moveToMake.getPiece().getTiles();
         for (int i = 0; i < 3; i++) {

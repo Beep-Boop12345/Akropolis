@@ -472,12 +472,7 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
-        System.out.println(gameState);
-        Stack stack = new Stack(gameState);
-        System.out.println(stack);
-
         if (isGameOver(gameState)) {
-            System.out.println("returned empty set FIRST");
             return new HashSet<>();
         }
 
@@ -490,12 +485,13 @@ public class Akropolis {
         Player player = new Player(gameState.split(";")[2+playerID]);
         //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
+        System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
+        System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
         int avaliablePiece = constructionSite.countPieces();
 
-        System.out.println("now iterating");
         // Iterate through all finite moves
         for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
             for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
@@ -504,7 +500,7 @@ public class Akropolis {
                 if(isMoveValid(gameState,move0, true)){
                     validMoves.add(move0.toString());
                     //We need not check validity of purchasable pieces
-                    for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
+                    for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
                         validMoves.add(move.toString());
@@ -520,41 +516,24 @@ public class Akropolis {
                 if(isMoveValid(gameState,move0, true)){
                     validMoves.add(move0.toString());
                     //We need not check validity of purchasable pieces
-                    for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
+                    for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
+                        System.out.println(move);
                         validMoves.add(move.toString());
                         //We need not check validity of equivilant transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
-                        Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_240));
+                        System.out.println(move1);
+                        Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
+                        System.out.println(move2);
                         validMoves.add(move1.toString());
                         validMoves.add(move2.toString());
+                        System.out.println("_________________________");
                     }
                 }
 
             }
         }
-
-
-
-        for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
-            for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
-                new HexCoord(x,y);
-                for (Rotation rotation : Rotation.values()) {
-                    Transform transform = new Transform(new HexCoord(x,y) ,rotation);
-                    Move move0 = new Move (pieces[0], transform);
-                    if(isMoveValid(gameState,move0, true)){
-                        validMoves.add(move0.toString());
-                        for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
-                            Piece piece = pieces[s];
-                            Move move = new Move(piece, transform);
-                            validMoves.add(move.toString());
-                        }
-                    }
-                }
-            }
-        }
-        System.out.println("ahhhh");
         return validMoves; // FIXME Task 14
     }
 
