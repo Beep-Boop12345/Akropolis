@@ -2,9 +2,9 @@ package comp1140.ass2;
 
 
 public class Transform {
-    private final HexCoord pos;
+    private HexCoord pos;
 
-    private final Rotation rot;
+    private Rotation rot;
 
 
     public Transform(HexCoord translation, Rotation angle) {
@@ -40,8 +40,9 @@ public class Transform {
 
     /*Adds a transform to this transform (component-wise)
     * @Param transform to be added*/
-    private void add(Transform transform) {
-
+    public void add(Transform transform) {
+        pos = pos.add(transform.getPos());
+        rot = rot.add(transform.getRot());
     }
 
     public HexCoord getPos() {

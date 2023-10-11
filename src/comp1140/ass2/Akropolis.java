@@ -488,33 +488,66 @@ public class Akropolis {
         ConstructionSite constructionSite = new ConstructionSite(gameState);
         int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
         Player player = new Player(gameState.split(";")[2+playerID]);
+        //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
-        //System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
-        //System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
         int avaliablePiece = constructionSite.countPieces();
-        System.out.println(avaliablePiece);
-        System.out.println("stack length " + stack.getCurrentPieces().length);
-        if (avaliablePiece < 2 && stack.getCurrentPieces().length == 0) {
-            System.out.println("returned empty hashset");
-            return new HashSet<>();
-        }
+
         System.out.println("now iterating");
         // Iterate through all finite moves
+        for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
+            for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
+                Transform transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_0);
+                Move move0 = new Move (pieces[0], transform);
+                if(isMoveValid(gameState,move0, true)){
+                    validMoves.add(move0.toString());
+                    //We need not check validity of purchasable pieces
+                    for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
+                        Piece piece = pieces[s];
+                        Move move = new Move(piece, transform);
+                        validMoves.add(move.toString());
+                        //We need not check validity of equivilant transforms
+                        Move move1 = new Move(piece, new Transform(new HexCoord(x,y+1), Rotation.DEG_120));
+                        Move move2 = new Move(piece, new Transform(new HexCoord(x+1,y+(Math.abs(x) % 2)), Rotation.DEG_240));
+                        validMoves.add(move1.toString());
+                        validMoves.add(move2.toString());
+                    }
+                }
+                transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_180);
+                move0 = new Move (pieces[0], transform);
+                if(isMoveValid(gameState,move0, true)){
+                    validMoves.add(move0.toString());
+                    //We need not check validity of purchasable pieces
+                    for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
+                        Piece piece = pieces[s];
+                        Move move = new Move(piece, transform);
+                        validMoves.add(move.toString());
+                        //We need not check validity of equivilant transforms
+                        Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
+                        Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_240));
+                        validMoves.add(move1.toString());
+                        validMoves.add(move2.toString());
+                    }
+                }
+
+            }
+        }
+
+
+
         for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
             for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
                 new HexCoord(x,y);
                 for (Rotation rotation : Rotation.values()) {
                     Transform transform = new Transform(new HexCoord(x,y) ,rotation);
-                    for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
-                        Piece piece = pieces[s];
-                        if (piece == null) {
-                            break;
-                        }
-                        Move move = new Move (piece, transform);
-                        if(isMoveValid(gameState,move, true)){
+                    Move move0 = new Move (pieces[0], transform);
+                    if(isMoveValid(gameState,move0, true)){
+                        validMoves.add(move0.toString());
+                        for (int s = 1; s < Math.min(stones+1, avaliablePiece); s++) {
+                            Piece piece = pieces[s];
+                            Move move = new Move(piece, transform);
                             validMoves.add(move.toString());
                         }
                     }
