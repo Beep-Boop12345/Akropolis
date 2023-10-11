@@ -65,7 +65,7 @@ public class ConstructionSite {
         return false;
     }
 
-    private static int countPieces() {
+    public static int countPieces() {
         int count = 0;
         for (int i = 0; i < size; i++) {
             if (currentPieces[i] != null) {

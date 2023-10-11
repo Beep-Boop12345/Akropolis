@@ -52,10 +52,7 @@ public class HexCoord {
      */
     public HexCoord[] getSurroundings(){
         /*Offset to account for hexagonal grid, rotations work differently for odd columns*/
-        int offset = 0;
-        if (Math.abs(x) % 2 == 1) {
-            offset = 1;
-        }
+        int offset = Math.abs(x) % 2;
         HexCoord[] neigbours = new HexCoord[6];
         neigbours[0] = new HexCoord(x,y+1);
         neigbours[1] = new HexCoord(x+1,y+offset);

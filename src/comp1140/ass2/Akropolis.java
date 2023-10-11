@@ -393,12 +393,15 @@ public class Akropolis {
         /*Determines if piece can be placed on the board at given postion*/
         return player.getBoard().isValidPlacement(moveObject);
     }
-    public static boolean isMoveValid(String gameState, Move move) {
+    public static boolean isMoveValid(String gameState, Move move, boolean priceGuarded) {
         /*Creates the objects needed for computation*/
         ConstructionSite constructionSite = new ConstructionSite(gameState);
         int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
         Player player = new Player(gameState.split(";")[2+playerID]);
         /*Determines if the piece can be chosen from constructionSite*/
+        if (priceGuarded) {
+            return player.getBoard().isValidPlacement(move);
+        }
         int price = constructionSite.findPrice(move.getPiece());
         if (price < 0 || price > player.getStones()) {
             return false;
@@ -469,6 +472,16 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
+        System.out.println(gameState);
+        Stack stack = new Stack(gameState);
+        System.out.println(stack);
+
+        if (isGameOver(gameState)) {
+            System.out.println("returned empty set FIRST");
+            return new HashSet<>();
+        }
+
+
         // Initializes set with possible legal moves
         Set<String> validMoves = new HashSet<>();
         //Initialize objects
@@ -476,39 +489,39 @@ public class Akropolis {
         int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
         Player player = new Player(gameState.split(";")[2+playerID]);
         int boardRadiusX = player.getBoard().getBoardRadiusX();
+        //System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
-        System.out.println("radius x: " + boardRadiusX);
-        System.out.println("radius y: " + boardRadiusY);
+        //System.out.println(boardRadiusY);
+        int stones = player.getStones();
+        Piece[] pieces = constructionSite.getCurrentPieces();
+        int avaliablePiece = constructionSite.countPieces();
+        System.out.println(avaliablePiece);
+        System.out.println("stack length " + stack.getCurrentPieces().length);
+        if (avaliablePiece < 2 && stack.getCurrentPieces().length == 0) {
+            System.out.println("returned empty hashset");
+            return new HashSet<>();
+        }
+        System.out.println("now iterating");
         // Iterate through all finite moves
-        for (Piece piece : constructionSite.getCurrentPieces()) {
-            if (piece != null) {
+        for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
+            for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
+                new HexCoord(x,y);
                 for (Rotation rotation : Rotation.values()) {
-                    for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
-                        for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
-                            Move move = new Move (piece, new Transform(new HexCoord(x,y) ,rotation));
-                            if(isMoveValid(gameState,move)){
-                                validMoves.add(move.toString());
-                            }
+                    Transform transform = new Transform(new HexCoord(x,y) ,rotation);
+                    for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
+                        Piece piece = pieces[s];
+                        if (piece == null) {
+                            break;
+                        }
+                        Move move = new Move (piece, transform);
+                        if(isMoveValid(gameState,move, true)){
+                            validMoves.add(move.toString());
                         }
                     }
                 }
             }
         }
-
-
-
-        int numberOfPlayers = Integer.parseInt(gameState.substring(0,1));
-
-        // Set maxPieceID based on numberOfPlayers
-        int maxPieceID;
-        switch (numberOfPlayers) {
-            case 2: maxPieceID = 37; break;
-            case 3: maxPieceID = 49; break;
-            default: maxPieceID = 61; break;
-        }
-
-
-
+        System.out.println("ahhhh");
         return validMoves; // FIXME Task 14
     }
 

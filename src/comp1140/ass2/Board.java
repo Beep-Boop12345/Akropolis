@@ -3,6 +3,8 @@ package comp1140.ass2;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.function.DoubleToIntFunction;
+
 public class Board {
 
     /*100 100 is origin, Array of all the tiles appearing on the surface*/
@@ -150,47 +152,66 @@ public class Board {
      * @return boolean, true if the piece can be legally placed on the board*/
     public Boolean isValidPlacement(Move moveToMake) {
         HexCoord[] positions = findTilePosition(moveToMake);
-        /*The tiles that will be covered if the piece is placed*/
-        Tile[] tilesToBeCovered = new Tile[3];
         /*Counting to see how many of the pieces hexagons will not cover another piece*/
-        int nullCount = 0;
-        for (int i = 0; i < 3; i++) {
-            tilesToBeCovered[i] = getTile(positions[i]);
-            if (tilesToBeCovered[i] == null) {
-                nullCount ++;
-            }
-        }
-        /*returns false if some pieces are on the ground but not all of them*/
-        if (nullCount > 0 && nullCount < 3) {
+        int height = placementHeights(positions);
+        if (height == -1) {
             return false;
         }
 
-
-
         /*Given the case that the entire piece is on the ground return true if there is an adjacent tile*/
-        if (nullCount == 3) {
-            for (HexCoord i : positions) {
-                for (HexCoord j : i.getSurroundings()) {
-                    if (getTile(j) != null) {
-                        return true;
-                    }
+        if (height == 0) {
+            for (HexCoord point : moveToMake.getPieceNeighbours()) {
+                if (getTile(point) != null) {
+                    return true;
                 }
             }
             return false;
-        } //FIXME potential optimization
-
-        /*Checks if the whole piece is on the one level*/
-        boolean heightEq = true;
-        heightEq = heightEq && (tilesToBeCovered[0].getHeight() == tilesToBeCovered[1].getHeight());
-        heightEq = heightEq && (tilesToBeCovered[2].getHeight() == tilesToBeCovered[1].getHeight());
-        /*Given that the entire piece is level checks that it will not cover just one piece*/
-        if (heightEq) {
-            boolean samePiece = true;
-            samePiece = samePiece && (tilesToBeCovered[0].getPiece() == tilesToBeCovered[1].getPiece());
-            samePiece = samePiece && (tilesToBeCovered[2].getPiece() == tilesToBeCovered[1].getPiece());
-            return !samePiece;
         }
-        return false;
+        int piece0 = getTile(positions[0]).getPiece();
+        boolean samePiece = true;
+        samePiece = samePiece && (piece0 == getTile(positions[1]).getPiece());
+        samePiece = samePiece && (getTile(positions[2]).getPiece() == piece0);
+        return !samePiece;
+    }
+
+    /** returns height all the pieces wll be placed at.@u7646615
+     * <p>
+     * -1 if different heigh
+     *
+     * @param piecePositions positions pieces will be placed
+     * @return the height at which they will be placed
+     * */
+
+    private int placementHeights(HexCoord[] piecePositions) {
+        Tile tile0 = getTile(piecePositions[0]);
+        int height0;
+        if (tile0 != null) {
+            height0 = tile0.getHeight() + 1;
+        } else {
+            height0 = 0;
+        }
+        Tile tile1 = getTile(piecePositions[1]);
+        int height1;
+        if (tile1 != null) {
+            height1 = tile1.getHeight() + 1;
+        } else {
+            height1 = 0;
+        }
+        if (height0 != height1) {
+            return -1;
+        }
+
+        Tile tile2 = getTile(piecePositions[2]);
+        int height2;
+        if (tile2 != null) {
+            height2 = tile2.getHeight() + 1;
+        } else {
+            height2 = 0;
+        }
+        if (height0 != height2) {
+            return -1;
+        }
+        return height0;
     }
 
     /**
