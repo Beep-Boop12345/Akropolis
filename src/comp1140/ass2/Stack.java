@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class Stack {
 
-    private static int pieceCount;
+    private int pieceCount;
 
-    private static Piece[] currentPieces;
+    private Piece[] currentPieces;
 
     public Stack (Piece[] pieces){
         pieceCount = pieces.length;
@@ -106,7 +106,7 @@ public class Stack {
 
 
     /*Chooses a random tile to give to constructionSite. Give choose a more descriptive name*/
-    public static Piece choose() {
+    public Piece choose() {
         if (pieceCount == 0) {
             return null;
         }
@@ -125,11 +125,11 @@ public class Stack {
         return output;
     }
 
-    public static int getPieceCount() {
+    public int getPieceCount() {
         return pieceCount;
     }
 
-    public static Piece[] getCurrentPieces() {
+    public Piece[] getCurrentPieces() {
         return currentPieces;
     }
 

@@ -1,33 +1,34 @@
 package comp1140.ass2;
 
-import comp1140.ass2.gui.StoneLabel;
-import comp1140.ass2.gui.VisualBoard;
-
-import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
 
-    public static int numberOfPlayers;
+    public int numberOfPlayers;
 
-    public static Player[] currentPlayers;
+    public Player[] currentPlayers;
 
-    public static int pieceCount;
+    public int pieceCount;
 
-    public static Piece[] pieces;
+    public Piece[] pieces;
 
-    public static ConstructionSite constructionSite;
+    public ConstructionSite constructionSite;
 
-    public static Stack stack;
+    public Stack stack;
 
-    public static Boolean[] scoreVariants = new Boolean[5];
+    public Boolean[] scoreVariants = new Boolean[5];
 
-    public static GameState gameStage;
+    public GameState gameStage;
 
-    public static int currentTurn;
+    public int currentTurn;
 
+    /**
+     * Constructs an Akropolis Class from its string representation for testing
+     * @author u7683699
+     * @param gameState The string representing a game state
+     */
     Akropolis(String gameState) {
 
         if (isStateStringWellFormed(gameState)) {
@@ -70,7 +71,7 @@ public class Akropolis {
 
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
-     * @u7330006
+     * @author u7330006
      * @param move a move string.
      * @return true is the move string is well-formed, false otherwise.
      */
@@ -83,12 +84,12 @@ public class Akropolis {
         boolean hasInvalidCharacters = move.contains("N00") || move.contains("W00");
 
         // Set maxPieceID based on numberOfPlayers
-        int maxPieceID;
-        switch (numberOfPlayers) {
-            case 2: maxPieceID = 37; break;
-            case 3: maxPieceID = 49; break;
-            default: maxPieceID = 61;
-        }
+        int maxPieceID = 61;
+//        switch (numberOfPlayers) {
+//            case 2: maxPieceID = 37; break;
+//            case 3: maxPieceID = 49; break;
+//            default: maxPieceID = 61;
+//        }
 
         // Get the pieceID
         int pieceID;
@@ -109,7 +110,7 @@ public class Akropolis {
      * In addition to the specified formatting rules, there are two additional things you must check.
      * 1. No duplicate tiles are contained within the state string (based on the tile ids).
      * 2. The tiles in the string must be playable for the given player count (Hint: use the TILE_POOL).
-     * @u7330006
+     * @author u7330006
      * @param gameState a state string.
      * @return true if the state string is well-formed, false otherwise.
      */
@@ -230,6 +231,7 @@ public class Akropolis {
     }
 
     /**
+     * @author u7683699
      * Given a state string, checks whether the game has ended.
      * <p>
      * The game ends when there is only one tile left in the Construction Site and all other tiles have been played.
@@ -238,41 +240,21 @@ public class Akropolis {
      * @return true if the game is over, false otherwise.
      */
     public static boolean isGameOver(String gameState) {
-        var newConstructionSite = new ConstructionSite(gameState);
-        var pieces = newConstructionSite.getCurrentPieces();
-        int pieceCount = 0;
+        Akropolis akropolis = new Akropolis(gameState);
 
-        for (Piece piece:pieces) {
-            if (piece != null) pieceCount += 1;
-        }
-
-        var siteEmpty = pieceCount <= 1;
-        //System.out.println("Site: " + siteEmpty);
-
-        var newStack = new Stack(gameState);
-        var stackEmpty = newStack.getPieceCount() <= 0;
-        //System.out.println("Stack: " + stackEmpty);
-
-        return (siteEmpty && stackEmpty);
-
+        return akropolis.isGameOver();
     }
 
-    /*Same method using object inputs*/
-    public static boolean isGameOver(ConstructionSite site, Stack stack) {
-        var pieces = site.getCurrentPieces();
-        int pieceCount = 0;
-
-        for (Piece piece:pieces) {
-            if (piece != null) pieceCount += 1;
-        }
-
-        var siteEmpty = pieceCount <= 1;
-
+    /**
+     * @author u7683699
+     * Checks if this akropolis game instance has ended
+     * @return true if the game is over, false otherwise.
+     */
+    public boolean isGameOver() {
+        var siteEmpty = constructionSite.getCurrentPieceCount() <= 1;
         var stackEmpty = stack.getPieceCount() <= 0;
-        //System.out.println("Stack: " + stackEmpty);
 
         return (siteEmpty && stackEmpty);
-
     }
 
     /**
@@ -293,16 +275,17 @@ public class Akropolis {
      * @param gameState a state string.
      * @return the state string with the Construction Site refilled if needed, otherwise the unmodified state string.
      */
+
     public static String resupplyConstructionSite(String gameState) {
-        /*make Construction site*/
-        ConstructionSite constructionSite = new ConstructionSite(gameState);
-        /*Needs to make stack to pull from*/
-        Stack stack = new Stack(gameState);
-        /*reSupplies it*/
-        constructionSite.resupply(stack);
+        //Make Akropolis Instance
+        Akropolis akropolis = new Akropolis(gameState);
+
+        //Resupply Its Construction Site
+        akropolis.constructionSite.resupply(akropolis.stack);
+
         /*gets the new string representation and incorporates it into the gameState string*/
         String[] gameStateAsArray = gameState.split(";");
-        gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + constructionSite.toString();
+        gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + akropolis.constructionSite.toString();
         return String.join(";", gameStateAsArray) + ";";
     }
 
@@ -319,14 +302,19 @@ public class Akropolis {
      * @param position  a position string.
      * @return the height of the tile for the player at the given position.
      */
+
     public static int heightAt(String gameState, int playerId, String position) {
-        String playerString;
-        playerString = gameState.split(";")[playerId + 2];
-        Player player = new Player(playerString);
-        Tile tile = player.getBoard().getTile(new HexCoord(position));
+
+        Akropolis akropolis = new Akropolis(gameState);
+
+        Player player = akropolis.currentPlayers[playerId];
+        HexCoord tilePosition = new HexCoord(position);
+
+        Tile tile = player.getBoard().getTile(tilePosition);
         if (tile == null) {
             return 0;
         }
+
         return tile.getHeight() + 1;
     }
 
@@ -347,11 +335,15 @@ public class Akropolis {
      * @param position  a position string.
      * @return The character representing the tile at the position (null if there is no tile).
      */
+
     public static Character tileAt(String gameState, int playerId, String position) {
-        String playerString;
-        playerString = gameState.split(";")[playerId + 2];
-        Player player = new Player(playerString);
-        Tile tile = player.getBoard().getTile(new HexCoord(position));
+
+        Akropolis akropolis = new Akropolis(gameState);
+
+        Player player = akropolis.currentPlayers[playerId];
+        HexCoord tilePosition = new HexCoord(position);
+
+        Tile tile = player.getBoard().getTile(tilePosition);
         if (tile == null) {
             return null;
         }
@@ -377,20 +369,29 @@ public class Akropolis {
      * @param move      a move string.
      * @return true if the move can be played, false otherwise.
      */
+
     public static boolean isMoveValid(String gameState, String move) {
+
+        Akropolis akropolis = new Akropolis(gameState);
+
         /*Creates the objects needed for computation*/
         Move moveObject = new Move(move);
-        ConstructionSite constructionSite = new ConstructionSite(gameState);
-        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
-        Player player = new Player(gameState.split(";")[2+playerID]);
-        /*Determines if the piece can be chosen from constructionSite*/
-        int price = constructionSite.findPrice(moveObject.getPiece());
+
+        return akropolis.isMoveValid(moveObject);
+    }
+
+    public boolean isMoveValid(Move move) {
+        int price = constructionSite.findPrice(move.getPiece());
+        Player player = currentPlayers[currentTurn];
+
         if (price < 0 || price > player.getStones()) {
             return false;
         }
-        /*Determines if piece can be placed on the board at given postion*/
-        return player.getBoard().isValidPlacement(moveObject);
+
+        return player.getBoard().isValidPlacement(move);
     }
+
+    // TODO Redo Method
     public static boolean isMoveValid(String gameState, Move move, boolean priceGuarded) {
         /*Creates the objects needed for computation*/
         ConstructionSite constructionSite = new ConstructionSite(gameState);
@@ -421,27 +422,20 @@ public class Akropolis {
      * @return The state string after applying the move.
      */
     public static String applyMove(String gameState, String move) {
-        /*not required but will be useful when game becomes object reliant*/
-        if (!isMoveValid(gameState,move)) {
-            return gameState;
-        }
-        /*Initialize objects*/
-        int turn = Integer.parseInt(gameState.split(";")[1].substring(0,1));
-        int playerCount = Integer.parseInt(gameState.substring(0,1));
-        Move moveObj = new Move(move);
-        ConstructionSite constructionSite = new ConstructionSite(gameState);
-        Stack stack = new Stack(gameState);
-        /*Player not needed for string based method but useful when game becomes object reliant*/
-        Player player = new Player(gameState.split(";")[2+turn]);
-        /*Compute changes to objects*/
-        player.applyMove(constructionSite, moveObj);
-        constructionSite.resupply(stack);
+
+        Akropolis akropolis = new Akropolis(gameState);
+        Move moveObject = new Move(move);
+
+        var currentTurn = akropolis.currentTurn;
+
+        akropolis.applyMove(moveObject);
+
         /*create new gameState string*/
         String[] gameStateArr = gameState.split(";");
-        for (int i = 0; i < playerCount; i++) {
-            if (i == turn) {
+        for (int i = 0; i < akropolis.numberOfPlayers; i++) {
+            if (i == currentTurn) {
                 /*Account for stone cost*/
-                String stoneString = String.valueOf(player.getStones());
+                String stoneString = String.valueOf(akropolis.currentPlayers[currentTurn].getStones());
                 if (stoneString.length() == 1) {
                     stoneString = "0" + stoneString;
                 }
@@ -451,16 +445,33 @@ public class Akropolis {
                 gameStateArr[i + 2] = purchasedPlayer + move;
             }
         }
-        /*Update turn if needed*/
-        if (!isGameOver(constructionSite,stack)) {
-            turn = (turn + 1) % playerCount;
-        }
-        gameStateArr[1] = String.valueOf(turn) + constructionSite;
+
+        gameStateArr[1] = String.valueOf(akropolis.currentTurn) + akropolis.constructionSite;
         String newGameState = "";
         for (String gameStringComponent : gameStateArr) {
             newGameState = newGameState + gameStringComponent + ";";
         }
         return newGameState;
+    }
+
+    public void applyMove(Move move) {
+        /*not required but will be useful when game becomes object reliant*/
+//        if (!isMoveValid(gameState,move)) {
+//            return gameState;
+//        }
+        // TODO Valid Move Check
+        /*Initialize objects*/
+
+        var player = currentPlayers[currentTurn];
+
+        /*Compute changes to objects*/
+        player.applyMove(constructionSite, move);
+        constructionSite.resupply(stack);
+
+        /*Update turn if needed*/
+        if (!isGameOver()) {
+            currentTurn = (currentTurn + 1) % numberOfPlayers;
+        }
     }
 
     /**
@@ -488,7 +499,7 @@ public class Akropolis {
         System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
-        int avaliablePiece = constructionSite.countPieces();
+        int avaliablePiece = constructionSite.getCurrentPieceCount();
 
         // Iterate through all finite moves
         for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
@@ -502,7 +513,7 @@ public class Akropolis {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
                         validMoves.add(move.toString());
-                        //We need not check validity of equivilant transforms
+                        //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y+1), Rotation.DEG_120));
                         Move move2 = new Move(piece, new Transform(new HexCoord(x+1,y+(Math.abs(x) % 2)), Rotation.DEG_240));
                         validMoves.add(move1.toString());
@@ -519,7 +530,7 @@ public class Akropolis {
                         Move move = new Move(piece, transform);
                         System.out.println(move);
                         validMoves.add(move.toString());
-                        //We need not check validity of equivilant transforms
+                        //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
                         System.out.println(move1);
                         Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
@@ -566,7 +577,7 @@ public class Akropolis {
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = Akropolis.currentPlayers[i];
+            Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -634,7 +645,7 @@ public class Akropolis {
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = Akropolis.currentPlayers[i];
+            Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -732,7 +743,7 @@ public class Akropolis {
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = Akropolis.currentPlayers[i];
+            Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -823,7 +834,7 @@ public class Akropolis {
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = Akropolis.currentPlayers[i];
+            Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -915,7 +926,7 @@ public class Akropolis {
 
         // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = Akropolis.currentPlayers[i];
+            Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
 
@@ -1026,33 +1037,33 @@ public class Akropolis {
         return ""; // FIXME Task 22
     }
 
-    public static Stack getStack() {
+    public Stack getStack() {
         return stack;
     }
 
-    public static Piece[] createPieceArray(int numberOfPlayers) {
-
-        String currentPool = TILE_POOL;
-        Piece[] pieceArray = new Piece[pieceCount];
-
-        for (int i = 1; i < numberOfPlayers + 1; i++) {
-            String splitPoint  = Integer.toString(i + 1) + ":";
-            String[] splitPool = currentPool.split(splitPoint);
-            currentPool = splitPool[0];
-            for (int j = 0; j < (currentPool.length()/5); j++) {
-                String subString = currentPool.substring((j*5), (j*5) + 5);
-                String pieceId = subString.substring(0,2);
-                int pieceIndex = Integer.parseInt(pieceId);
-
-                pieceArray[pieceIndex] = new Piece(subString);
-            }
-            System.out.println(currentPool);
-            currentPool = splitPool[1];
-            System.out.println(currentPool);
-        }
-
-        return new Piece[0];
-    }
+//    public static Piece[] createPieceArray(int numberOfPlayers) {
+//
+//        String currentPool = TILE_POOL;
+//        Piece[] pieceArray = new Piece[pieceCount];
+//
+//        for (int i = 1; i < numberOfPlayers + 1; i++) {
+//            String splitPoint  = Integer.toString(i + 1) + ":";
+//            String[] splitPool = currentPool.split(splitPoint);
+//            currentPool = splitPool[0];
+//            for (int j = 0; j < (currentPool.length()/5); j++) {
+//                String subString = currentPool.substring((j*5), (j*5) + 5);
+//                String pieceId = subString.substring(0,2);
+//                int pieceIndex = Integer.parseInt(pieceId);
+//
+//                pieceArray[pieceIndex] = new Piece(subString);
+//            }
+//            System.out.println(currentPool);
+//            currentPool = splitPool[1];
+//            System.out.println(currentPool);
+//        }
+//
+//        return new Piece[0];
+//    }
 
 
 

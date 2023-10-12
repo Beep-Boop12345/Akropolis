@@ -11,7 +11,7 @@ public enum GameState {
     public final int turn;
 
     // There are 2 to 4 inclusive possible players
-    public final int numPlayers = Akropolis.numberOfPlayers;
+    //public final int numPlayers = Akropolis.numberOfPlayers;
 
 
 
@@ -34,28 +34,28 @@ public enum GameState {
     }
 
     // Method to update the game state
-    public GameState updateState(boolean playing, boolean finished) {
-        if (finished) {
-            return ENDED;
-        } else if (playing) {
-            return cycleMove();
-        } else {
-            return SETUP;
-        }
-    }
+//    public GameState updateState(boolean playing, boolean finished) {
+//        if (finished) {
+//            return ENDED;
+//        } else if (playing) {
+//            return cycleMove();
+//        } else {
+//            return SETUP;
+//        }
+//    }
 
     // Method to cycle player turn
-    public GameState cycleMove() {
-        int nextPlayer = (turn % numPlayers) + 1;
-
-        return switch (nextPlayer) {
-            case 1 -> PLAYER1MOVE;
-            case 2 -> PLAYER2MOVE;
-            case 3 -> PLAYER3MOVE;
-            case 4 -> PLAYER4MOVE;
-            default -> this;
-        };
-    }
+//    public GameState cycleMove() {
+//        int nextPlayer = (turn % numPlayers) + 1;
+//
+//        return switch (nextPlayer) {
+//            case 1 -> PLAYER1MOVE;
+//            case 2 -> PLAYER2MOVE;
+//            case 3 -> PLAYER3MOVE;
+//            case 4 -> PLAYER4MOVE;
+//            default -> this;
+//        };
+//    }
 
     @Override
     public String toString() {

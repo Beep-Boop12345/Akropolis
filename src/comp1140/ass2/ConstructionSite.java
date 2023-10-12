@@ -4,9 +4,9 @@ import java.lang.Math;
 
 public class ConstructionSite {
 
-    public static int size;
+    public int size;
 
-    public static Piece[] currentPieces;
+    public Piece[] currentPieces;
 
 
     public ConstructionSite (int playercount, Piece[] initialPieces, Stack stack) {
@@ -46,37 +46,37 @@ public class ConstructionSite {
         return Integer.parseInt(gameState.substring(0,1));
     }
 
-    public static void resupply (Stack stack) {
+    public void resupply (Stack stack) {
         if (!isEmpty()) {
             return;
         }
         /*order();*/
-        for (int i = countPieces(); i < size; i++) {
+        for (int i = getCurrentPieceCount(); i < size; i++) {
             currentPieces[i] = addPiece(stack);
         }
     }
 
     /*Evaluates whether refilling is needed
     * @Return True if only one piece in construction site*/
-    private static boolean isEmpty() {
-        if (countPieces() < 2) {
+    private boolean isEmpty() {
+        if (getCurrentPieceCount() < 2) {
             return true;
         }
         return false;
     }
 
-    public static int countPieces() {
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (currentPieces[i] != null) {
-                count += 1;
-            }
-        }
-        return count;
-    }
+//    public int countPieces() {
+//        int count = 0;
+//        for (int i = 0; i < size; i++) {
+//            if (currentPieces[i] != null) {
+//                count += 1;
+//            }
+//        }
+//        return count;
+//    }
 
     /*Order the pieces so that all null instances are at the highest indexes of the currentPiece array*/
-    private static void order() {
+    private void order() {
         int index = 0;
         while (index < size) {
             if (currentPieces[index] == null) {
@@ -97,7 +97,7 @@ public class ConstructionSite {
     * @Param Piece purchase piece to be purchased
     * @Return int price price of selection, -1 if not possible*/
     public int findPrice(Piece purchase) {
-        if (countPieces() < 2) {
+        if (getCurrentPieceCount() < 2) {
             return -1;
         }
         for (int i = 0; i < size; i++) {
@@ -110,7 +110,7 @@ public class ConstructionSite {
 
     /*Removes an amount of Pieces from the construction site from the left
     * @Param piece to be removed*/
-    public static void removePiece(Piece piece) {
+    public void removePiece(Piece piece) {
         /*this round about way of removing is to make sure all nulls remain at the end*/
         boolean hasReachedPieceToBeRemoved = false;
         Piece[] currentPiecesHldr = new Piece[size];
@@ -151,7 +151,17 @@ public class ConstructionSite {
         return output;
     }
 
-    public static Piece[] getCurrentPieces() {
+    public Piece[] getCurrentPieces() {
         return currentPieces;
+    }
+
+    public int getCurrentPieceCount() {
+        var currentPieceCount = 0;
+        for (var piece : currentPieces) {
+            if (piece != null) {
+                currentPieceCount++;
+            }
+        }
+        return currentPieceCount;
     }
 }
