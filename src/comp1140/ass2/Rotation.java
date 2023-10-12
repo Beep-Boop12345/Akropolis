@@ -74,7 +74,7 @@ public enum Rotation {
 
     @Override
     public String toString() {
-        return "R" +String.valueOf((int) (value / 60));
+        return String.valueOf((int) (value / 60));
     }
 }
 

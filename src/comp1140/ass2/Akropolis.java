@@ -10,17 +10,13 @@ public class Akropolis {
 
     public Player[] currentPlayers;
 
-    public int pieceCount;
-
-    public Piece[] pieces;
-
     public ConstructionSite constructionSite;
 
     public Stack stack;
 
     public Boolean[] scoreVariants = new Boolean[5];
 
-    public GameState gameStage;
+    //public GameState gameStage;
 
     public int currentTurn;
 
@@ -37,11 +33,8 @@ public class Akropolis {
             String[] playerStrings = new String[components.length - 2];
             System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
 
-            int currentTurnId = Character.getNumericValue(components[1].charAt(0));
 
-            String currentPlayerString = playerStrings[0];
-
-            currentTurn = currentTurnId;
+            currentTurn = Character.getNumericValue(components[1].charAt(0));
 
             currentPlayers = new Player[playerStrings.length];
 
@@ -64,10 +57,6 @@ public class Akropolis {
 
     }
 
-    /*Cycles turn*/
-    public static void nextTurn() {
-
-    }
 
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
@@ -391,24 +380,6 @@ public class Akropolis {
         return player.getBoard().isValidPlacement(move);
     }
 
-    // TODO Redo Method
-    public static boolean isMoveValid(String gameState, Move move, boolean priceGuarded) {
-        /*Creates the objects needed for computation*/
-        ConstructionSite constructionSite = new ConstructionSite(gameState);
-        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
-        Player player = new Player(gameState.split(";")[2+playerID]);
-        /*Determines if the piece can be chosen from constructionSite*/
-        if (priceGuarded) {
-            return player.getBoard().isValidPlacement(move);
-        }
-        int price = constructionSite.findPrice(move.getPiece());
-        if (price < 0 || price > player.getStones()) {
-            return false;
-        }
-        /*Determines if piece can be placed on the board at given postion*/
-        return player.getBoard().isValidPlacement(move);
-    }
-
     /**
      * Given a state string and a move string, apply the move to the board.
      * <p>
@@ -447,20 +418,19 @@ public class Akropolis {
         }
 
         gameStateArr[1] = String.valueOf(akropolis.currentTurn) + akropolis.constructionSite;
-        String newGameState = "";
+        StringBuilder newGameState = new StringBuilder();
         for (String gameStringComponent : gameStateArr) {
-            newGameState = newGameState + gameStringComponent + ";";
+            newGameState.append(gameStringComponent).append(";");
         }
-        return newGameState;
+        return newGameState.toString();
     }
 
     public void applyMove(Move move) {
+
         /*not required but will be useful when game becomes object reliant*/
-//        if (!isMoveValid(gameState,move)) {
-//            return gameState;
-//        }
-        // TODO Valid Move Check
-        /*Initialize objects*/
+        if (!isMoveValid(move)) {
+            return;
+        }
 
         var player = currentPlayers[currentTurn];
 
@@ -481,17 +451,31 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
-        if (isGameOver(gameState)) {
-            return new HashSet<>();
+
+        Akropolis akropolis = new Akropolis(gameState);
+
+        var moveSet = akropolis.generateAllValidMoves();
+
+        Set<String> validMoves = new HashSet<>();
+
+        for (var move : moveSet) {
+            validMoves.add(move.toString());
         }
 
+        return validMoves;
+    }
+
+    public Set<Move> generateAllValidMoves() {
 
         // Initializes set with possible legal moves
-        Set<String> validMoves = new HashSet<>();
-        //Initialize objects
-        ConstructionSite constructionSite = new ConstructionSite(gameState);
-        int playerID = Integer.parseInt(gameState.split(";")[1].substring(0,1));
-        Player player = new Player(gameState.split(";")[2+playerID]);
+        Set<Move> validMoves = new HashSet<>();
+
+        if (isGameOver()) {
+            return validMoves;
+        }
+
+        Player player = currentPlayers[currentTurn];
+
         //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
         System.out.println(boardRadiusX);
@@ -506,44 +490,44 @@ public class Akropolis {
             for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
                 Transform transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_0);
                 Move move0 = new Move (pieces[0], transform);
-                if(isMoveValid(gameState,move0, true)){
-                    validMoves.add(move0.toString());
+                if(isMoveValid(move0)){
+                    validMoves.add(move0);
                     //We need not check validity of purchasable pieces
                     for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
-                        validMoves.add(move.toString());
+                        validMoves.add(move);
                         //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y+1), Rotation.DEG_120));
                         Move move2 = new Move(piece, new Transform(new HexCoord(x+1,y+(Math.abs(x) % 2)), Rotation.DEG_240));
-                        validMoves.add(move1.toString());
-                        validMoves.add(move2.toString());
+                        validMoves.add(move1);
+                        validMoves.add(move2);
                     }
                 }
                 transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_180);
                 move0 = new Move (pieces[0], transform);
-                if(isMoveValid(gameState,move0, true)){
-                    validMoves.add(move0.toString());
+                if(isMoveValid(move0)){
+                    validMoves.add(move0);
                     //We need not check validity of purchasable pieces
                     for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
                         System.out.println(move);
-                        validMoves.add(move.toString());
+                        validMoves.add(move);
                         //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
                         System.out.println(move1);
                         Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
                         System.out.println(move2);
-                        validMoves.add(move1.toString());
-                        validMoves.add(move2.toString());
+                        validMoves.add(move1);
+                        validMoves.add(move2);
                         System.out.println("_________________________");
                     }
                 }
 
             }
         }
-        return validMoves; // FIXME Task 14
+        return validMoves;
     }
 
     /**
