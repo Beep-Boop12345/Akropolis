@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
  * @author u7330006
  */
 
+
+ // Dependency on score calculation tasks
 public class Scoreboard extends Label {
     Scoreboard(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);

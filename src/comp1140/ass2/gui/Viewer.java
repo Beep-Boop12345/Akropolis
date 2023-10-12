@@ -4,24 +4,17 @@ import comp1140.ass2.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import org.w3c.dom.css.Rect;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+
 
 public class Viewer extends Application {
 
@@ -74,13 +67,13 @@ public class Viewer extends Application {
             }
         }
 
-        /* Old Code to Displays Stones
+        // Old Code to Displays Stones
         int stones = Integer.parseInt(currentPlayerString.substring(2,4));
         System.out.println(stones);
 
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
         newView.getChildren().add(stoneLabel);
-         */
+
 
 
         /* New Code to Display Scoreboard including Stones and playerScores
@@ -159,10 +152,6 @@ public class Viewer extends Application {
 
         root.getChildren().add(controls);
         root.getChildren().add(currentView);
-
-        // Invokes Setup class to get initial stateString
-        Setup.display();
-
 
 
         makeControls();
