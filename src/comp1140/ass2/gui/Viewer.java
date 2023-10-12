@@ -129,13 +129,9 @@ public class Viewer extends Application {
         gameTextField = new TextField();
         gameTextField.setPrefWidth(800);
         Button button = new Button("Refresh");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-
-                displayState(gameTextField.getText());
-                controls.toFront();
-            }
+        button.setOnAction(e -> {
+            displayState(gameTextField.getText());
+            controls.toFront();
         });
         HBox hb = new HBox();
         hb.getChildren().addAll(gameLabel, gameTextField, button);
