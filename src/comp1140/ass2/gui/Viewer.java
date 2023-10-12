@@ -74,12 +74,19 @@ public class Viewer extends Application {
             }
         }
 
-        //Displays Stones
+        /* Old Code to Displays Stones
         int stones = Integer.parseInt(currentPlayerString.substring(2,4));
         System.out.println(stones);
 
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
         newView.getChildren().add(stoneLabel);
+         */
+
+
+        /* New Code to Display Scoreboard including Stones and playerScores
+        Scoreboard scoreboard = new Scoreboard(state);
+        newView.getChildren().add(scoreboard);
+        */
 
         //Isolates Move String
         String movesString = currentPlayerString.substring(4);

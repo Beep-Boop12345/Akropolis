@@ -16,6 +16,10 @@ public class Akropolis {
 
     public Boolean[] scoreVariants = new Boolean[5];
 
+    public int[] playerScores;
+
+    public int[] playerStones;
+
     //public GameState gameStage;
 
     public int currentTurn;
@@ -25,7 +29,7 @@ public class Akropolis {
      * @author u7683699
      * @param gameState The string representing a game state
      */
-    Akropolis(String gameState) {
+    public Akropolis(String gameState) {
 
         if (isStateStringWellFormed(gameState)) {
             //Breaks string to construct objects
@@ -51,6 +55,15 @@ public class Akropolis {
             // Find the score variants for h,m,b,t,g
             for (int i = 0; i < scoreVariants.length; i++) {
                 scoreVariants[i] = Character.isUpperCase(gameState.charAt(i + 1));
+            }
+
+            // Find the playerScores
+            playerScores = calculateCompleteScores(gameState);
+
+            // Find the playerStones
+            playerStones = new int[numberOfPlayers];
+            for (int i = 0; i < numberOfPlayers; i++) {
+                playerStones[i] = currentPlayers[i].getStones();
             }
 
         }
@@ -617,7 +630,7 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Market district is adjacent to a Market plaza, its points are doubled.
-     * @u7330006
+     * @author u7330006
      * @param gameState a state string.
      * @return An array containing the "Market" component of the score for each player (ordered by ascending player ID).
      */
@@ -715,7 +728,7 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Barracks district has 3 or 4 adjacent empty spaces, its points are doubled.
-     * @u7330006
+     * @author u7330006
      * @param gameState a state string.
      * @return An array containing the "Barracks" component of the score for each player (ordered by ascending player ID).
      */
@@ -806,7 +819,7 @@ public class Akropolis {
      * Recall that the score is the product of the stars and the points.
      * <p>
      * For the variant, if a Temple is on a level higher than 1, its points are doubled.
-     * @u7330006
+     * @author u7330006
      * @param gameState a state string.
      * @return An array containing the "Temple" component of the score for each player (ordered by ascending player ID).
      */
@@ -898,7 +911,7 @@ public class Akropolis {
      * For the variant, if a Garden is adjacent to a "lake", its points are doubled.
      * <p>
      * A lake is an empty space that is completely surrounded by tiles.
-     * @u7330006
+     * @author u7330006
      * @param gameState a state string.
      * @return An array containing the "Garden" component of the score for each player (ordered by ascending player ID).
      */

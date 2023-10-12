@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+
+/**
+ * This enum is responsible for keeping track of the current player turns and cycling turns
+ * @author u7330006
+ */
 public enum GameState {
     ENDED(0),
     PLAYER1MOVE(1),

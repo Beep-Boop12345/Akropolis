@@ -11,7 +11,7 @@ public class HexCoord {
      * Constructor for instances of HexCoordinates
      * @param x the horizontal displacement
      * @param y the vertical displacement
-     * @u7330006
+     * @author u7330006
      */
 
     public HexCoord(int x, int y) {

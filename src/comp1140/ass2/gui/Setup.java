@@ -18,7 +18,7 @@ import java.util.Random;
  * This class is responsible for initializing the game, allowing users to select the number of players and score variants.
  * Its primary purpose is to provide a display method that can be utilized in any other JavaFX executable class. This method
  * initializes the initial gameState string and creates instances of Akropolis objects using said string to commence the game.
- * @u7330006
+ * @author u7330006
  */
 
 public class Setup {

@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 /**
  * This enum is responsible for representing district objects from a string representation.
- * @u7330006
+ * @author u7330006
  */
 public enum District {
     HOUSES("Houses"),
