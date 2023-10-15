@@ -9,22 +9,18 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PurchasablePiece extends Group {
     /*The back end piece this represents*/
-    private Piece piece;
-    private Viewer viewer;
-    private Akropolis akropolis;
+    private final Piece piece;
 
-    private ArrayList<VisualTile> vTiles;
+    private final ArrayList<VisualTile> vTiles;
 
-    private ArrayList<Line> connectors;
+    private final ArrayList<Line> connectors;
 
     private Rotation rotation;
 
@@ -33,8 +29,7 @@ public class PurchasablePiece extends Group {
     private boolean reflected;
 
     //Fields to track movement
-    private double initialX;
-    private double initialY;
+
     //difference in mouse position and original position
     private double mousePosDiffX;
     private double mousePosDiffY;
@@ -45,7 +40,10 @@ public class PurchasablePiece extends Group {
     //Fields to track events
     private boolean isPressed;
 
-    //A visual piece that is used in the visual construction site.@u7683699, @u7646615
+    /**    A visual piece that is used in the visual construction site.
+     * @author u7683699, @author u7646615
+     *
+     */
     PurchasablePiece(double x, double y, Piece piece, double sideLength, Viewer viewer, Akropolis akropolis){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
@@ -54,10 +52,6 @@ public class PurchasablePiece extends Group {
         this.rotation = Rotation.DEG_0;
         this.size = sideLength;
         this.reflected = false;
-        this.viewer = viewer;
-        this.akropolis = akropolis;
-        this.initialX = x;
-        this.initialY = y;
 
         Tile[] tiles = piece.getTiles();
 
@@ -102,7 +96,7 @@ public class PurchasablePiece extends Group {
                 resizePiece();
                 isPressed =true;
                 reflected = !event.isPrimaryButtonDown();
-                reflect(mousePositionX);
+                reflect();
                 toFront();
             }
         });
@@ -140,7 +134,7 @@ public class PurchasablePiece extends Group {
                 if (event.getCode() == KeyCode.A) {
                     rotation = rotation.add(Rotation.getAngle(-60));
                     rotatePiece();
-                } else if (event.getCharacter() == "d") {
+                } else if (event.getCharacter().equals("d")) {
                     rotation = rotation.add(Rotation.getAngle(60));
                     rotatePiece();
                 }
@@ -149,7 +143,6 @@ public class PurchasablePiece extends Group {
     }
 
     /**Resizes the Piece. @u7646615
-     *
      * */
     private void resizePiece() {
         double yLength = size * (Math.sin(Math.toRadians(60)));
@@ -176,7 +169,6 @@ public class PurchasablePiece extends Group {
     }
 
     /** updates the connectors. @u7646615
-     *
      * */
     private void updateConnectors(){
         for (int i = 0; i < 3; i++) {
@@ -194,9 +186,8 @@ public class PurchasablePiece extends Group {
 
     /**
      * Reflects the piece. @u7646615
-     *
      * */
-    private void reflect(double axis){
+    private void reflect(){
         if (reflected) {
             vTiles.get(2).setLayoutX(-1.5*size);
         } else {
@@ -264,9 +255,5 @@ public class PurchasablePiece extends Group {
                 break;
         }
         return positions;
-    }
-
-    private void findValidMoves() {
-
     }
 }

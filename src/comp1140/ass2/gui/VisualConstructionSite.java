@@ -3,9 +3,7 @@ package comp1140.ass2.gui;
 import comp1140.ass2.Akropolis;
 import comp1140.ass2.ConstructionSite;
 import comp1140.ass2.Piece;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -30,26 +28,6 @@ public class VisualConstructionSite extends Group {
         box.setStroke(Color.SEASHELL.darker());
         box.setStrokeWidth(3);
         this.getChildren().add(box);
-
-        //VBox used to order purchasable pieces automatically
-        /*VBox pieceVBox = new VBox();
-        pieceVBox.setLayoutX(sideLength);
-        pieceVBox.setLayoutY(sideLength * 0.7);
-
-        pieceVBox.setSpacing(10);
-        this.getChildren().add(pieceVBox);
-
-        Piece[] pieces = this.site.getCurrentPieces();
-
-        for (int i = 0; i < pieces.length; i++) {
-            var piece = pieces[i];
-
-            if (piece == null) continue;
-
-            var newVisualPiece = new PurchasablePiece(0,sideLength*i*4, piece, sideLength);
-            purchasablePieces.add(newVisualPiece);
-            pieceVBox.getChildren().add(newVisualPiece);
-        }*/
 
         Piece[] pieces = this.site.getCurrentPieces();
         for (int i = 0; i < pieces.length; i++) {

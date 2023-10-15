@@ -2,8 +2,6 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,8 +16,8 @@ import javafx.stage.Stage;
 
 public class Viewer extends Application {
 
-    private static final int VIEWER_WIDTH = 1200;
-    private static final int VIEWER_HEIGHT = 700;
+    private static final double VIEWER_WIDTH = 1200;
+    private static final double VIEWER_HEIGHT = 700;
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -69,7 +67,7 @@ public class Viewer extends Application {
             }
         }
 
-        // Old Code to Displays Stones
+        // Old Code to Display Stones
         int stones = Integer.parseInt(currentPlayerString.substring(2,4));
         System.out.println(stones);
 
@@ -79,7 +77,7 @@ public class Viewer extends Application {
 
 
         /* New Code to Display Scoreboard including Stones and playerScores
-        Scoreboard scoreboard = new Scoreboard(state);
+        Scoreboard, scoreboard = new Scoreboard(state);
         newView.getChildren().add(scoreboard);
         */
 
@@ -172,11 +170,11 @@ public class Viewer extends Application {
         return site;
     }
 
-    public static int getViewerWidth() {
+    public static double getViewerWidth() {
         return VIEWER_WIDTH;
     }
 
-    public static int getViewerHeight() {
+    public static double getViewerHeight() {
         return VIEWER_HEIGHT;
     }
 }

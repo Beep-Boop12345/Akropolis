@@ -2,36 +2,31 @@ package comp1140.ass2.gui;
 
 import javafx.scene.Group;
 import comp1140.ass2.*;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeType;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import javafx.scene.Node;
+
+import javafx.scene.shape.Polygon;
+
 
 import static javafx.scene.paint.Color.GOLD;
 
-public class VisualMove extends Group {
-    private Move move;
-    private VisualBoard board;
-    private double[] position;
 
-    VisualMove(Move move, double[] position, VisualBoard board) {
-        this.move = move;
-        this.board = board;
+public class VisualMove extends Group {
+
+    /**
+     * Constructs a preview for a move
+     * @author u7646615
+     * @param move backend move that it represents
+     * @param position the position it is at
+     * */
+    VisualMove(Move move, double[] position) {
         setLayoutX(position[0]);
         setLayoutY(position[1]);
         Polygon hex1;
         Polygon hex2;
         Polygon hex3;
         switch (move.getPosition().getRot()) {
-            case DEG_0:
+            case DEG_0, DEG_120, DEG_240:
                 hex1 = makeHexagon();
                 hex1.setLayoutX(0);
                 hex1.setLayoutY(0);
@@ -45,7 +40,7 @@ public class VisualMove extends Group {
                 hex3.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
                 this.getChildren().add(hex3);
                 break;
-            case DEG_60:
+            case DEG_60, DEG_180, DEG_300:
                 hex1 = makeHexagon();
                 hex1.setLayoutX(0);
                 hex1.setLayoutY(0);
@@ -62,6 +57,9 @@ public class VisualMove extends Group {
         }
     }
 
+    /**
+     * Makes the move shape appear
+     * @author u7646615*/
     public void activate() {
         toFront();
         for (Node hex : this.getChildren()) {
@@ -69,12 +67,20 @@ public class VisualMove extends Group {
         }
     }
 
+    /**
+     * Makes the move shape disappear
+     * @author u7646615*/
     public void deactivate() {
         for (Node hex : this.getChildren()) {
             hex.setOpacity(0);
         }
     }
 
+    /**
+     * Produces a hexagon shape
+     * @author u7646615
+     *
+     * @return polygon returns a polygon in the shape of hexagon*/
     private Polygon makeHexagon() {
         Polygon hexagon = new Polygon();
         Double[] pointArray = new Double[12];
