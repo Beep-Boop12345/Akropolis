@@ -191,7 +191,7 @@ public class VisualBoard extends Group {
      * @param y y-coordinate of point
      * @param reflected whether the piece is reflected, only a move with the same reflection will be returned
      **/
-    private Move findClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
+    public Move findClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
         Move closest = null;
         for (Move move : moves) {
             if ((move.getPosition().getRot() == Rotation.DEG_0) == !reflected) {
@@ -217,7 +217,7 @@ public class VisualBoard extends Group {
             closestMove.deactivate();
         }
         Move closestMoveRep = findClosestMove(moves, x, y, reflected);
-        if (closestMoveRep == null) {
+        if (closestMoveRep == null || moveDistance(closestMoveRep, x, y) > 80) {
             return;
         }
         closestMove = new VisualMove(closestMoveRep, windowPositionOfMove(closestMoveRep));
@@ -235,4 +235,7 @@ public class VisualBoard extends Group {
         closestMove = null;
     }
 
+    public VisualMove getClosestMove() {
+        return closestMove;
+    }
 }

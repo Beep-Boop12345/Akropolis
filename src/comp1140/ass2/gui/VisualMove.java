@@ -13,6 +13,7 @@ import static javafx.scene.paint.Color.GOLD;
 
 public class VisualMove extends Group {
 
+    private final Move move;
     /**
      * Constructs a preview for a move
      * @author u7646615
@@ -20,6 +21,7 @@ public class VisualMove extends Group {
      * @param position the position it is at
      * */
     VisualMove(Move move, double[] position) {
+        this.move = move;
         setLayoutX(position[0]);
         setLayoutY(position[1]);
         Polygon hex1;
@@ -94,5 +96,9 @@ public class VisualMove extends Group {
         hexagon.setFill(GOLD);
         hexagon.setOpacity(1);
         return hexagon;
+    }
+
+    public Move getMove() {
+        return move;
     }
 }

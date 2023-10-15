@@ -1217,7 +1217,15 @@ public class Akropolis {
         return stack;
     }
 
-//    public static Piece[] createPieceArray(int numberOfPlayers) {
+    public Player getCurrentPlayer() {
+        return currentPlayers[currentTurn];
+    }
+
+    public ConstructionSite getConstructionSite() {
+        return constructionSite;
+    }
+
+    //    public static Piece[] createPieceArray(int numberOfPlayers) {
 //
 //        String currentPool = TILE_POOL;
 //        Piece[] pieceArray = new Piece[pieceCount];

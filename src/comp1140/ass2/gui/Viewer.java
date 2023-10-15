@@ -26,49 +26,25 @@ public class Viewer extends Application {
     private TextField gameTextField;
 
     //components for easy access and modification
+    private Akropolis akropolis;
     private VisualBoard board;
     private VisualConstructionSite site;
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
-     * @param state the String representation of the current game state
+     * @param akropolis representitive of the state as an object
      */
-    void displayState(String state) {
-
-        //Fails to show state when state cannot be shown
-        if (!Akropolis.isStateStringWellFormed(state)) {
-
-            Text failText = new Text();
-            failText.setText("Please Enter A Valid State String!");
-            failText.setLayoutX(VIEWER_WIDTH/2 - 100);
-            failText.setLayoutY(VIEWER_HEIGHT/2 - 10);
-            currentView.getChildren().add(failText);
-            return;
-
-        }
+    void displayState(Akropolis akropolis) {
 
         //Reset The View
         root.getChildren().remove(currentView);
         Group newView  = new Group();
 
-        //Breaks string to construct objects
-        String[] components = state.split(";");
-        String[] playerStrings = new String[components.length - 2];
-        System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
+        int currentTurnId = akropolis.currentTurn;
 
-        int currentTurnId = Character.getNumericValue(components[1].charAt(0));
-
-        String currentPlayerString = playerStrings[0];
-
-        for (String s : playerStrings) {
-            if (Character.getNumericValue(s.charAt(1)) == currentTurnId) {
-                currentPlayerString = s;
-                break;
-            }
-        }
 
         // Old Code to Display Stones
-        int stones = Integer.parseInt(currentPlayerString.substring(2,4));
+        int stones = akropolis.getCurrentPlayer().getStones();
         System.out.println(stones);
 
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
@@ -81,11 +57,8 @@ public class Viewer extends Application {
         newView.getChildren().add(scoreboard);
         */
 
-        //Isolates Move String
-        String movesString = currentPlayerString.substring(4);
-
         //Constructs A Visual Board Object by Creating the String Instanced Board Object
-        VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString), this);
+        VisualBoard currentBoard = new VisualBoard(akropolis.getCurrentPlayer().getBoard(), this);
         board = currentBoard;
 
         currentBoard.setLayoutX(VIEWER_WIDTH/2);
@@ -96,13 +69,13 @@ public class Viewer extends Application {
         //Constructs A Visual Construction Site Object by Instancing the Construction Site Class
         var sitePosX = VIEWER_WIDTH * 0.85;
         var sitePosY = VIEWER_HEIGHT*0.05;
-        var subSite = new ConstructionSite(state);
+        var subSite = akropolis.getConstructionSite();
 
         VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX,
                 sitePosY,
                 subSite,
                 this,
-                new Akropolis(state));
+                akropolis);
         newView.getChildren().add(currentConstructionSite);
         site = currentConstructionSite;
 
@@ -136,7 +109,18 @@ public class Viewer extends Application {
         gameTextField.setPrefWidth(800);
         Button button = new Button("Refresh");
         button.setOnAction(e -> {
-            displayState(gameTextField.getText());
+            if (!Akropolis.isStateStringWellFormed(gameTextField.getText())) {
+
+                Text failText = new Text();
+                failText.setText("Please Enter A Valid State String!");
+                failText.setLayoutX(VIEWER_WIDTH/2 - 100);
+                failText.setLayoutY(VIEWER_HEIGHT/2 - 10);
+                currentView.getChildren().add(failText);
+                return;
+
+            }
+            this.akropolis = new Akropolis(gameTextField.getText());
+            displayState(akropolis);
             controls.toFront();
         });
         HBox hb = new HBox();
@@ -160,6 +144,12 @@ public class Viewer extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /**Updates the viewed state
+     * @author u7646615*/
+    public void updateView() {
+        displayState(akropolis);
     }
 
     public VisualBoard getBoard() {

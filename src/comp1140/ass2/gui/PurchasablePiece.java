@@ -1,6 +1,7 @@
 package comp1140.ass2.gui;
 
 import comp1140.ass2.Akropolis;
+import comp1140.ass2.Move;
 import comp1140.ass2.Piece;
 import comp1140.ass2.Rotation;
 import comp1140.ass2.Tile;
@@ -119,7 +120,21 @@ public class PurchasablePiece extends Group {
         this.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                double moveX = event.getSceneX() - mousePositionX;
+                double moveY = event.getSceneY() - mousePositionY;
                 isPressed = false;
+                Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                        moveX+mousePositionX-mousePosDiffX,
+                        moveY+mousePositionY-mousePosDiffY,
+                        reflected);
+                if (moveSelected == null) {
+                    setLayoutX(x);
+                    setLayoutY(y);
+                    size = 25;
+                    resizePiece();
+                }
+                akropolis.applyMove(moveSelected);
+                viewer.updateView();
             }
         });
         this.setOnKeyTyped(new EventHandler<KeyEvent>() {
