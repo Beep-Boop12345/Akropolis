@@ -3,7 +3,7 @@ package comp1140.ass2;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
-import java.util.function.DoubleToIntFunction;
+
 
 public class Board {
 
@@ -364,7 +364,7 @@ public class Board {
      * @param point the point to be checked if it is in the bounds of the board
      * @return boolean true if it is in the bounds of the board
      * */
-    private boolean inBounds(HexCoord point) {
+    public boolean inBounds(HexCoord point) {
         int xPos = 100 + point.getX();
         int yPos = 100 + point.getY();
         if (xPos > 99 + boardRadiusX + 3 || xPos < 100 - boardRadiusX - 3) {

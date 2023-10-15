@@ -564,45 +564,185 @@ public class Akropolis {
         int[] houseScores = new int[numberOfPlayers];
         boolean houseScoringVar = akropolis.scoreVariants[0];
 
-        // Iterate through all the player strings to calculate each player's score
         for (int i = 0; i < numberOfPlayers; i++) {
             Player player = akropolis.currentPlayers[i];
             Board board = player.getBoard();
             Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the houses and houseStars to be zero for each player
             int totalHouseStars = 0;
-            int totalValidHouses = 0;
 
-            // Iterate through the playerTiles to first find the largest group of adjacent Houses
+            Set<Set<Tile>> adjacentHouseGroups = new HashSet<>();
+
             for (int m = 0; m < playerTiles.length; m++) {
                 for (int n = 0; n < playerTiles[m].length; n++) {
                     Tile tile = playerTiles[m][n];
                     HexCoord point = new HexCoord(m - 100, n - 100);
-
-
-                    // If the tile is null, ignore the current iteration
                     if (tile == null) {
                         continue;
                     }
 
-                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
                     if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
                         totalHouseStars += tile.getStars(tile);
                         continue;
                     }
 
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
+                    /* Add a new group of adjacent house tiles to the set if a group
+                       already doesn't contain the tile                              */
+                    if (tile.getDistrictType() == District.HOUSES) {
+                        boolean inGroup = false;
+                        for (Set<Tile> group : adjacentHouseGroups) {
+                            if (group.contains(tile)) {
+                                inGroup=true;
+                                break;
+                            }
+                        }
 
+                        if (!inGroup) {
+                            Set<Tile> houseGroup = new HashSet<>();
+                            findHouseGroup(board, tile, point, houseGroup);
+                            adjacentHouseGroups.add(houseGroup);
+                        }
 
+                    }
                 }
             }
-            int houseScore = totalHouseStars * totalValidHouses;
-            houseScores[i] = houseScore;
+
+            // Find the maximum group size and the set with the maximum group size
+            int maxGroupSize = 0;
+            Set<Tile> largestGroup = null;
+
+            for (Set<Tile> group : adjacentHouseGroups) {
+                int groupSize = group.size();
+                if (groupSize > maxGroupSize) {
+                    maxGroupSize = groupSize;
+                    largestGroup = group;
+                }
+            }
+
+            // Calculate the district value of the maximum group size (accounting for height)
+            int totalValidHouses = 0;
+            if (largestGroup != null) {
+                for (Tile tile : largestGroup) {
+                    totalValidHouses += tile.getHeight()+1;
+                }
+            }
+
+            // Calculate scores based on the largest adjacent house group
+            if (houseScoringVar && totalValidHouses >= 10) {
+                houseScores[i] = totalValidHouses * 2 * totalHouseStars;
+            } else {
+                houseScores[i] = totalValidHouses * totalHouseStars;
+            }
         }
         return houseScores;
     }
+
+    /**
+     * A simple index finder method to find the index of a HexCoord in a HexCoord array.
+     * Returns -1 if the element is not in the array.
+     * @param hexCoords the array you are searching through
+     * @param hexCoord the element in the array you are serching for
+     * @return the index of the element in the array
+     */
+    public static int indexOf(HexCoord[] hexCoords, HexCoord hexCoord) {
+        for (int index = 0; index < hexCoords.length; index++) {
+            if (hexCoords[index].equals(hexCoord)) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * There's no simple getHexCoord method in board since tiles can be duplicate to one another other
+     * to find a HexCoord of an adjacent tile we have to reference the original tile's HexCoord and
+     * determine it based on that and its position in the surroundingTileHexCoord array found
+     * using the getSurroundings method in the HexCoord class
+     * @param board the original board
+     * @param tileToFind the surroundingTile HexCoord you're searching for
+     * @param point the original point in which the surroundingTile is adjacent to
+     * @return the HexCoord of the surroundingTile
+     */
+    public static HexCoord findSurroundingHexCoord(Board board, Tile tileToFind, HexCoord point) {
+        HexCoord[] surroundingHexCoords = point.getSurroundings();
+
+        for (HexCoord surroundings : surroundingHexCoords) {
+            if (board.getTile(surroundings) == tileToFind) {
+                int x = point.getX();
+                int y = point.getY();
+                int offset = Math.abs(x) % 2;
+                int surroundingTileIndex = indexOf(surroundingHexCoords, surroundings);
+
+                HexCoord surroundingHexCoord = switch (surroundingTileIndex) {
+                    case 0 -> new HexCoord(x, y + 1);
+                    case 1 -> new HexCoord(x + 1, y + offset);
+                    case 2 -> new HexCoord(x + 1, y - 1 + offset);
+                    case 3 -> new HexCoord(x, y - 1);
+                    case 4 -> new HexCoord(x - 1, y - 1 + offset);
+                    case 5 -> new HexCoord(x - 1, y + offset);
+                    default -> null;
+                };
+
+                return surroundingHexCoord;
+            }
+        }
+
+        return null; // Return null only if no matching tile is found in any surroundingHexCoords.
+    }
+
+
+    /**
+     * Given a house district tile, the board it came from and its corresponding HexCoord
+     * Return a set of house tiles that are directly adjacent to one another.
+     * This function is a recursive function taking in a Set of tiles and will stop recursing once it can no longer
+     * find adjacent house tiles within the board to add to the group of adjacent house tiles.
+     * Base Case: Once ALL the surrounding tiles are no longer houses within the board.
+     * @param board the board all the tiles originate from
+     * @param tile the tile you are searching for adjacent house groups for
+     *             (this will change during recursion)
+     * @param point the HexCoord of the tile as we cannot determine HexCoords just based on tiles
+     *                 (as there are duplicate tiles in board)
+     * @param group a set of tiles that represent the largest group of adjacent houses corresponding to a tile
+     *              (this will change during recursion)
+     */
+
+    public static void findHouseGroup(Board board, Tile tile, HexCoord point, Set<Tile> group) {
+        group.add(tile);
+
+        HexCoord[] surroundingHexCoords = point.getSurroundings();
+
+        // Base Case: If all the surroundingTiles are no longer houses that are within the board don't recurse
+        boolean notAllValidHouses = true;
+        for (HexCoord surroundings : surroundingHexCoords) {
+            Tile surroundingTile = board.getTile(surroundings);
+            HexCoord surroundingTileHexCoord = findSurroundingHexCoord(board, tile, point);
+            // If one of the surroundingTiles is valid stop searching for valid tiles and recurse
+            if (tile != null && point != null && surroundingTileHexCoord != null) {
+                if (board.inBounds(surroundingTileHexCoord) && (surroundingTile.getDistrictType() == District.HOUSES)) {
+                    notAllValidHouses = false;
+                    break;
+                }
+            }
+        }
+
+        // Only recurse if one of the surrounding tiles is a house and is within the board
+        if (!notAllValidHouses) {
+            for (HexCoord surroundings : surroundingHexCoords) {
+                Tile surroundingTile = board.getTile(surroundings);
+                HexCoord surroundingTileHexCoord = findSurroundingHexCoord(board, tile, point);
+
+                // If the adjacent tile is a district house add it to the group
+                if (board.inBounds(surroundingTileHexCoord) &&
+                        surroundingTile != null &&
+                        !group.contains(surroundingTile) &&
+                        surroundingTile.getDistrictType() == District.HOUSES &&
+                        !surroundingTile.getPlaza()) {
+                    findHouseGroup(board, surroundingTile, surroundingTileHexCoord, group);
+                }
+            }
+        }
+    }
+
 
 
     /**
@@ -1008,8 +1148,8 @@ public class Akropolis {
 
 
     /**
-     *
-     * @return
+     * Given a state string, calculate the stone count for each player.
+     * @return array of stone counts for each player in ascending order
      */
     public static int[] calculatePlayerStones(String gameState) {
       Akropolis akropolis = new Akropolis(gameState);
