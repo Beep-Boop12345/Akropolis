@@ -16,10 +16,6 @@ public class Akropolis {
 
     public Boolean[] scoreVariants = new Boolean[5];
 
-    public int[] playerScores;
-
-    public int[] playerStones;
-
     //public GameState gameStage;
 
     public int currentTurn;
@@ -56,19 +52,15 @@ public class Akropolis {
             for (int i = 0; i < scoreVariants.length; i++) {
                 scoreVariants[i] = Character.isUpperCase(gameState.charAt(i + 1));
             }
-
-            // Find the playerScores
-            playerScores = calculateCompleteScores(gameState);
-
-            // Find the playerStones
-            playerStones = new int[numberOfPlayers];
-            for (int i = 0; i < numberOfPlayers; i++) {
-                playerStones[i] = currentPlayers[i].getStones();
-            }
-
         }
 
+
+        // Error handling if the gameState is invalid
+        else {
+            throw new IllegalArgumentException("Invalid gameState: " + gameState);
+        }
     }
+
 
 
     /**
@@ -688,14 +680,8 @@ public class Akropolis {
                     // Increment the district count
                     if (tile.getDistrictType() == District.MARKETS) {
                         if (adjacentMarketDistricts == 0) {
-                            if (marketScoringVar) {
-                                // If the market has 3 or 4 adjacent empty spaces, the market is valid for scoring
-                                if (adjacentMarketPlazas >= 1) {
+                            if (marketScoringVar && adjacentMarketPlazas >= 1) {
                                     totalValidMarkets += 2 * (tile.getHeight() + 1);
-                                }
-                                else {
-                                    totalValidMarkets += tile.getHeight()+1;
-                                }
                             }
                             else {
                                 totalValidMarkets += tile.getHeight()+1;
@@ -777,16 +763,11 @@ public class Akropolis {
 
                     // Increment the district count
                     if (tile.getDistrictType() == District.BARRACKS) {
-                        if (barrackScoringVar) {
-                            // If the barrack has 3 or 4 adjacent empty spaces, the barrack is valid for scoring
-                            if (emptySpaces == 3 || emptySpaces == 4) {
+                        if (emptySpaces >= 1) {
+                            if (barrackScoringVar && (emptySpaces == 3 || emptySpaces == 4)) {
                                 totalValidBarracks += 2 * (tile.getHeight() + 1);
-                            } else if (emptySpaces >= 1) {
-                                totalValidBarracks += tile.getHeight() + 1;
                             }
-                        } else {
-                            // If the barrack has at least 1 adjacent empty space, the barrack is valid for scoring
-                            if (emptySpaces >= 1) {
+                            else {
                                 totalValidBarracks += tile.getHeight() + 1;
                             }
                         }
@@ -871,12 +852,8 @@ public class Akropolis {
                     if (tile.getDistrictType() == District.TEMPLES) {
                         // If the temple is completely surrounded, the temple is valid for scoring
                         if (isSurrounded) {
-                            if (templeScoringVar) {
-                                if (tile.getHeight() >= 1) {
+                            if (templeScoringVar && tile.getHeight() >= 1) {
                                     totalValidTemples += 2 * (tile.getHeight() + 1);
-                                } else {
-                                    totalValidTemples += tile.getHeight() + 1;
-                                }
                             } else {
                                 totalValidTemples += tile.getHeight() + 1;
                             }
@@ -959,13 +936,8 @@ public class Akropolis {
 
                     // Increment the district count
                     if (tile.getDistrictType() == District.GARDENS) {
-                        if (gardenScoringVar) {
-                            if (adjacentToLake) {
+                        if (gardenScoringVar && adjacentToLake) {
                                 totalValidGardens += 2 * (tile.getHeight()+1);
-                            }
-                            else {
-                                totalValidGardens += tile.getHeight()+1;
-                            }
                         } else {
                             totalValidGardens += tile.getHeight()+1;
                         }
@@ -1032,6 +1004,25 @@ public class Akropolis {
      */
     public static String generateAIMove(String gameState) {
         return ""; // FIXME Task 22
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public static int[] calculatePlayerStones(String gameState) {
+      Akropolis akropolis = new Akropolis(gameState);
+      int numberOfPlayers = akropolis.numberOfPlayers;
+      int[] playerStones;
+      Player[] currentPlayers = akropolis.currentPlayers;
+
+      // Find the playerStones
+      playerStones = new int[numberOfPlayers];
+      for (int i = 0; i < numberOfPlayers; i++) {
+            playerStones[i] = currentPlayers[i].getStones();
+      }
+        return playerStones;
     }
 
     public Stack getStack() {

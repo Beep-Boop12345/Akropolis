@@ -18,9 +18,9 @@ import javafx.scene.paint.Color;
 public class Scoreboard extends Label {
     Scoreboard(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int[] scores = akropolis.playerScores;
+        int[] scores = Akropolis.calculateCompleteScores(gameState);
         int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] playerStones = akropolis.playerStones;
+        int[] playerStones = Akropolis.calculatePlayerStones(gameState);
 
 
         // Organise the scoreboard into a vertical box
