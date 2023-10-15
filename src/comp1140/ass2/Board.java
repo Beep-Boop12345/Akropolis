@@ -22,14 +22,18 @@ public class Board {
      * @author u7646615
      *
      * @param player the player id of the player that owns this board
-     * @param surfaceTiles 2d array of tiles representing the birds eye layout of the board*/
-    public Board(int player, Tile[][] surfaceTiles) {
+     * */
+    public Board(int player) {
         this.player = player;
-        this.surfaceTiles = surfaceTiles;
         stonesInHold = 0;
+        /*Places the initial tiles*/
+        this.surfaceTiles[100][100] = new Tile(District.HOUSES, true, 0);
+        this.surfaceTiles[101][99] = new Tile(District.QUARRY, false, 0);
+        this.surfaceTiles[100][101] = new Tile(District.QUARRY, false, 0);
+        this.surfaceTiles[99][99] = new Tile(District.QUARRY, false, 0);
         //Default to max now, will change in future
-        boardRadiusX = 100;
-        boardRadiusY = 100;
+        boardRadiusX = 2;
+        boardRadiusY = 2;
     }
 
     /**Constructs board from String.

@@ -14,7 +14,7 @@ public class Akropolis {
 
     public Stack stack;
 
-    public Boolean[] scoreVariants = new Boolean[5];
+    public boolean[] scoreVariants = new boolean[5];
 
     //public GameState gameStage;
 
@@ -59,6 +59,44 @@ public class Akropolis {
         else {
             throw new IllegalArgumentException("Invalid gameState: " + gameState);
         }
+    }
+    public Akropolis(int numberOfPlayers, boolean[] scoringVariants) {
+        this.numberOfPlayers = numberOfPlayers;
+        this.scoreVariants = scoringVariants;
+        this.currentPlayers = new Player[numberOfPlayers];
+        this.currentTurn = 0;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            currentPlayers[i] = new Player(i,new Board(i),0);
+        }
+        this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
+        this.stack = new Stack(getInitialStack());
+        resupplyConstructionSite();
+    }
+
+    /** Returns the pieces that will be in a newly initialized stack
+     * @author u7646615*/
+    private Piece[] getInitialStack() {
+        int idCap = 0;
+        switch (numberOfPlayers) {
+            case 2:
+                idCap = 37;
+                break;
+            case 3:
+                idCap = 49;
+                break;
+            case 4:
+                idCap = 61;
+                break;
+        }
+        Piece[] heldPieces = new Piece[idCap];
+        for (int i = 0; i < idCap; i++) {
+            String pieceIDString = String.valueOf(i+1);
+            if (pieceIDString.length() == 1) {
+                pieceIDString = "0" + pieceIDString;
+            }
+            heldPieces[i] = new Piece(pieceIDString);
+        }
+        return heldPieces;
     }
 
 
@@ -282,6 +320,10 @@ public class Akropolis {
         String[] gameStateAsArray = gameState.split(";");
         gameStateAsArray[1] = gameStateAsArray[1].substring(0,1) + akropolis.constructionSite.toString();
         return String.join(";", gameStateAsArray) + ";";
+    }
+
+    private void resupplyConstructionSite() {
+        constructionSite.resupply(stack);
     }
 
     /**
