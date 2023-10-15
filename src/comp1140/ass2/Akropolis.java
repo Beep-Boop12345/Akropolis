@@ -254,6 +254,7 @@ public class Akropolis {
     /**
      * Given a state string, checks whether the Construction Site needs to be resupplied. If it does, resupplies the
      * Construction Site, otherwise does nothing.
+     * @author u7646615
      * <p>
      * The Construction Site needs to be refilled if both:
      * 1. There is only one tile remaining in the Construction Site
@@ -286,6 +287,7 @@ public class Akropolis {
     /**
      * Given a state string, a player, and a position, finds the height of the tile in that player's city at the
      * position.
+     * @author u7646615
      * <p>
      * If there is no tile at the position, the height is 0.
      * <p>
@@ -315,6 +317,7 @@ public class Akropolis {
     /**
      * Given a state string, a player, and a position, finds the character representing the tile in that player's city
      * at the position.
+     * @author u7646615
      * <p>
      * The characters for each tile is given in the specification.
      * <p>
@@ -387,6 +390,7 @@ public class Akropolis {
 
     /**
      * Given a state string and a move string, apply the move to the board.
+     * @author u7646615
      * <p>
      * Ensure the Construction Site is resupplied at the end of the turn if needed.
      * Only advance the turn of the move does not end the game.
@@ -451,6 +455,7 @@ public class Akropolis {
 
     /**
      * Given a state string, returns a set of move strings containing all the moves that can be played.
+     * @author u7646615
      *
      * @param gameState a state string.
      * @return A set containing all moves that can be played.
@@ -470,7 +475,7 @@ public class Akropolis {
         return validMoves;
     }
 
-    public Set<Move> generateAllValidMoves() {
+    private Set<Move> generateAllValidMoves() {
 
         // Initializes set with possible legal moves
         Set<Move> validMoves = new HashSet<>();
@@ -528,6 +533,48 @@ public class Akropolis {
                         validMoves.add(move2);
                         System.out.println("_________________________");
                     }
+                }
+
+            }
+        }
+        return validMoves;
+    }
+
+    /**
+     * Returns just the valid moves for one piece
+     * @author u7646615
+     * <p>
+     * It only returns valid moves that are geometrically unique.
+     * @param piece the piece for which moves should be found
+     * @return the set containing all the moves that it can make.
+     * */
+    public Set<Move> generateAllValidMovesOfPiece(Piece piece) {
+
+        // Initializes set with possible legal moves
+        Set<Move> validMoves = new HashSet<>();
+
+        if (isGameOver()) {
+            return validMoves;
+        }
+
+        Player player = currentPlayers[currentTurn];
+
+        //Get values to limit search
+        int boardRadiusX = player.getBoard().getBoardRadiusX();
+        int boardRadiusY = player.getBoard().getBoardRadiusY();
+
+        // Iterate through all finite moves
+        for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
+            for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
+                Transform transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_0);
+                Move move = new Move (piece, transform);
+                if(isMoveValid(move)){
+                    validMoves.add(move);
+                }
+                transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_60);
+                move = new Move (piece, transform);
+                if(isMoveValid(move)){
+                    validMoves.add(move);
                 }
 
             }
@@ -953,6 +1000,7 @@ public class Akropolis {
 
     /**
      * Given a state string, calculate the score for each player.
+     * @author u7646615
      * <p>
      * Task 19 only considers the standard scoring rules, Task 23 considers the variant scoring.
      * Hint: Check the settings component of the state.

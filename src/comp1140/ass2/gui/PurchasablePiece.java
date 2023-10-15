@@ -1,5 +1,6 @@
 package comp1140.ass2.gui;
 
+import comp1140.ass2.Akropolis;
 import comp1140.ass2.Piece;
 import comp1140.ass2.Rotation;
 import comp1140.ass2.Tile;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 public class PurchasablePiece extends Group {
     /*The back end piece this represents*/
     private Piece piece;
+    private Viewer viewer;
+    private Akropolis akropolis;
 
     private ArrayList<VisualTile> vTiles;
 
@@ -30,6 +33,8 @@ public class PurchasablePiece extends Group {
     private boolean reflected;
 
     //Fields to track movement
+    private double initialX;
+    private double initialY;
     //difference in mouse position and original position
     private double mousePosDiffX;
     private double mousePosDiffY;
@@ -41,7 +46,7 @@ public class PurchasablePiece extends Group {
     private boolean isPressed;
 
     //A visual piece that is used in the visual construction site.@u7683699, @u7646615
-    PurchasablePiece(double x, double y, Piece piece, double sideLength){
+    PurchasablePiece(double x, double y, Piece piece, double sideLength, Viewer viewer, Akropolis akropolis){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
@@ -49,6 +54,10 @@ public class PurchasablePiece extends Group {
         this.rotation = Rotation.DEG_0;
         this.size = sideLength;
         this.reflected = false;
+        this.viewer = viewer;
+        this.akropolis = akropolis;
+        this.initialX = x;
+        this.initialY = y;
 
         Tile[] tiles = piece.getTiles();
 
@@ -105,6 +114,10 @@ public class PurchasablePiece extends Group {
                 double moveY = event.getSceneY() - mousePositionY;
                 setLayoutX(moveX+mousePositionX-mousePosDiffX);
                 setLayoutY(moveY+mousePositionY-mousePosDiffY);
+                viewer.getBoard().activateClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                        moveX+mousePositionX-mousePosDiffX,
+                        moveY+mousePositionY-mousePosDiffY,
+                        reflected);
                 toFront();
             }
         });
@@ -251,5 +264,9 @@ public class PurchasablePiece extends Group {
                 break;
         }
         return positions;
+    }
+
+    private void findValidMoves() {
+
     }
 }

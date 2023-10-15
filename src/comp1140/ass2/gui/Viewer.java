@@ -27,7 +27,9 @@ public class Viewer extends Application {
     private Group currentView = new Group();
     private TextField gameTextField;
 
-
+    //components for easy access and modification
+    private VisualBoard board;
+    private VisualConstructionSite site;
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
@@ -85,7 +87,8 @@ public class Viewer extends Application {
         String movesString = currentPlayerString.substring(4);
 
         //Constructs A Visual Board Object by Creating the String Instanced Board Object
-        VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString));
+        VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString), this);
+        board = currentBoard;
 
         currentBoard.setLayoutX(VIEWER_WIDTH/2);
         currentBoard.setLayoutY(VIEWER_HEIGHT/2);
@@ -97,8 +100,13 @@ public class Viewer extends Application {
         var sitePosY = VIEWER_HEIGHT*0.05;
         var subSite = new ConstructionSite(state);
 
-        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX, sitePosY, subSite);
+        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX,
+                sitePosY,
+                subSite,
+                this,
+                new Akropolis(state));
         newView.getChildren().add(currentConstructionSite);
+        site = currentConstructionSite;
 
         //Creates A Label to Display Current Turn
         Label playerLabel = new Label("Player " + (currentTurnId + 1));
@@ -156,5 +164,19 @@ public class Viewer extends Application {
         primaryStage.show();
     }
 
+    public VisualBoard getBoard() {
+        return board;
+    }
 
+    public VisualConstructionSite getSite() {
+        return site;
+    }
+
+    public static int getViewerWidth() {
+        return VIEWER_WIDTH;
+    }
+
+    public static int getViewerHeight() {
+        return VIEWER_HEIGHT;
+    }
 }

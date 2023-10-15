@@ -1,16 +1,17 @@
 package comp1140.ass2.gui;
 
-import comp1140.ass2.Board;
-import comp1140.ass2.District;
-import comp1140.ass2.Tile;
+import comp1140.ass2.*;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 public class VisualBoard extends Group {
@@ -18,8 +19,13 @@ public class VisualBoard extends Group {
     /*Backend board that this visual board corresponds to*/
     Board board;
 
+    private Viewer viewer;
+
     // Keeps a store of all currently placed tiles
     ArrayList<VisualTile> tiles;
+
+    // Stores the closest move
+    VisualMove closestMove;
 
     // The max height of all tiles
     int boardHeight = 0;
@@ -28,9 +34,11 @@ public class VisualBoard extends Group {
     private Double mousex;
     private Double mousey;
 
-    VisualBoard(Board board) {
+    VisualBoard(Board board, Viewer viewer) {
         this.board = board;
+        this.viewer = viewer;
         this.tiles = new ArrayList<>();
+        this.closestMove = null;
 
         Tile[][] tiles = board.getSurfaceTiles();
 
@@ -92,12 +100,6 @@ public class VisualBoard extends Group {
             this.mousey = event.getSceneY();
             this.toBack();
         });
-        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                System.out.println("pressed");
-            }
-        });
 
     }
 
@@ -142,4 +144,65 @@ public class VisualBoard extends Group {
             }
         }
     }
+
+    private double[] windowPositionOfMove(Move move) {
+        int xCoord = move.getPosition().getPos().getX();
+        int yCoord = move.getPosition().getPos().getY();
+        int sideLength = 30;
+
+        double xOffset = Math.abs(xCoord % 2);
+        double yLength = sideLength * (Math.sin(Math.toRadians(60)));
+
+        double xPos = 1.5 * xCoord * sideLength;
+        double yPos = -2 * yCoord * yLength - xOffset * yLength;
+
+        double[] position = new double[2];
+        position[0] = xPos;
+        position[1] = yPos;
+        return position;
+    }
+    private double moveDistance(Move move, double x, double y) {
+        if (move == null) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double[] movePosition = windowPositionOfMove(move);
+        //Must convert between the pieces offset
+        double trueXPos = x + viewer.getSite().getLayoutX();
+        double trueYPos = y + viewer.getSite().getLayoutY();
+        double relativeXPos = trueXPos - viewer.getViewerWidth()/2;
+        double relativeYPos = trueYPos - viewer.getViewerHeight()/2;
+        return Math.sqrt((relativeXPos - movePosition[0])*(relativeXPos - movePosition[0]) + (relativeYPos - movePosition[1])*(relativeYPos - movePosition[1]));
+    }
+    private Move findClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
+        Move closest = null;
+        for (Move move : moves) {
+            if ((move.getPosition().getRot() == Rotation.DEG_0) == !reflected) {
+                if (moveDistance(move,x,y) < moveDistance(closest,x,y)) {
+                    closest = move;
+                }
+            }
+        }
+        return closest;
+    }
+
+    public void activateClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
+        if (closestMove != null) {
+            closestMove.deactivate();
+        }
+        Move closestMoveRep = findClosestMove(moves, x, y, reflected);
+        if (closestMoveRep == null) {
+            return;
+        }
+        closestMove = new VisualMove(closestMoveRep, windowPositionOfMove(closestMoveRep), this);
+        this.getChildren().add(closestMove);
+        System.out.println(findClosestMove(moves, x, y, reflected));
+        closestMove.activate();
+        System.out.println("I activated a move");
+    }
+
+    public void deactivateClosestMove() {
+        closestMove.deactivate();
+        closestMove = null;
+    }
+
 }
