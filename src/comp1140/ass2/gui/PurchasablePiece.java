@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -23,11 +24,13 @@ public class PurchasablePiece extends Group {
 
     private final ArrayList<Line> connectors;
 
-    private Rotation rotation;
+    private double rotation;
 
     private double size;
 
     private boolean reflected;
+
+    private boolean playable;
 
     //Fields to track movement
 
@@ -50,9 +53,10 @@ public class PurchasablePiece extends Group {
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
         this.isPressed = false;
-        this.rotation = Rotation.DEG_0;
+        this.rotation = 0;
         this.size = sideLength;
         this.reflected = false;
+        this.playable = true;
 
         Tile[] tiles = piece.getTiles();
 
@@ -85,26 +89,48 @@ public class PurchasablePiece extends Group {
         this.setLayoutX(x);
         this.setLayoutY(y);
 
+        if (!akropolis.canPieceBePurchased(this.piece)) {
+            this.setOpacity(0.2);
+            this.playable = false;
+        }
+
         /*Dragging functionality for Purchasable Piece*/
         this.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                if (!playable) {
+                    return;
+                }
                 mousePositionX = event.getSceneX();
                 mousePositionY = event.getSceneY();
                 mousePosDiffX = mousePositionX - getLayoutX();
                 mousePosDiffY = mousePositionY - getLayoutY();
                 size = 30;
-                resizePiece();
+                updateShape();
                 isPressed =true;
                 reflected = !event.isPrimaryButtonDown();
-                reflect();
                 toFront();
+            }
+        });
+
+        this.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                if (!playable) {
+                    return;
+                }
+                double deltaY = event.getDeltaY();
+                rotation += deltaY/40;
+                updateShape();
             }
         });
 
         this.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                if (!playable) {
+                    return;
+                }
                 double moveX = event.getSceneX() - mousePositionX;
                 double moveY = event.getSceneY() - mousePositionY;
                 setLayoutX(moveX+mousePositionX-mousePosDiffX);
@@ -120,6 +146,9 @@ public class PurchasablePiece extends Group {
         this.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                if (!playable) {
+                    return;
+                }
                 double moveX = event.getSceneX() - mousePositionX;
                 double moveY = event.getSceneY() - mousePositionY;
                 isPressed = false;
@@ -131,57 +160,14 @@ public class PurchasablePiece extends Group {
                     setLayoutX(x);
                     setLayoutY(y);
                     size = 25;
-                    resizePiece();
+                    updateShape();
                 }
                 akropolis.applyMove(moveSelected);
                 viewer.updateView();
             }
         });
-        this.setOnKeyTyped(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                System.out.println("anything!!!!");
-                if (!isPressed) {
-                    System.out.println("key pressed no click");
-                    return;
-                }
-                System.out.println("key pressed while pressing");
-                if (event.getCode() == KeyCode.A) {
-                    rotation = rotation.add(Rotation.getAngle(-60));
-                    rotatePiece();
-                } else if (event.getCharacter().equals("d")) {
-                    rotation = rotation.add(Rotation.getAngle(60));
-                    rotatePiece();
-                }
-            }
-        });
     }
 
-    /**Resizes the Piece. @u7646615
-     * */
-    private void resizePiece() {
-        double yLength = size * (Math.sin(Math.toRadians(60)));
-        for (int i = 0; i < 3; i++) {
-            // resize tiles
-            vTiles.get(i).resizeTile(size);
-            if (i == 1) {
-                vTiles.get(i).setLayoutY(-2 * yLength);
-            } else if (i > 1) {
-                vTiles.get(i).setLayoutX(1.5*size);
-                vTiles.get(i).setLayoutY(-1 * yLength);
-            }
-            // resize lines
-            int j = (i+1) % 3;
-            System.out.println("(j: " + j + ",i: " + i + ")");
-            Line line = connectors.get(i);
-            line.setStrokeWidth(size);
-            line.setStartX(vTiles.get(i).getLayoutX());
-            line.setStartY(vTiles.get(i).getLayoutY());
-            line.setEndX(vTiles.get(j).getLayoutX());
-            line.setEndY(vTiles.get(j).getLayoutY());
-        }
-            // FIXME Correct top right connector line
-    }
 
     /** updates the connectors. @u7646615
      * */
@@ -199,27 +185,18 @@ public class PurchasablePiece extends Group {
         }
     }
 
-    /**
-     * Reflects the piece. @u7646615
-     * */
-    private void reflect(){
-        if (reflected) {
-            vTiles.get(2).setLayoutX(-1.5*size);
-        } else {
-            vTiles.get(2).setLayoutX(1.5*size);
-        }
-        updateConnectors();
-    }
 
     /**Rotates the piece. @u7646615
      *
      */
-    private void rotatePiece(){
+    private void updateShape(){
         double[] positions = findRelativeWindowPosition();
         for (int i = 0; i < 3; i++) {
+            vTiles.get(i).resizeTile(size);
             vTiles.get(i).setLayoutX(positions[2*i]);
-            vTiles.get(i).setLayoutX(positions[2*i+1]);
+            vTiles.get(i).setLayoutY(positions[2*i+1]);
         }
+        updateConnectors();
     }
 
     /**Finds the relative position on the window of each piece.@u7646615
@@ -228,44 +205,57 @@ public class PurchasablePiece extends Group {
     private double[] findRelativeWindowPosition(){
         double yLength = size * (Math.sin(Math.toRadians(60)));
         double[] positions = new double[6];
-        positions[0] = 0;
-        positions[1] = 0;
-        Rotation newRotation = this.rotation;
+        System.out.println(60 * ((int) (this.rotation)));
+        Rotation newRotation = Rotation.getAngle (60 * ((int) (this.rotation)));
+        System.out.println(newRotation.value);
+        System.out.println("__________________-");
         switch (newRotation) {
             case DEG_0:
+                positions[0] = 0;
+                positions[1] = 0;
                 positions[2] = 0;
                 positions[3] = -2 * yLength;
                 positions[4] = 1.5*size;
                 positions[5] = -yLength;
                 break;
             case DEG_60:
-                positions[2] = 1.5*size;
-                positions[3] = -yLength;
-                positions[4] = 1.5*size;
-                positions[5] = yLength;
+                positions[0] = -Math.cos(Math.toRadians(60))*size;
+                positions[1] = -yLength;
+                positions[2] = size;
+                positions[3] = -2*yLength;
+                positions[4] = size;
+                positions[5] = 0;
                 break;
             case DEG_120:
+                positions[0] = 0;
+                positions[1] = -2 * yLength;
                 positions[2] = 1.5*size;
-                positions[3] = yLength;
-                positions[4] = 0;
-                positions[5] = 2*yLength;
-                break;
-            case DEG_180:
-                positions[2] = 0;
-                positions[3] = 2*yLength;
-                positions[4] = -1.5*size;
-                positions[5] = yLength;
-                break;
-            case DEG_240:
-                positions[2] = -1.5*size;
-                positions[3] = yLength;
-                positions[4] = -1.5*size;
-                positions[5] = -yLength;
-                break;
-            case DEG_300:
-                positions[2] = -1.5*size;
                 positions[3] = -yLength;
                 positions[4] = 0;
+                positions[5] = 0;
+                break;
+            case DEG_180:
+                positions[0] = size;
+                positions[1] = -2*yLength;
+                positions[2] = size;
+                positions[3] = 0;
+                positions[4] = -Math.cos(Math.toRadians(60))*size;
+                positions[5] = -yLength;
+                break;
+            case DEG_240:
+                positions[0] = 1.5*size;
+                positions[1] = -yLength;
+                positions[2] = 0;
+                positions[3] = 0;
+                positions[4] = 0;
+                positions[5] = -2*yLength;
+                break;
+            case DEG_300:
+                positions[0] = size;
+                positions[1] = 0;
+                positions[2] = -Math.cos(Math.toRadians(60))*size;
+                positions[3] = -yLength;
+                positions[4] = size;
                 positions[5] = -2*yLength;
                 break;
         }
