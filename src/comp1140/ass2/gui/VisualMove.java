@@ -28,7 +28,7 @@ public class VisualMove extends Group {
         Polygon hex2;
         Polygon hex3;
         switch (move.getPosition().getRot()) {
-            case DEG_0, DEG_120, DEG_240:
+            case DEG_0:
                 hex1 = makeHexagon();
                 hex1.setLayoutX(0);
                 hex1.setLayoutY(0);
@@ -42,7 +42,35 @@ public class VisualMove extends Group {
                 hex3.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
                 this.getChildren().add(hex3);
                 break;
-            case DEG_60, DEG_180, DEG_300:
+            case DEG_120:
+                hex2 = makeHexagon();
+                hex2.setLayoutX(0);
+                hex2.setLayoutY(0);
+                this.getChildren().add(hex2);
+                hex3 = makeHexagon();
+                hex3.setLayoutX(0);
+                hex3.setLayoutY(-2* 30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex3);
+                hex1 = makeHexagon();
+                hex1.setLayoutX(1.5*30);
+                hex1.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex1);
+                break;
+            case DEG_240:
+                hex3 = makeHexagon();
+                hex3.setLayoutX(0);
+                hex3.setLayoutY(0);
+                this.getChildren().add(hex3);
+                hex1 = makeHexagon();
+                hex1.setLayoutX(0);
+                hex1.setLayoutY(-2* 30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex1);
+                hex2 = makeHexagon();
+                hex2.setLayoutX(1.5*30);
+                hex2.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex2);
+                break;
+            case DEG_60:
                 hex1 = makeHexagon();
                 hex1.setLayoutX(0);
                 hex1.setLayoutY(0);
@@ -51,6 +79,34 @@ public class VisualMove extends Group {
                 hex2.setLayoutX(1.5*30);
                 hex2.setLayoutY(30 * (Math.sin(Math.toRadians(60))));
                 this.getChildren().add(hex2);
+                hex3 = makeHexagon();
+                hex3.setLayoutX(1.5 * 30);
+                hex3.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex3);
+                break;
+            case DEG_180:
+                hex2 = makeHexagon();
+                hex2.setLayoutX(0);
+                hex2.setLayoutY(0);
+                this.getChildren().add(hex2);
+                hex3 = makeHexagon();
+                hex3.setLayoutX(1.5*30);
+                hex3.setLayoutY(30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex3);
+                hex1 = makeHexagon();
+                hex1.setLayoutX(1.5 * 30);
+                hex1.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex1);
+                break;
+            case DEG_300:
+                hex3 = makeHexagon();
+                hex3.setLayoutX(0);
+                hex3.setLayoutY(0);
+                this.getChildren().add(hex3);
+                hex1 = makeHexagon();
+                hex1.setLayoutX(1.5*30);
+                hex1.setLayoutY(30 * (Math.sin(Math.toRadians(60))));
+                this.getChildren().add(hex1);
                 hex3 = makeHexagon();
                 hex3.setLayoutX(1.5 * 30);
                 hex3.setLayoutY(-30 * (Math.sin(Math.toRadians(60))));

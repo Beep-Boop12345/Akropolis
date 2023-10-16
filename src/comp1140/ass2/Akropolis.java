@@ -624,14 +624,25 @@ public class Akropolis {
         for (int x = -(boardRadiusX + 3); x < boardRadiusX + 3; x++) {
             for (int y = -(boardRadiusY+3); y < boardRadiusY + 3; y++) {
                 Transform transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_0);
-                Move move = new Move (piece, transform);
-                if(isMoveValid(move)){
-                    validMoves.add(move);
+                Move move0 = new Move (piece, transform);
+                if(isMoveValid(move0)){
+                    validMoves.add(move0);
+                    //We need not check validity of equivalent transforms
+                    Move move1 = new Move(piece, new Transform(new HexCoord(x,y+1), Rotation.DEG_120));
+                    Move move2 = new Move(piece, new Transform(new HexCoord(x+1,y+(Math.abs(x) % 2)), Rotation.DEG_240));
+                    validMoves.add(move1);
+                    validMoves.add(move2);
+
                 }
-                transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_60);
-                move = new Move (piece, transform);
-                if(isMoveValid(move)){
-                    validMoves.add(move);
+                transform = new Transform(new HexCoord(x,y) ,Rotation.DEG_180);
+                move0 = new Move (piece, transform);
+                if(isMoveValid(move0)){
+                    validMoves.add(move0);
+                    //We need not check validity of equivalent transforms
+                    Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
+                    Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
+                    validMoves.add(move1);
+                    validMoves.add(move2);
                 }
 
             }

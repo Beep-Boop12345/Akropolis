@@ -189,12 +189,12 @@ public class VisualBoard extends Group {
      * @param moves all the moves being evaluated
      * @param x x-coordinate of point
      * @param y y-coordinate of point
-     * @param reflected whether the piece is reflected, only a move with the same reflection will be returned
+     * @param rotation wthe pieces rotation only moves with the same rotation will be returned
      **/
-    public Move findClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
+    public Move findClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         Move closest = null;
         for (Move move : moves) {
-            if ((move.getPosition().getRot() == Rotation.DEG_0) == !reflected) {
+            if (move.getPosition().getRot() == rotation) {
                 if (moveDistance(move,x,y) < moveDistance(closest,x,y)) {
                     closest = move;
                 }
@@ -213,19 +213,19 @@ public class VisualBoard extends Group {
      * @param moves all the moves being evaluated
      * @param x x-coordinate of point
      * @param y y-coordinate of point
-     * @param reflected whether the piece is reflected, only a move with the same reflection will be returned
+     * @param rotation wthe pieces rotation only moves with the same rotation will be activated
      **/
-    public void activateClosestMove(Set<Move> moves, double x, double y, boolean reflected) {
+    public void activateClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         if (closestMove != null) {
             closestMove.deactivate();
         }
-        Move closestMoveRep = findClosestMove(moves, x, y, reflected);
+        Move closestMoveRep = findClosestMove(moves, x, y, rotation);
         if (closestMoveRep == null || moveDistance(closestMoveRep, x, y) > 40) {
             return;
         }
         closestMove = new VisualMove(closestMoveRep, windowPositionOfMove(closestMoveRep));
         this.getChildren().add(closestMove);
-        System.out.println(findClosestMove(moves, x, y, reflected));
+        System.out.println(findClosestMove(moves, x, y, rotation));
         closestMove.activate();
         System.out.println("I activated a move");
     }

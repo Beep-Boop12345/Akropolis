@@ -138,7 +138,7 @@ public class PurchasablePiece extends Group {
                 viewer.getBoard().activateClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
                         moveX+mousePositionX-mousePosDiffX,
                         moveY+mousePositionY-mousePosDiffY,
-                        reflected);
+                        Rotation.getAngle (60 * ((int) (rotation))));
                 toFront();
             }
         });
@@ -155,7 +155,7 @@ public class PurchasablePiece extends Group {
                 Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
                         moveX+mousePositionX-mousePosDiffX,
                         moveY+mousePositionY-mousePosDiffY,
-                        reflected);
+                        Rotation.getAngle (60 * ((int) (rotation))));
                 if (moveSelected == null) {
                     setLayoutX(x);
                     setLayoutY(y);
@@ -205,10 +205,7 @@ public class PurchasablePiece extends Group {
     private double[] findRelativeWindowPosition(){
         double yLength = size * (Math.sin(Math.toRadians(60)));
         double[] positions = new double[6];
-        System.out.println(60 * ((int) (this.rotation)));
         Rotation newRotation = Rotation.getAngle (60 * ((int) (this.rotation)));
-        System.out.println(newRotation.value);
-        System.out.println("__________________-");
         switch (newRotation) {
             case DEG_0:
                 positions[0] = 0;
