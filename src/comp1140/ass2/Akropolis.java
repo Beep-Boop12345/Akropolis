@@ -420,6 +420,9 @@ public class Akropolis {
     }
 
     public boolean isMoveValid(Move move) {
+        if (move == null) {
+            return false;
+        }
         int price = constructionSite.findPrice(move.getPiece());
         Player player = currentPlayers[currentTurn];
 

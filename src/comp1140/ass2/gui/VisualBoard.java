@@ -178,8 +178,8 @@ public class VisualBoard extends Group {
         //Must convert between the pieces offset
         double trueXPos = x + viewer.getSite().getLayoutX();
         double trueYPos = y + viewer.getSite().getLayoutY();
-        double relativeXPos = trueXPos - viewer.getViewerWidth()/2;
-        double relativeYPos = trueYPos - viewer.getViewerHeight()/2;
+        double relativeXPos = trueXPos - getLayoutX();
+        double relativeYPos = trueYPos - getLayoutY();
         return Math.sqrt((relativeXPos - movePosition[0])*(relativeXPos - movePosition[0]) + (relativeYPos - movePosition[1])*(relativeYPos - movePosition[1]));
     }
     /**
@@ -200,6 +200,9 @@ public class VisualBoard extends Group {
                 }
             }
         }
+        if (moveDistance(closest, x,y) > 40) {
+            return null;
+        }
         return closest;
     }
 
@@ -217,7 +220,7 @@ public class VisualBoard extends Group {
             closestMove.deactivate();
         }
         Move closestMoveRep = findClosestMove(moves, x, y, reflected);
-        if (closestMoveRep == null || moveDistance(closestMoveRep, x, y) > 80) {
+        if (closestMoveRep == null || moveDistance(closestMoveRep, x, y) > 40) {
             return;
         }
         closestMove = new VisualMove(closestMoveRep, windowPositionOfMove(closestMoveRep));
