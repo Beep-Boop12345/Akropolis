@@ -34,6 +34,9 @@ public enum Rotation {
      * @return rotation
      */
     public static Rotation getAngle(int angle) {
+        if (angle < 0) {
+            return getAngle(angle + 360);
+        }
         angle = angle % 360;
         for (Rotation direction : Rotation.values()) {
             if (direction.value == angle) {

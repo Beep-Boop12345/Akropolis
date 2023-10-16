@@ -434,6 +434,18 @@ public class Akropolis {
     }
 
     /**
+     * Returns true if a given piece can be purchased
+     * @author u7646615
+     * @param piece piece that could be purchased
+     * @return true if it can be purchased*/
+    public boolean canPieceBePurchased(Piece piece) {
+        int price = constructionSite.findPrice(piece);
+        Player player = currentPlayers[currentTurn];
+
+        return !(price < 0 || price > player.getStones());
+    }
+
+    /**
      * Given a state string and a move string, apply the move to the board.
      * @author u7646615
      * <p>
