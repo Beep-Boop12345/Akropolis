@@ -568,48 +568,65 @@ public class Akropolis {
      */
     public static int[] calculateHouseScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] houseScores = new int[numberOfPlayers];
-        boolean houseScoringVar = akropolis.scoreVariants[0];
+
+        return akropolis.calculateHouseScores();
+
+        //int numberOfPlayers = akropolis.numberOfPlayers;
+        //int[] houseScores = new int[numberOfPlayers];
+        //boolean houseScoringVar = akropolis.scoreVariants[0];
 
         // Iterate through all the player strings to calculate each player's score
-        for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
+        //for (int i = 0; i < numberOfPlayers; i++) {
+//            Player player = akropolis.currentPlayers[i];
+//            Board board = player.getBoard();
+//            Tile[][] playerTiles = board.getSurfaceTiles();
+//
+//            // Initialize the houses and houseStars to be zero for each player
+//            int totalHouseStars = 0;
+//            int totalValidHouses = 0;
+//
+//            // Iterate through the playerTiles to first find the largest group of adjacent Houses
+//            for (int m = 0; m < playerTiles.length; m++) {
+//                for (int n = 0; n < playerTiles[m].length; n++) {
+//                    Tile tile = playerTiles[m][n];
+//                    HexCoord point = new HexCoord(m - 100, n - 100);
+//
+//
+//                    // If the tile is null, ignore the current iteration
+//                    if (tile == null) {
+//                        continue;
+//                    }
+//
+//                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
+//                    if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
+//                        totalHouseStars += tile.getStars(tile);
+//                        continue;
+//                    }
+//
+//                    // Count the emptySpaces of the current tile
+//                    HexCoord[] surroundingHexCoords = point.getSurroundings();
+//
+//
+//                }
+//            }
+//            int houseScore = totalHouseStars * totalValidHouses;
+//            houseScores[i] = houseScore;
+//        }
+//        return houseScores;
+    }
 
-            // Initialize the houses and houseStars to be zero for each player
-            int totalHouseStars = 0;
-            int totalValidHouses = 0;
+    public int[] calculateHouseScores() {
 
-            // Iterate through the playerTiles to first find the largest group of adjacent Houses
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
+        int[] houseScoreArray = new int[numberOfPlayers];
+        var variant = scoreVariants[0];
 
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
-                        totalHouseStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-
-
-                }
-            }
-            int houseScore = totalHouseStars * totalValidHouses;
-            houseScores[i] = houseScore;
+        for (int i = 0; i < currentPlayers.length; i++) {
+            var playerBoard = currentPlayers[i].getBoard();
+            houseScoreArray[i] = playerBoard.calculateHouseScore(variant);
         }
-        return houseScores;
+
+        return houseScoreArray;
+
     }
 
 

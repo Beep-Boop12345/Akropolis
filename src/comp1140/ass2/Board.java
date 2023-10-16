@@ -1,5 +1,9 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gittest.A;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
@@ -394,6 +398,114 @@ public class Board {
         return true;
     }
 
+    public int calculateHouseScore(boolean variant) {
+        if (!variant) {
+
+            // Initialize the houses and houseStars to be zero for each player
+            int totalHouseStars = 0;
+            int totalValidHouses = 0;
+
+            ArrayList<HashSet<Tile>> mergeSetList = new ArrayList<>();
+
+            for (int i = 0; i < surfaceTiles.length; i++) {
+                for (int j = 0; j < surfaceTiles[i].length; j++) {
+                    Tile tile = surfaceTiles[i][j];
+                    if (tile != null) {
+                        HashSet<Tile> singleTileSet = new HashSet<>();
+                        singleTileSet.add(tile);
+                        mergeSetList.add(singleTileSet);
+                    }
+                }
+            }
+            
+            var noMerge = false;
+
+            outerLoop:
+            while (!noMerge) {
+                noMerge = true;
+                for (var set : mergeSetList) {
+                    if (mergeSet(set, mergeSetList)) {
+                        noMerge = false;
+                        break;
+                    }
+                }
+            }
+
+            System.out.println(mergeSetList.size());
+            
+            
+
+
+
+//            // Iterate through the playerTiles to first find the largest group of adjacent Houses
+//            for (int m = 0; m < surfaceTiles.length; m++) {
+//                for (int n = 0; n < surfaceTiles[m].length; n++) {
+//                    Tile tile = surfaceTiles[m][n];
+//                    HexCoord point = new HexCoord(m - 100, n - 100);
+//
+//
+//                    // If the tile is null, ignore the current iteration
+//                    if (tile == null) {
+//                        continue;
+//                    }
+//
+//                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
+//                    if (tile.getPlaza() && tile.getDistrictType().equals(District.HOUSES)) {
+//                        totalHouseStars += tile.getStars(tile);
+//                        continue;
+//                    }
+//
+//                    // Count the emptySpaces of the current tile
+//                    HexCoord[] surroundingHexCoords = point.getSurroundings();
+//
+//
+//                }
+//            }
+            return totalHouseStars * totalValidHouses;
+        }
+        return 5;
+    }
+
+    private boolean mergeSet(HashSet<Tile> set, ArrayList<HashSet<Tile>> mergeSetList) {
+        for (var tile : set) {
+
+            var surrounds = getAdjacentTiles(tile);
+
+            for(var otherSet : mergeSetList) {
+                if (!otherSet.equals(set)) {
+                    for (var adjacentTile : surrounds) {
+                        if (otherSet.contains(adjacentTile)) {
+                            for (var otherTile : otherSet) {
+                                set.add(otherTile);
+                            }
+                            mergeSetList.remove(otherSet);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    
+    public ArrayList<Tile> getAdjacentTiles(Tile tile) {
+
+        ArrayList<Tile> adjacentTiles = new ArrayList<>();
+
+        for (int i = 0; i < surfaceTiles.length; i++) {
+            for (int j = 0; j < surfaceTiles[i].length; j++) {
+                if (tile.equals(surfaceTiles[i][j])) {
+                    var surroundingHexes = (new HexCoord(i-100, j-100)).getSurroundings();
+                    for (HexCoord surroundingHex : surroundingHexes) {
+                        adjacentTiles.add(getTile(surroundingHex));
+                    }
+                }
+            }
+        }
+        return adjacentTiles;
+    }
 
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
