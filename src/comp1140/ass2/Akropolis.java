@@ -698,83 +698,15 @@ public class Akropolis {
 
     public int[] calculateHouseScores() {
 
+
         int[] houseScoreArray = new int[numberOfPlayers];
         var variant = scoreVariants[0];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-            int totalHouseStars = 0;
-
-            Set<Set<Tile>> adjacentHouseGroups = new HashSet<>();
-
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-                    if (tile == null) {
-                        continue;
-                    }
-
-        for (int i = 0; i < currentPlayers.length; i++) {
-            var playerBoard = currentPlayers[i].getBoard();
-            houseScoreArray[i] = playerBoard.calculateHouseScore(variant);
+            houseScoreArray[i] = currentPlayers[i].getBoard().calculateHouseScore(false);
         }
-                    if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
-                        totalHouseStars += tile.getStars(tile);
-                        continue;
-                    }
-
+        System.out.println("_______");
         return houseScoreArray;
-                    /* Add a new group of adjacent house tiles to the set if a group
-                       already doesn't contain the tile                              */
-                    if (tile.getDistrictType() == District.HOUSES) {
-                        boolean inGroup = false;
-                        for (Set<Tile> group : adjacentHouseGroups) {
-                            if (group.contains(tile)) {
-                                inGroup=true;
-                                break;
-                            }
-                        }
-
-                        if (!inGroup) {
-                            Set<Tile> houseGroup = new HashSet<>();
-                            findHouseGroup(board, tile, point, houseGroup);
-                            adjacentHouseGroups.add(houseGroup);
-                        }
-
-                    }
-                }
-            }
-
-            // Find the maximum group size and the set with the maximum group size
-            int maxGroupSize = 0;
-            Set<Tile> largestGroup = null;
-
-            for (Set<Tile> group : adjacentHouseGroups) {
-                int groupSize = group.size();
-                if (groupSize > maxGroupSize) {
-                    maxGroupSize = groupSize;
-                    largestGroup = group;
-                }
-            }
-
-            // Calculate the district value of the maximum group size (accounting for height)
-            int totalValidHouses = 0;
-            if (largestGroup != null) {
-                for (Tile tile : largestGroup) {
-                    totalValidHouses += tile.getHeight()+1;
-                }
-            }
-
-            // Calculate scores based on the largest adjacent house group
-            if (houseScoringVar && totalValidHouses >= 10) {
-                houseScores[i] = totalValidHouses * 2 * totalHouseStars;
-            } else {
-                houseScores[i] = totalValidHouses * totalHouseStars;
-            }
-        }
-        return houseScores;
     }
 
     /**
