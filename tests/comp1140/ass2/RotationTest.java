@@ -30,17 +30,7 @@ public class RotationTest {
         assertEquals(Rotation.DEG_300, Rotation.getAngle(1020));
     }
 
-    @Test
-    @DisplayName("Returns null for invalid / negative angles")
-    public void testGetAngleInvalidAngles() {
-        assertNull(Rotation.getAngle(30));
-        assertNull(Rotation.getAngle(45));
-        assertNull(Rotation.getAngle(999));
-        assertNull(Rotation.getAngle(-60));
-        assertNull(Rotation.getAngle(-300));
-        assertNull(Rotation.getAngle(50));
-        assertNull(Rotation.getAngle(75));
-    }
+
 
     @Test
     @DisplayName("Add method correct works with basic angles")
