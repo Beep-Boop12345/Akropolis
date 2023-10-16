@@ -19,7 +19,7 @@ public enum Rotation {
     /**
      * Constructor: create a new instance of Rotation class
      * Rotation is clockwise
-     * @param angle of rotationww
+     * @param angle of rotation
      */
     Rotation(int angle){
         this.value = angle;
@@ -74,7 +74,7 @@ public enum Rotation {
 
     @Override
     public String toString() {
-        return String.valueOf((int) (value / 60));
+        return String.valueOf(value / 60);
     }
 }
 

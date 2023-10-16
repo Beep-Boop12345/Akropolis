@@ -9,7 +9,7 @@ public class ConstructionSite {
     public Piece[] currentPieces;
 
 
-    public ConstructionSite (int playercount, Piece[] initialPieces, Stack stack) {
+    public ConstructionSite (int playercount, Piece[] initialPieces) {
         this.size = playercount + 2;
         this.currentPieces = new Piece[this.size];
         for (int i =0; i < initialPieces.length; i++) {

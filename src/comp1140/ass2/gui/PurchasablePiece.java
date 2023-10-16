@@ -1,5 +1,7 @@
 package comp1140.ass2.gui;
 
+import comp1140.ass2.Akropolis;
+import comp1140.ass2.Move;
 import comp1140.ass2.Piece;
 import comp1140.ass2.Rotation;
 import comp1140.ass2.Tile;
@@ -8,20 +10,18 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PurchasablePiece extends Group {
     /*The back end piece this represents*/
-    private Piece piece;
+    private final Piece piece;
 
-    private ArrayList<VisualTile> vTiles;
+    private final ArrayList<VisualTile> vTiles;
 
-    private ArrayList<Line> connectors;
+    private final ArrayList<Line> connectors;
 
     private Rotation rotation;
 
@@ -30,6 +30,7 @@ public class PurchasablePiece extends Group {
     private boolean reflected;
 
     //Fields to track movement
+
     //difference in mouse position and original position
     private double mousePosDiffX;
     private double mousePosDiffY;
@@ -40,8 +41,11 @@ public class PurchasablePiece extends Group {
     //Fields to track events
     private boolean isPressed;
 
-    //A visual piece that is used in the visual construction site.@u7683699, @u7646615
-    PurchasablePiece(double x, double y, Piece piece, double sideLength){
+    /**    A visual piece that is used in the visual construction site.
+     * @author u7683699, @author u7646615
+     *
+     */
+    PurchasablePiece(double x, double y, Piece piece, double sideLength, Viewer viewer, Akropolis akropolis){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
@@ -93,7 +97,7 @@ public class PurchasablePiece extends Group {
                 resizePiece();
                 isPressed =true;
                 reflected = !event.isPrimaryButtonDown();
-                reflect(mousePositionX);
+                reflect();
                 toFront();
             }
         });
@@ -105,6 +109,10 @@ public class PurchasablePiece extends Group {
                 double moveY = event.getSceneY() - mousePositionY;
                 setLayoutX(moveX+mousePositionX-mousePosDiffX);
                 setLayoutY(moveY+mousePositionY-mousePosDiffY);
+                viewer.getBoard().activateClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                        moveX+mousePositionX-mousePosDiffX,
+                        moveY+mousePositionY-mousePosDiffY,
+                        reflected);
                 toFront();
             }
         });
@@ -112,7 +120,21 @@ public class PurchasablePiece extends Group {
         this.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                double moveX = event.getSceneX() - mousePositionX;
+                double moveY = event.getSceneY() - mousePositionY;
                 isPressed = false;
+                Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                        moveX+mousePositionX-mousePosDiffX,
+                        moveY+mousePositionY-mousePosDiffY,
+                        reflected);
+                if (moveSelected == null) {
+                    setLayoutX(x);
+                    setLayoutY(y);
+                    size = 25;
+                    resizePiece();
+                }
+                akropolis.applyMove(moveSelected);
+                viewer.updateView();
             }
         });
         this.setOnKeyTyped(new EventHandler<KeyEvent>() {
@@ -127,7 +149,7 @@ public class PurchasablePiece extends Group {
                 if (event.getCode() == KeyCode.A) {
                     rotation = rotation.add(Rotation.getAngle(-60));
                     rotatePiece();
-                } else if (event.getCharacter() == "d") {
+                } else if (event.getCharacter().equals("d")) {
                     rotation = rotation.add(Rotation.getAngle(60));
                     rotatePiece();
                 }
@@ -136,7 +158,6 @@ public class PurchasablePiece extends Group {
     }
 
     /**Resizes the Piece. @u7646615
-     *
      * */
     private void resizePiece() {
         double yLength = size * (Math.sin(Math.toRadians(60)));
@@ -163,7 +184,6 @@ public class PurchasablePiece extends Group {
     }
 
     /** updates the connectors. @u7646615
-     *
      * */
     private void updateConnectors(){
         for (int i = 0; i < 3; i++) {
@@ -181,9 +201,8 @@ public class PurchasablePiece extends Group {
 
     /**
      * Reflects the piece. @u7646615
-     *
      * */
-    private void reflect(double axis){
+    private void reflect(){
         if (reflected) {
             vTiles.get(2).setLayoutX(-1.5*size);
         } else {

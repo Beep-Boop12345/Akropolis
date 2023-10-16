@@ -2,8 +2,6 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,8 +16,8 @@ import javafx.stage.Stage;
 
 public class Viewer extends Application {
 
-    private static final int VIEWER_WIDTH = 1200;
-    private static final int VIEWER_HEIGHT = 700;
+    private static final double VIEWER_WIDTH = 1200;
+    private static final double VIEWER_HEIGHT = 700;
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -27,48 +25,26 @@ public class Viewer extends Application {
     private Group currentView = new Group();
     private TextField gameTextField;
 
-
+    //components for easy access and modification
+    private Akropolis akropolis;
+    private VisualBoard board;
+    private VisualConstructionSite site;
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
-     * @param state the String representation of the current game state
+     * @param akropolis representitive of the state as an object
      */
-    void displayState(String state) {
-
-        //Fails to show state when state cannot be shown
-        if (!Akropolis.isStateStringWellFormed(state)) {
-
-            Text failText = new Text();
-            failText.setText("Please Enter A Valid State String!");
-            failText.setLayoutX(VIEWER_WIDTH/2 - 100);
-            failText.setLayoutY(VIEWER_HEIGHT/2 - 10);
-            currentView.getChildren().add(failText);
-            return;
-
-        }
+    void displayState(Akropolis akropolis) {
 
         //Reset The View
         root.getChildren().remove(currentView);
         Group newView  = new Group();
 
-        //Breaks string to construct objects
-        String[] components = state.split(";");
-        String[] playerStrings = new String[components.length - 2];
-        System.arraycopy(components, 2, playerStrings, 0, components.length - 2);
+        int currentTurnId = akropolis.currentTurn;
 
-        int currentTurnId = Character.getNumericValue(components[1].charAt(0));
 
-        String currentPlayerString = playerStrings[0];
-
-        for (String s : playerStrings) {
-            if (Character.getNumericValue(s.charAt(1)) == currentTurnId) {
-                currentPlayerString = s;
-                break;
-            }
-        }
-
-        // Old Code to Displays Stones
-        int stones = Integer.parseInt(currentPlayerString.substring(2,4));
+        // Old Code to Display Stones
+        int stones = akropolis.getCurrentPlayer().getStones();
         System.out.println(stones);
 
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
@@ -77,15 +53,13 @@ public class Viewer extends Application {
 
 
         /* New Code to Display Scoreboard including Stones and playerScores
-        Scoreboard scoreboard = new Scoreboard(state);
+        Scoreboard, scoreboard = new Scoreboard(state);
         newView.getChildren().add(scoreboard);
         */
 
-        //Isolates Move String
-        String movesString = currentPlayerString.substring(4);
-
         //Constructs A Visual Board Object by Creating the String Instanced Board Object
-        VisualBoard currentBoard = new VisualBoard(new Board(currentTurnId, movesString));
+        VisualBoard currentBoard = new VisualBoard(akropolis.getCurrentPlayer().getBoard(), this);
+        board = currentBoard;
 
         currentBoard.setLayoutX(VIEWER_WIDTH/2);
         currentBoard.setLayoutY(VIEWER_HEIGHT/2);
@@ -95,10 +69,15 @@ public class Viewer extends Application {
         //Constructs A Visual Construction Site Object by Instancing the Construction Site Class
         var sitePosX = VIEWER_WIDTH * 0.85;
         var sitePosY = VIEWER_HEIGHT*0.05;
-        var subSite = new ConstructionSite(state);
+        var subSite = akropolis.getConstructionSite();
 
-        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX, sitePosY, subSite);
+        VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX,
+                sitePosY,
+                subSite,
+                this,
+                akropolis);
         newView.getChildren().add(currentConstructionSite);
+        site = currentConstructionSite;
 
         //Creates A Label to Display Current Turn
         Label playerLabel = new Label("Player " + (currentTurnId + 1));
@@ -130,7 +109,18 @@ public class Viewer extends Application {
         gameTextField.setPrefWidth(800);
         Button button = new Button("Refresh");
         button.setOnAction(e -> {
-            displayState(gameTextField.getText());
+            if (!Akropolis.isStateStringWellFormed(gameTextField.getText())) {
+
+                Text failText = new Text();
+                failText.setText("Please Enter A Valid State String!");
+                failText.setLayoutX(VIEWER_WIDTH/2 - 100);
+                failText.setLayoutY(VIEWER_HEIGHT/2 - 10);
+                currentView.getChildren().add(failText);
+                return;
+
+            }
+            this.akropolis = new Akropolis(gameTextField.getText());
+            displayState(akropolis);
             controls.toFront();
         });
         HBox hb = new HBox();
@@ -156,5 +146,25 @@ public class Viewer extends Application {
         primaryStage.show();
     }
 
+    /**Updates the viewed state
+     * @author u7646615*/
+    public void updateView() {
+        displayState(akropolis);
+    }
 
+    public VisualBoard getBoard() {
+        return board;
+    }
+
+    public VisualConstructionSite getSite() {
+        return site;
+    }
+
+    public static double getViewerWidth() {
+        return VIEWER_WIDTH;
+    }
+
+    public static double getViewerHeight() {
+        return VIEWER_HEIGHT;
+    }
 }

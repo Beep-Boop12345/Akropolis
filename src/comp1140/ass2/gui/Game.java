@@ -3,8 +3,6 @@ package comp1140.ass2.gui;
 import comp1140.ass2.Akropolis;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 // FIXME Task 13  - Basic Playable Game
