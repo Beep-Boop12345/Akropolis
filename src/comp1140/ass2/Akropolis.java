@@ -1125,7 +1125,9 @@ public class Akropolis {
                     HexCoord[] surroundingHexCoords = point.getSurroundings();
                     boolean adjacentToLake = false;
                     for (int j = 0; j < surroundingHexCoords.length; j++) {
+                        //System.out.println(board.isLakeSingleTile(surroundingHexCoords[j]));
                         if (board.isLakeSingleTile(surroundingHexCoords[j])) {
+                            //System.out.println("Adjacent");
                             adjacentToLake = true;
                             break;
                         }
@@ -1134,6 +1136,7 @@ public class Akropolis {
                     // Increment the district count
                     if (tile.getDistrictType() == District.GARDENS) {
                         if (gardenScoringVar && adjacentToLake) {
+                            //System.out.println("Vraiant");
                                 totalValidGardens += 2 * (tile.getHeight()+1);
                         } else {
                             totalValidGardens += tile.getHeight()+1;
@@ -1144,6 +1147,8 @@ public class Akropolis {
             int gardenScore = totalGardenStars*totalValidGardens;
             gardenScores[i] = gardenScore;
         }
+
+        //System.out.println("------");
         return gardenScores;
     }
 
