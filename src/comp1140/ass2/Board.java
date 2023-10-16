@@ -404,87 +404,87 @@ public class Board {
     }
 
     public int calculateHouseScore(boolean variant) {
-        if (!variant) {
-            int totalValidHouseScore = 0;
 
-            ArrayList<HexCoord> listOfCoords = getTilesOfType(District.HOUSES);
+        ArrayList<HexCoord> listOfCoords = getTilesOfType(District.HOUSES);
 
-            ArrayList<ArrayList<HexCoord>> foundGroups = new ArrayList<>();
+        ArrayList<ArrayList<HexCoord>> foundGroups = new ArrayList<>();
 
-            outerLoop:
-            for (int i = 0; i < listOfCoords.size(); i++) {
-
-                for (var group : foundGroups) {
-                    if (group.contains(listOfCoords.get(i))) {
-                        continue outerLoop;
-                    }
-                }
-
-                ArrayList<HexCoord> newGroup = new ArrayList<>();
-                newGroup.add(listOfCoords.get(i));
-                foundGroups.add(newGroup);
-                findSurroundingHouses(newGroup, listOfCoords.get(i));
-
-            }
-
-            System.out.println("Found groups: " + foundGroups.size());
+        outerLoop:
+        for (int i = 0; i < listOfCoords.size(); i++) {
 
             for (var group : foundGroups) {
-                System.out.println(group.size());
-            }
-
-            ArrayList<ArrayList<HexCoord>> largestGroups = new ArrayList<>();
-
-            if (foundGroups.size() < 1) {
-                return 0;
-            }
-            largestGroups.add(foundGroups.get(0));
-
-            for (var group : foundGroups) {
-                if (group.size() > largestGroups.get(0).size()) {
-                    System.out.println("Larger");
-                    largestGroups = new ArrayList<>();
-                    largestGroups.add(group);
-                } else if (group.size() == largestGroups.get(0).size()) {
-                    largestGroups.add(group);
+                if (group.contains(listOfCoords.get(i))) {
+                    continue outerLoop;
                 }
             }
 
-            System.out.println("Largest: " + largestGroups.get(0).size());
-
-            ArrayList<Integer> largestScores = new ArrayList<>();
-
-            for (var largeGroup : largestGroups) {
-
-                var score = 0;
-
-                for (var coord : largeGroup) {
-                    var tile = getTile(coord);
-                    var tileHeight = tile.getHeight();
-
-                    if (!tile.getPlaza())  {
-                        score += (tileHeight + 1);
-                    }
-                }
-
-                largestScores.add(score);
-            }
-
-            var largestScore = largestScores.get(0);
-
-            for (var score : largestScores) {
-                if (score > largestScore) {
-                    largestScore = score;
-                }
-            }
-
-            var stars = starCount(District.HOUSES);
-
-            System.out.println("Stars: " + stars);
-            return largestScore * stars;
+            ArrayList<HexCoord> newGroup = new ArrayList<>();
+            newGroup.add(listOfCoords.get(i));
+            foundGroups.add(newGroup);
+            findSurroundingHouses(newGroup, listOfCoords.get(i));
 
         }
-        return 5;
+
+        System.out.println("Found groups: " + foundGroups.size());
+
+        for (var group : foundGroups) {
+            System.out.println(group.size());
+        }
+
+        ArrayList<ArrayList<HexCoord>> largestGroups = new ArrayList<>();
+
+        if (foundGroups.size() < 1) {
+            return 0;
+        }
+        largestGroups.add(foundGroups.get(0));
+
+        for (var group : foundGroups) {
+            if (group.size() > largestGroups.get(0).size()) {
+                System.out.println("Larger");
+                largestGroups = new ArrayList<>();
+                largestGroups.add(group);
+            } else if (group.size() == largestGroups.get(0).size()) {
+                largestGroups.add(group);
+            }
+        }
+
+        System.out.println("Largest: " + largestGroups.get(0).size());
+
+        ArrayList<Integer> largestScores = new ArrayList<>();
+
+        for (var largeGroup : largestGroups) {
+
+            var score = 0;
+
+            for (var coord : largeGroup) {
+                var tile = getTile(coord);
+                var tileHeight = tile.getHeight();
+
+                if (!tile.getPlaza())  {
+                    score += (tileHeight + 1);
+                }
+            }
+
+            if (variant && score >= 10) {
+                score *= 2;
+            }
+
+            largestScores.add(score);
+        }
+
+        var largestScore = largestScores.get(0);
+
+        for (var score : largestScores) {
+            if (score > largestScore) {
+                largestScore = score;
+            }
+        }
+
+        var stars = starCount(District.HOUSES);
+
+        System.out.println("Stars: " + stars);
+        return largestScore * stars;
+
     }
 
 

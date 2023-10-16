@@ -655,48 +655,6 @@ public class Akropolis {
 
         return akropolis.calculateHouseScores();
 
-        //int numberOfPlayers = akropolis.numberOfPlayers;
-        //int[] houseScores = new int[numberOfPlayers];
-        //boolean houseScoringVar = akropolis.scoreVariants[0];
-
-        // Iterate through all the player strings to calculate each player's score
-        //for (int i = 0; i < numberOfPlayers; i++) {
-//            Player player = akropolis.currentPlayers[i];
-//            Board board = player.getBoard();
-//            Tile[][] playerTiles = board.getSurfaceTiles();
-//
-//            // Initialize the houses and houseStars to be zero for each player
-//            int totalHouseStars = 0;
-//            int totalValidHouses = 0;
-//
-//            // Iterate through the playerTiles to first find the largest group of adjacent Houses
-//            for (int m = 0; m < playerTiles.length; m++) {
-//                for (int n = 0; n < playerTiles[m].length; n++) {
-//                    Tile tile = playerTiles[m][n];
-//                    HexCoord point = new HexCoord(m - 100, n - 100);
-//
-//
-//                    // If the tile is null, ignore the current iteration
-//                    if (tile == null) {
-//                        continue;
-//                    }
-//
-//                    // Increment the totalHouseStars if they are a plaza and don't count plazas for districts
-//                    if (tile.getPlaza() && tile.getDistrictType() == District.HOUSES) {
-//                        totalHouseStars += tile.getStars(tile);
-//                        continue;
-//                    }
-//
-//                    // Count the emptySpaces of the current tile
-//                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-//
-//
-//                }
-//            }
-//            int houseScore = totalHouseStars * totalValidHouses;
-//            houseScores[i] = houseScore;
-//        }
-//        return houseScores;
     }
 
     public int[] calculateHouseScores() {
@@ -706,7 +664,7 @@ public class Akropolis {
         var variant = scoreVariants[0];
 
         for (int i = 0; i < numberOfPlayers; i++) {
-            houseScoreArray[i] = currentPlayers[i].getBoard().calculateHouseScore(false);
+            houseScoreArray[i] = currentPlayers[i].getBoard().calculateHouseScore(variant);
         }
         System.out.println("_______");
         return houseScoreArray;
