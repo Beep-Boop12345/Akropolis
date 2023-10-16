@@ -269,7 +269,9 @@ public class Board {
         // Checks that all neighbours are non-empty
         HexCoord[] neighbours = point.getSurroundings();
         for (HexCoord neighbour : neighbours) {
-            if (getTile(neighbour) == null || !withinEdge(neighbour)) {
+            //System.out.println("null: " + (getTile(neighbour) == null));
+            //System.out.println("edge: " + (!withinEdge(neighbour)));
+            if (getTile(neighbour) == null) {
                 return false;
             }
         }
