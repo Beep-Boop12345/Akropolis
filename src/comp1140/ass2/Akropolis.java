@@ -539,9 +539,9 @@ public class Akropolis {
 
         //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
-        System.out.println(boardRadiusX);
+        // System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
-        System.out.println(boardRadiusY);
+        // System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
         int avaliablePiece = constructionSite.getCurrentPieceCount();
@@ -573,16 +573,16 @@ public class Akropolis {
                     for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
-                        System.out.println(move);
+                        // System.out.println(move);
                         validMoves.add(move);
                         //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
-                        System.out.println(move1);
+                        // System.out.println(move1);
                         Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
-                        System.out.println(move2);
+                        // System.out.println(move2);
                         validMoves.add(move1);
                         validMoves.add(move2);
-                        System.out.println("_________________________");
+                        // System.out.println("_________________________");
                     }
                 }
 
@@ -885,13 +885,6 @@ public class Akropolis {
     }
 
 
-
-
-
-
-
-
-
     /**
      * Generate a move using your AI.
      * <p>
@@ -904,7 +897,45 @@ public class Akropolis {
      * @return An AI generated move.
      */
     public static String generateAIMove(String gameState) {
-        return ""; // FIXME Task 22
+        Akropolis currentGame = new Akropolis(gameState);
+        int turn = currentGame.currentTurn;
+
+        // Generate an array of validMoves to determine the best move for now
+        Set<String> allValidMoves = generateAllValidMoves(gameState);
+        String[] validMovesArray = allValidMoves.toArray(new String[0]);
+        int[] evaluationAfterMove = new int[allValidMoves.size()];
+
+        /* Initialize the bestScore to be the current score of the player
+           and set the bestMoveIndex to be 0
+         */
+        int bestScore = currentGame.calculateCompleteScores()[turn];
+        int bestMoveIndex = 0;
+
+        // Set a 3-second timeout
+        long startTime = System.currentTimeMillis();
+        long timeout = 3000; // 3 seconds in milliseconds
+
+        // Calculate the scores applied after each move
+        for (int i = 0; i < validMovesArray.length; i++) {
+            String moveString = validMovesArray[i];
+            Akropolis gameAfterMove = new Akropolis(applyMove(gameState, moveString));
+            int eval = gameAfterMove.calculateCompleteScores()[turn];
+            evaluationAfterMove[i] = eval;
+
+            // Find the move with the bestScore
+            if (eval > bestScore) {
+                bestScore = eval;
+                bestMoveIndex = i;
+            }
+
+            // Check for the timeout
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - startTime >= timeout) {
+                break; // Exit the loop if the timeout is reached
+            }
+        }
+
+        return validMovesArray[bestMoveIndex];
     }
 
 
