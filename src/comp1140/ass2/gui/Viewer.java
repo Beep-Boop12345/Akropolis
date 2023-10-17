@@ -155,6 +155,17 @@ public class Viewer extends Application {
         primaryStage.show();
     }
 
+    public Viewer(Akropolis akropolis) {
+        this.akropolis = akropolis;
+        Stage primaryStage = new Stage();
+        Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        displayState(akropolis);
+        //root.getChildren().add(currentView);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
     /**Updates the viewed state
      * @author u7646615*/
     public void updateView() {
