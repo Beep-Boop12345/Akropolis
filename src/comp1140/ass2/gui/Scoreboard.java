@@ -39,11 +39,15 @@ public class Scoreboard extends Label {
             // Create a label to display player number, score, and number of stones
             Label playerInfoLabel = new Label("Player " + (i + 1) + ": Score: " + scores[i] + " Stones: " + playerStones[i]);
 
-            // Customize the label (font, style, etc.)
+            // Customize the label style
             playerInfoLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
-            // Apply the specified style to the HBox
-            playerHBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).toString().replace("0x", "#") + ";");
+            // Customize the HBox style
+            playerHBox.setStyle(
+                    "-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).toString().replace("0x", "#") + ";" +
+                            "-fx-border-color: black;" +  // Border color
+                            "-fx-border-width: 2px;"      // Border width
+            );
 
             // Add the player info label to the playerHBox
             playerHBox.getChildren().add(playerInfoLabel);

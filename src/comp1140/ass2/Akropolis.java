@@ -684,8 +684,6 @@ public class Akropolis {
      * @author u7683699
      */
     public int[] calculateHouseScores() {
-
-
         int[] houseScoreArray = new int[numberOfPlayers];
         boolean variant = scoreVariants[0];
 
@@ -718,72 +716,17 @@ public class Akropolis {
      */
     public static int[] calculateMarketScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] marketScores = new int[numberOfPlayers];
-        boolean marketScoringVar = akropolis.scoreVariants[1];
+        return akropolis.calculateMarketScores();
+    }
 
-        // Iterate through all the player strings to calculate each player's score
+    public int[] calculateMarketScores() {
+        int[] marketScoreArray = new int[numberOfPlayers];
+        boolean variant = scoreVariants[1];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the markets and marketStars to be zero for each player
-            int totalMarketStars = 0;
-            int totalValidMarkets = 0;
-
-            // Iterate through the playerTiles to find marketPlazas stars and market districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalMarketStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.MARKETS) {
-                        totalMarketStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    int adjacentMarketDistricts = 0;
-                    int adjacentMarketPlazas = 0;
-                    // Count how many of the surrounding spaces are empty
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        Tile surroundingTile = board.getTile(surroundingHexCoords[j]);
-                        if (surroundingTile == null) { continue; }
-                        if (surroundingTile.getDistrictType() == District.MARKETS) {
-                            if (surroundingTile.getPlaza()) {
-                                adjacentMarketPlazas++;
-                            }
-                            else {
-                                adjacentMarketDistricts++;
-                            }
-                        }
-                    }
-
-                    // Increment the district count
-                    if (tile.getDistrictType() == District.MARKETS) {
-                        if (adjacentMarketDistricts == 0) {
-                            if (marketScoringVar && adjacentMarketPlazas >= 1) {
-                                    totalValidMarkets += 2 * (tile.getHeight() + 1);
-                            }
-                            else {
-                                totalValidMarkets += tile.getHeight() + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            int marketScore = totalMarketStars * totalValidMarkets;
-            marketScores[i] = marketScore;
+            marketScoreArray[i] = currentPlayers[i].getBoard().calculateMarketScore(variant);
         }
-        return marketScores;
+        return marketScoreArray;
     }
 
     /**
