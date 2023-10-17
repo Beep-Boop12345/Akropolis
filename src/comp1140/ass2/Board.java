@@ -505,20 +505,20 @@ public class Board {
 
         var surrounds = currentCoord.getSurroundings();
 
-        for (int i = 0; i < surrounds.length; i++) {
-            var surroundingTile = getTile(surrounds[i]);
+        for (HexCoord surround : surrounds) {
+            var surroundingTile = getTile(surround);
 
             var notNull = surroundingTile != null;
 
             if (notNull) {
 
-                var notInGroup = !housesInGroup.contains(surrounds[i]);
+                var notInGroup = !housesInGroup.contains(surround);
                 var isHouse = surroundingTile.getDistrictType().equals(District.HOUSES);
                 var notPlaza = !surroundingTile.getPlaza();
 
                 if (notInGroup && isHouse && notPlaza) {
-                    housesInGroup.add(surrounds[i]);
-                    findSurroundingHouses(housesInGroup, surrounds[i]);
+                    housesInGroup.add(surround);
+                    findSurroundingHouses(housesInGroup, surround);
                 }
             }
         }
@@ -613,6 +613,42 @@ public class Board {
             totalMarketScore += (getTile(coord).getHeight() + 1) * variantMultiplier;
         }
         return totalMarketScore * marketStars;
+    }
+
+    /**
+     * Calculates the barracks score for this board's current state
+     * @param variant Determines whether to use the variant calculation
+     * @return A single number value representing this player's barracks score
+     * @author u7683699
+     */
+    public int calculateBarracksScore(boolean variant) {
+
+        int barracksStars = starCountOfType(District.BARRACKS);
+        int totalBarracksScore = 0;
+
+        var listOfCoords = getTilesOfType(District.BARRACKS);
+
+        for (var coord : listOfCoords) {
+
+            var adjacentTilePositions = coord.getSurroundings();
+            var emptyAdjacentCount = 0;
+
+            for (var adjacentTilePosition : adjacentTilePositions) {
+
+                var adjacentTile = getTile(adjacentTilePosition);
+
+                if (adjacentTile == null) {
+                    emptyAdjacentCount += 1;
+                }
+            }
+
+            if (emptyAdjacentCount >= 3 && variant) {
+                totalBarracksScore += (getTile(coord).getHeight() + 1) * 2;
+            } else if (emptyAdjacentCount >= 1) {
+                totalBarracksScore += (getTile(coord).getHeight() + 1);
+            }
+        }
+        return totalBarracksScore * barracksStars;
     }
 
     public Tile[][] getSurfaceTiles() {

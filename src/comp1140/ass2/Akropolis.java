@@ -762,64 +762,24 @@ public class Akropolis {
      */
     public static int[] calculateBarracksScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] barrackScores = new int[numberOfPlayers];
-        boolean barrackScoringVar = akropolis.scoreVariants[2];
 
-        // Iterate through all the player strings to calculate each player's score
+        return akropolis.calculateBarracksScores();
+    }
+
+    /**
+     * calculates the "Barracks" component of the score for each player in this akropolis instance
+     * @return The barracks scores for each player
+     * @author u7683699
+     */
+    public int[] calculateBarracksScores() {
+
+        int[] barracksScoreArray = new int[numberOfPlayers];
+        var variant = scoreVariants[2];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the barracks and barrackStars to be zero for each player
-            int totalBarrackStars = 0;
-            int totalValidBarracks = 0;
-
-            // Iterate through the playerTiles to find barrackPlazas stars and barrack districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalBarrackStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.BARRACKS) {
-                        totalBarrackStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    int emptySpaces = 0;
-                    // Count how many of the surrounding spaces are empty
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        if (board.getTile(surroundingHexCoords[j]) == null) {
-                            emptySpaces ++;
-                        }
-                    }
-
-                    // Increment the district count
-                    if (tile.getDistrictType() == District.BARRACKS) {
-                        if (emptySpaces >= 1) {
-                            if (barrackScoringVar && (emptySpaces == 3 || emptySpaces == 4)) {
-                                totalValidBarracks += 2 * (tile.getHeight() + 1);
-                            }
-                            else {
-                                totalValidBarracks += tile.getHeight() + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            int barrackScore = totalBarrackStars * totalValidBarracks;
-            barrackScores[i] = barrackScore;
+            barracksScoreArray[i] = currentPlayers[i].getBoard().calculateBarracksScore(variant);
         }
-        return barrackScores;
+        return barracksScoreArray;
     }
 
 
