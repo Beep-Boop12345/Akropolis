@@ -79,13 +79,13 @@ public class Tile {
     public int getStars(Tile tile) {
         // Only Plaza's have stars
         if (tile.isPlaza) {
-            switch (tile.districtType) {
-                case HOUSES: return 1;
-                case MARKETS, TEMPLES, BARRACKS: return 2;
-                case GARDENS: return 3;
+            return switch (tile.districtType) {
+                case HOUSES -> 1;
+                case MARKETS, TEMPLES, BARRACKS -> 2;
+                case GARDENS -> 3;
                 // Return 0 if it doesn't match a district
-                default: return 0;
-            }
+                default -> 0;
+            };
         } else {
             return 0;
         }
