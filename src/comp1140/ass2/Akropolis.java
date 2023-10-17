@@ -517,17 +517,12 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
-
         Akropolis akropolis = new Akropolis(gameState);
-
         var moveSet = akropolis.generateAllValidMoves();
-
         Set<String> validMoves = new HashSet<>();
-
         for (var move : moveSet) {
             validMoves.add(move.toString());
         }
-
         return validMoves;
     }
 
