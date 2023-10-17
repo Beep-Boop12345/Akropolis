@@ -406,11 +406,8 @@ public class Board {
     }
 
     public int calculateHouseScore(boolean variant) {
-
         ArrayList<HexCoord> listOfCoords = getTilesOfType(District.HOUSES);
-
         ArrayList<ArrayList<HexCoord>> foundGroups = new ArrayList<>();
-
         outerLoop:
         for (int i = 0; i < listOfCoords.size(); i++) {
 
@@ -419,7 +416,6 @@ public class Board {
                     continue outerLoop;
                 }
             }
-
             ArrayList<HexCoord> newGroup = new ArrayList<>();
             newGroup.add(listOfCoords.get(i));
             foundGroups.add(newGroup);
@@ -427,22 +423,11 @@ public class Board {
 
         }
 
-        System.out.println("Found groups: " + foundGroups.size());
-
-        for (var group : foundGroups) {
-            System.out.println(group.size());
-        }
-
         ArrayList<ArrayList<HexCoord>> largestGroups = new ArrayList<>();
-
-        if (foundGroups.size() < 1) {
-            return 0;
-        }
+        if (foundGroups.size() < 1) { return 0; }
         largestGroups.add(foundGroups.get(0));
-
         for (var group : foundGroups) {
             if (group.size() > largestGroups.get(0).size()) {
-                System.out.println("Larger");
                 largestGroups = new ArrayList<>();
                 largestGroups.add(group);
             } else if (group.size() == largestGroups.get(0).size()) {
@@ -450,18 +435,12 @@ public class Board {
             }
         }
 
-        System.out.println("Largest: " + largestGroups.get(0).size());
-
         ArrayList<Integer> largestScores = new ArrayList<>();
-
         for (var largeGroup : largestGroups) {
-
             var score = 0;
-
             for (var coord : largeGroup) {
                 var tile = getTile(coord);
                 var tileHeight = tile.getHeight();
-
                 if (!tile.getPlaza())  {
                     score += (tileHeight + 1);
                 }
@@ -470,12 +449,10 @@ public class Board {
             if (variant && score >= 10) {
                 score *= 2;
             }
-
             largestScores.add(score);
         }
 
         var largestScore = largestScores.get(0);
-
         for (var score : largestScores) {
             if (score > largestScore) {
                 largestScore = score;
@@ -483,10 +460,7 @@ public class Board {
         }
 
         var stars = starCount(District.HOUSES);
-
-        System.out.println("Stars: " + stars);
         return largestScore * stars;
-
     }
 
 
@@ -505,25 +479,15 @@ public class Board {
 
     public int calculateHouseScore1(boolean variant) {
         if (!variant) {
-
-            // Initialize the houses and houseStars to be zero for each player
-            int totalHouseStars = 0;
+            // Initialize the valid district houses to be zero
             int totalValidHouses = 0;
-
-
 
             ArrayList<ArrayList<HexCoord>> mergeList = splitHouseTiles();
 
             var mergeFlag = true;
 
             while (mergeFlag == true) {
-
                 mergeFlag = false;
-
-                if (mergeList.size() % 2 == 1) {
-                    System.out.println("Odd");
-                }
-
                 for (int i = 0; i < mergeList.size(); i = i+2) {
                     var firstList = mergeList.get(i);
                     ArrayList<HexCoord> secondList;
@@ -532,10 +496,6 @@ public class Board {
                     } else {
                         secondList = mergeList.get(i+1);
                     }
-
-
-                    System.out.println(firstList.size() + "  1");
-                    System.out.println(secondList.size() + "  2");
 
                     ArrayList<HexCoord> surroundsList = new ArrayList<>();
 
@@ -547,9 +507,6 @@ public class Board {
                     }
 
                     for (int j = 0; j < surroundsList.size(); j++) {
-
-                        System.out.println(surroundsList.get(j) + " " + i);
-
                         for (var coord : secondList) {
                             if (coord.equals(surroundsList.get(j))) {
                                 merge(mergeList, firstList, secondList);
@@ -560,7 +517,6 @@ public class Board {
                 }
             }
 
-            System.out.println("Done");
 
             ArrayList<HexCoord> largestGroup = mergeList.get(0);
 
@@ -570,21 +526,13 @@ public class Board {
                 }
             }
 
-
-
-
             for (var coord : largestGroup) {
-                System.out.println(coord);
-
                 totalValidHouses += getTile(coord).getHeight();
             }
 
-            System.out.println(totalValidHouses);
-
-
             return starCount(District.HOUSES) * totalValidHouses;
         }
-        return 5;
+        return 0;
     }
 
     private ArrayList<HexCoord> getTilesOfType(District district) {
@@ -609,13 +557,10 @@ public class Board {
             }
         }
         mergeList.remove(secondList);
-        System.out.println("Merge");
     }
 
     private ArrayList<ArrayList<HexCoord>> splitHouseTiles() {
-
         ArrayList<ArrayList<HexCoord>> mergeList = new ArrayList<>();
-
         for (int i = 0; i < surfaceTiles.length; i++) {
             for (int j = 0; j < surfaceTiles[i].length; j++) {
                 if (surfaceTiles[i][j] != null && surfaceTiles[i][j].getDistrictType().equals(District.HOUSES)) {
@@ -625,7 +570,6 @@ public class Board {
                 }
             }
         }
-
         return mergeList;
     }
 
@@ -643,46 +587,238 @@ public class Board {
         return stars;
     }
 
-    private boolean mergeSet(HashSet<Tile> set, ArrayList<HashSet<Tile>> mergeSetList) {
-        for (var tile : set) {
+    /**
+     * Method to calculate the market score for a single board given if the market variant is enabled or not.
+     * Note: This function does not use the helper function starCount to reduce complexity as that the use
+     *       of that helper function here will increase the number of total iterations required to calculate the score.
+     * @author u7330006
+     * @param variant the market scoring variant
+     * @return the market score for the board
+     */
+    public int calculateMarketScore(boolean variant) {
 
-            var surrounds = getAdjacentTiles(tile);
+        // Initialize the markets and marketStars to be zero for each player
+        int totalMarketStars = 0;
+        int totalValidMarkets = 0;
 
-            for(var otherSet : mergeSetList) {
-                if (!otherSet.equals(set)) {
-                    for (var adjacentTile : surrounds) {
-                        if (otherSet.contains(adjacentTile)) {
-                            for (var otherTile : otherSet) {
-                                set.add(otherTile);
-                            }
-                            mergeSetList.remove(otherSet);
-                            return true;
+        // Iterate through the playerTiles to find marketPlazas stars and market districts to calculate scores
+        for (int m = 0; m < surfaceTiles.length; m++) {
+            for (int n = 0; n < surfaceTiles[m].length; n++) {
+                Tile tile = surfaceTiles[m][n];
+                HexCoord point = new HexCoord(m - 100, n - 100);
+
+                // If the tile is null, ignore the current iteration
+                if (tile == null) {
+                    continue;
+                }
+
+                // Increment the totalMarketStars if they are a plaza and don't count plazas for districts
+                if (tile.getPlaza() && tile.getDistrictType() == District.MARKETS) {
+                    totalMarketStars += tile.getStars(tile);
+                    continue;
+                }
+
+                // Count the emptySpaces of the current tile
+                HexCoord[] surroundingHexCoords = point.getSurroundings();
+                int adjacentMarketDistricts = 0;
+                int adjacentMarketPlazas = 0;
+                // Count how many of the surrounding spaces are empty
+                for (int j = 0; j < surroundingHexCoords.length; j++) {
+                    Tile surroundingTile = getTile(surroundingHexCoords[j]);
+                    if (surroundingTile == null) { continue; }
+                    if (surroundingTile.getDistrictType() == District.MARKETS) {
+                        if (surroundingTile.getPlaza()) {
+                            adjacentMarketPlazas++;
+                        }
+                        else {
+                            adjacentMarketDistricts++;
+                        }
+                    }
+                }
+
+                // Increment the district count
+                if (tile.getDistrictType() == District.MARKETS) {
+                    if (adjacentMarketDistricts == 0) {
+                        if (variant && adjacentMarketPlazas >= 1) {
+                            totalValidMarkets += 2 * (tile.getHeight() + 1);
+                        }
+                        else {
+                            totalValidMarkets += tile.getHeight()+1;
                         }
                     }
                 }
             }
         }
-        return false;
+        int marketScore = totalMarketStars * totalValidMarkets;
+        return marketScore;
     }
 
+    /**
+     * Method to calculate the barack score for a single board given if the barrack variant is enabled or not.
+     * Note: This function does not use the helper function starCount to reduce complexity as that the use
+     *       of that helper function here will increase the number of total iterations required to calculate the score.
+     * @author u7330006
+     * @param variant the barrack scoring variant
+     * @return the barrack score for the board
+     */
+    public int calculateBarrackScore(boolean variant) {
+        // Initialize the barracks and barrackStars to be zero for each player
+        int totalBarrackStars = 0;
+        int totalValidBarracks = 0;
 
-    
-    public ArrayList<Tile> getAdjacentTiles(Tile tile) {
+        // Iterate through the playerTiles to find barrackPlazas stars and barrack districts to calculate scores
+        for (int m = 0; m < surfaceTiles.length; m++) {
+            for (int n = 0; n < surfaceTiles[m].length; n++) {
+                Tile tile = surfaceTiles[m][n];
+                HexCoord point = new HexCoord(m - 100, n - 100);
 
-        ArrayList<Tile> adjacentTiles = new ArrayList<>();
+                // If the tile is null, ignore the current iteration
+                if (tile == null) {
+                    continue;
+                }
 
-        for (int i = 0; i < surfaceTiles.length; i++) {
-            for (int j = 0; j < surfaceTiles[i].length; j++) {
-                if (tile.equals(surfaceTiles[i][j])) {
-                    var surroundingHexes = (new HexCoord(i-100, j-100)).getSurroundings();
-                    for (HexCoord surroundingHex : surroundingHexes) {
-                        adjacentTiles.add(getTile(surroundingHex));
+                // Increment the totalBarrackStars if they are a plaza and don't count plazas for districts
+                if (tile.getPlaza() && tile.getDistrictType() == District.BARRACKS) {
+                    totalBarrackStars += tile.getStars(tile);
+                    continue;
+                }
+
+                // Count the emptySpaces of the current tile
+                HexCoord[] surroundingHexCoords = point.getSurroundings();
+                int emptySpaces = 0;
+                // Count how many of the surrounding spaces are empty
+                for (int j = 0; j < surroundingHexCoords.length; j++) {
+                    if (getTile(surroundingHexCoords[j]) == null) {
+                        emptySpaces ++;
+                    }
+                }
+
+                // Increment the district count
+                if (tile.getDistrictType() == District.BARRACKS) {
+                    if (emptySpaces >= 1) {
+                        if (variant && (emptySpaces == 3 || emptySpaces == 4)) {
+                            totalValidBarracks += 2 * (tile.getHeight() + 1);
+                        }
+                        else {
+                            totalValidBarracks += tile.getHeight() + 1;
+                        }
                     }
                 }
             }
         }
-        return adjacentTiles;
+        int barrackScore = totalBarrackStars * totalValidBarracks;
+        return barrackScore;
     }
+
+
+    /**
+     * Method to calculate the temple score for a single board given if the temple variant is enabled or not.
+     * Note: This function does not use the helper function starCount to reduce complexity as that the use
+     *       of that helper function here will increase the number of total iterations required to calculate the score.
+     * @author u7330006
+     * @param variant the temple scoring variant
+     * @return the temple score for the board
+     */
+    public int calculateTempleScore(boolean variant) {
+        // Initialize the temples and templeStars to be zero for each player
+        int totalTempleStars = 0;
+        int totalValidTemples = 0;
+
+        // Iterate through the playerTiles to find templePlazas stars and temple districts to calculate scores
+        for (int m = 0; m < surfaceTiles.length; m++) {
+            for (int n = 0; n < surfaceTiles[m].length; n++) {
+                Tile tile = surfaceTiles[m][n];
+                HexCoord point = new HexCoord(m - 100, n - 100);
+
+                // If the tile is null, ignore the current iteration
+                if (tile == null) { continue; }
+
+                // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
+                if (tile.getPlaza() && tile.getDistrictType() == District.TEMPLES) {
+                    totalTempleStars += tile.getStars(tile);
+                    continue;
+                }
+
+                // Check if the tile is surrounded
+                boolean isSurrounded = true;
+                HexCoord[] surroundingHexCoords = point.getSurroundings();
+                // If any of the surrounding tiles are null, the temple isn't completely surrounded
+                for (int j = 0; j < surroundingHexCoords.length; j++) {
+                    if (getTile(surroundingHexCoords[j]) == null) {
+                        isSurrounded = false;
+                        break;
+                    }
+                }
+
+                // Increment district count
+                if (tile.getDistrictType() == District.TEMPLES) {
+                    // If the temple is completely surrounded, the temple is valid for scoring
+                    if (isSurrounded) {
+                        if (variant && tile.getHeight() >= 1) {
+                            totalValidTemples += 2 * (tile.getHeight() + 1);
+                        } else {
+                            totalValidTemples += tile.getHeight() + 1;
+                        }
+                    }
+                }
+            }
+        }
+        int templeScore = totalTempleStars * totalValidTemples;
+        return templeScore;
+    }
+
+    /**
+     * Method to calculate the garden score for a single board given if the garden variant is enabled or not.
+     * Note: This function does not use the helper function starCount to reduce complexity as that the use
+     *       of that helper function here will increase the number of total iterations required to calculate the score.
+     * @author u7330006
+     * @param variant the garden scoring variant
+     * @return the garden score for the board
+     */
+    public int calculateGardenScore(boolean variant) {
+        // Initialize the gardens and gardenStars to be zero for each player
+        int totalGardenStars = 0;
+        int totalValidGardens = 0;
+
+        // Iterate through the playerTiles to find gardenPlazas stars and garden districts to calculate scores
+        for (int m = 0; m < surfaceTiles.length; m++) {
+            for (int n = 0; n < surfaceTiles[m].length; n++) {
+                Tile tile = surfaceTiles[m][n];
+                HexCoord point = new HexCoord(m - 100, n - 100);
+
+                // If the tile is null ignore the current iteration
+                if (tile == null) { continue; }
+
+                // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
+                if (tile.getPlaza() && tile.getDistrictType() == District.GARDENS) {
+                    totalGardenStars += tile.getStars(tile);
+                    continue;
+                }
+
+                // Check if the garden is adjacent to a lake
+                HexCoord[] surroundingHexCoords = point.getSurroundings();
+                boolean adjacentToLake = false;
+                for (int j = 0; j < surroundingHexCoords.length; j++) {
+                    if (isLakeSingleTile(surroundingHexCoords[j])) {
+                        adjacentToLake = true;
+                        break;
+                    }
+                }
+
+                // Increment the district count
+                if (tile.getDistrictType() == District.GARDENS) {
+                    if (variant && adjacentToLake) {
+                        totalValidGardens += 2 * (tile.getHeight()+1);
+                    } else {
+                        totalValidGardens += tile.getHeight()+1;
+                    }
+                }
+            }
+        }
+        int gardenScore = totalGardenStars * totalValidGardens;
+        return gardenScore;
+    }
+
 
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
@@ -695,4 +831,7 @@ public class Board {
     public int getBoardRadiusY() {
         return boardRadiusY;
     }
+
+
+
 }

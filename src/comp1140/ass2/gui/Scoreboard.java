@@ -16,19 +16,19 @@ import javafx.scene.paint.Color;
 
  // Dependency on score calculation tasks
 public class Scoreboard extends Label {
-    Scoreboard(String gameState) {
-        Akropolis akropolis = new Akropolis(gameState);
-        int[] scores = Akropolis.calculateCompleteScores(gameState);
+    private final VBox scoreboardVBox = new VBox(10);
+    Scoreboard(Akropolis akropolis) {
+        int[] scores = akropolis.calculateCompleteScores();
         int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] playerStones = Akropolis.calculatePlayerStones(gameState);
+        int[] playerStones = akropolis.calculatePlayerStones();
 
 
         // Organise the scoreboard into a vertical box
-        VBox scoreboardVBox = new VBox(10);
         scoreboardVBox.setAlignment(Pos.CENTER);
 
         // Apply stone texture to the VBox
-        scoreboardVBox.setStyle("-fx-background-color: derive(stone, 20%);");
+        scoreboardVBox.setStyle("-fx-background-color: lightblue;");
+
 
         for (int i = 0; i < numberOfPlayers; i++) {
             // For each player make a horizontal box to display their scores and stone count
@@ -55,5 +55,10 @@ public class Scoreboard extends Label {
         // Set the VBox as the content of the Label
         this.setGraphic(scoreboardVBox);
 
+    }
+
+    // Method to get the height of the scoreboard
+    public double getScoreboardHeight() {
+        return scoreboardVBox.getBoundsInLocal().getHeight();
     }
 }
