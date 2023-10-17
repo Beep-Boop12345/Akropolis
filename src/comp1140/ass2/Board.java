@@ -405,44 +405,50 @@ public class Board {
         return yPos > 199 || yPos < 0;
     }
 
+    /**
+     * Calculates the house score for this boards current state
+     * @param variant Determines whether to use the variant calculation
+     * @return A single number value representing this player's house score
+     * @author u7683699
+     */
     public int calculateHouseScore(boolean variant) {
 
+        //Get all the relevant coordinates
         ArrayList<HexCoord> listOfCoords = getTilesOfType(District.HOUSES);
 
+        //This array tracks all the separate groups of houses we find
         ArrayList<ArrayList<HexCoord>> foundGroups = new ArrayList<>();
 
+        //For each coordinate if it is not already in a found group, start a new group and explore it
         outerLoop:
-        for (int i = 0; i < listOfCoords.size(); i++) {
+        for (HexCoord coord : listOfCoords) {
 
             for (var group : foundGroups) {
-                if (group.contains(listOfCoords.get(i))) {
+                if (group.contains(coord)) {
                     continue outerLoop;
                 }
             }
 
             ArrayList<HexCoord> newGroup = new ArrayList<>();
-            newGroup.add(listOfCoords.get(i));
+
+            newGroup.add(coord);
             foundGroups.add(newGroup);
-            findSurroundingHouses(newGroup, listOfCoords.get(i));
 
-        }
-
-        System.out.println("Found groups: " + foundGroups.size());
-
-        for (var group : foundGroups) {
-            System.out.println(group.size());
+            findSurroundingHouses(newGroup, coord);
         }
 
         ArrayList<ArrayList<HexCoord>> largestGroups = new ArrayList<>();
 
+        //If there are no groups of houses
         if (foundGroups.size() < 1) {
             return 0;
         }
+
         largestGroups.add(foundGroups.get(0));
 
+        //Finds all max groups
         for (var group : foundGroups) {
             if (group.size() > largestGroups.get(0).size()) {
-                System.out.println("Larger");
                 largestGroups = new ArrayList<>();
                 largestGroups.add(group);
             } else if (group.size() == largestGroups.get(0).size()) {
@@ -450,15 +456,15 @@ public class Board {
             }
         }
 
-        System.out.println("Largest: " + largestGroups.get(0).size());
-
         ArrayList<Integer> largestScores = new ArrayList<>();
 
+        //Calculates all scores for the largest groups
         for (var largeGroup : largestGroups) {
 
             var score = 0;
 
             for (var coord : largeGroup) {
+
                 var tile = getTile(coord);
                 var tileHeight = tile.getHeight();
 
@@ -476,212 +482,100 @@ public class Board {
 
         var largestScore = largestScores.get(0);
 
+        //Finds the max score
         for (var score : largestScores) {
             if (score > largestScore) {
                 largestScore = score;
             }
         }
 
-        var stars = starCount(District.HOUSES);
+        var stars = starCountOfType(District.HOUSES);
 
-        System.out.println("Stars: " + stars);
         return largestScore * stars;
-
     }
 
 
+    /**
+     * Recursively finds the house tiles surrounding the given hexcoord and modifies the group given.
+     * @param housesInGroup The current group being explored
+     * @param currentCoord The current hex coordinate having its surroundings checked
+     * @author u7683699
+     */
     private void findSurroundingHouses(ArrayList<HexCoord> housesInGroup, HexCoord currentCoord) {
 
         var surrounds = currentCoord.getSurroundings();
 
         for (int i = 0; i < surrounds.length; i++) {
             var surroundingTile = getTile(surrounds[i]);
-            if (!housesInGroup.contains(surrounds[i]) && surroundingTile != null && surroundingTile.getDistrictType().equals(District.HOUSES) && !surroundingTile.getPlaza()) {
-                housesInGroup.add(surrounds[i]);
-                findSurroundingHouses(housesInGroup, surrounds[i]);
+
+            var notNull = surroundingTile != null;
+
+            if (notNull) {
+
+                var notInGroup = !housesInGroup.contains(surrounds[i]);
+                var isHouse = surroundingTile.getDistrictType().equals(District.HOUSES);
+                var notPlaza = !surroundingTile.getPlaza();
+
+                if (notInGroup && isHouse && notPlaza) {
+                    housesInGroup.add(surrounds[i]);
+                    findSurroundingHouses(housesInGroup, surrounds[i]);
+                }
             }
         }
     }
 
-    public int calculateHouseScore1(boolean variant) {
-        if (!variant) {
-
-            // Initialize the houses and houseStars to be zero for each player
-            int totalHouseStars = 0;
-            int totalValidHouses = 0;
-
-
-
-            ArrayList<ArrayList<HexCoord>> mergeList = splitHouseTiles();
-
-            var mergeFlag = true;
-
-            while (mergeFlag == true) {
-
-                mergeFlag = false;
-
-                if (mergeList.size() % 2 == 1) {
-                    System.out.println("Odd");
-                }
-
-                for (int i = 0; i < mergeList.size(); i = i+2) {
-                    var firstList = mergeList.get(i);
-                    ArrayList<HexCoord> secondList;
-                    if (i + 1 >= mergeList.size()) {
-                        secondList = mergeList.get(0);
-                    } else {
-                        secondList = mergeList.get(i+1);
-                    }
-
-
-                    System.out.println(firstList.size() + "  1");
-                    System.out.println(secondList.size() + "  2");
-
-                    ArrayList<HexCoord> surroundsList = new ArrayList<>();
-
-                    for (int j = 0; j < firstList.size(); j++) {
-                        var surrounds = firstList.get(j).getSurroundings();
-                        for (int k = 0; k < surrounds.length; k++) {
-                            surroundsList.add(surrounds[k]);
-                        }
-                    }
-
-                    for (int j = 0; j < surroundsList.size(); j++) {
-
-                        System.out.println(surroundsList.get(j) + " " + i);
-
-                        for (var coord : secondList) {
-                            if (coord.equals(surroundsList.get(j))) {
-                                merge(mergeList, firstList, secondList);
-                                mergeFlag = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            System.out.println("Done");
-
-            ArrayList<HexCoord> largestGroup = mergeList.get(0);
-
-            for (var group : mergeList) {
-                if (group.size() > largestGroup.size()) {
-                    largestGroup = group;
-                }
-            }
-
-
-
-
-            for (var coord : largestGroup) {
-                System.out.println(coord);
-
-                totalValidHouses += getTile(coord).getHeight();
-            }
-
-            System.out.println(totalValidHouses);
-
-
-            return starCount(District.HOUSES) * totalValidHouses;
-        }
-        return 5;
-    }
-
+    /**
+     * Finds the positions on the board of tiles of this district type
+     * @param district The type of tile that is looked for
+     * @return A list of hex coordinates that are only of the district type
+     * @author u7683699
+     */
     private ArrayList<HexCoord> getTilesOfType(District district) {
 
         ArrayList<HexCoord> listOfCoords = new ArrayList<>();
 
         for (int i = 0; i < surfaceTiles.length; i++) {
             for (int j = 0; j < surfaceTiles[i].length; j++) {
+
                 var tile = surfaceTiles[i][j];
-                if (tile != null && tile.getDistrictType().equals(district) && !tile.getPlaza()) {
-                    listOfCoords.add( new HexCoord(i-100, j-100));
+
+                var notNull = tile != null;
+
+                if (notNull) {
+
+                    var equalDistrict = tile.getDistrictType().equals(district);
+                    var notPlaza = !tile.getPlaza();
+
+                    if (equalDistrict && notPlaza) {
+                        var hexPosition = new HexCoord(i - 100, j - 100);
+                        listOfCoords.add(hexPosition);
+                    }
                 }
             }
         }
         return listOfCoords;
     }
 
-    private void merge(ArrayList<ArrayList<HexCoord>> mergeList, ArrayList<HexCoord> firstList, ArrayList<HexCoord> secondList) {
-        for (int i = 0; i < secondList.size(); i++) {
-            if (!firstList.contains(secondList.get(i))) {
-                firstList.add(secondList.get(i));
-            }
-        }
-        mergeList.remove(secondList);
-        System.out.println("Merge");
-    }
+    /**
+     * Gives the number of stars in the plazas of this district type
+     * @param district The district type being counted
+     * @return A number of stars in the plazas of the district type
+     * @author u7683699
+     */
+    private int starCountOfType(District district) {
 
-    private ArrayList<ArrayList<HexCoord>> splitHouseTiles() {
-
-        ArrayList<ArrayList<HexCoord>> mergeList = new ArrayList<>();
-
-        for (int i = 0; i < surfaceTiles.length; i++) {
-            for (int j = 0; j < surfaceTiles[i].length; j++) {
-                if (surfaceTiles[i][j] != null && surfaceTiles[i][j].getDistrictType().equals(District.HOUSES)) {
-                    ArrayList<HexCoord> singleTile = new ArrayList<>();
-                    singleTile.add(new HexCoord(i -100, j-100));
-                    mergeList.add(singleTile);
-                }
-            }
-        }
-
-        return mergeList;
-    }
-
-    private int starCount(District district) {
         int stars = 0;
-        for (int i = 0; i < surfaceTiles.length; i++) {
-            for (int j = 0; j < surfaceTiles[i].length; j++) {
-                if (surfaceTiles[i][j] != null && surfaceTiles[i][j].getDistrictType().equals(district)) {
-                    if (surfaceTiles[i][j].getPlaza()) {
-                        stars += surfaceTiles[i][j].getStars(surfaceTiles[i][j]);
+
+        for (Tile[] surfaceTileRow : surfaceTiles) {
+            for (Tile tile : surfaceTileRow) {
+                if (tile != null && tile.getDistrictType().equals(district)) {
+                    if (tile.getPlaza()) {
+                        stars += tile.getStars(tile);
                     }
                 }
             }
         }
         return stars;
-    }
-
-    private boolean mergeSet(HashSet<Tile> set, ArrayList<HashSet<Tile>> mergeSetList) {
-        for (var tile : set) {
-
-            var surrounds = getAdjacentTiles(tile);
-
-            for(var otherSet : mergeSetList) {
-                if (!otherSet.equals(set)) {
-                    for (var adjacentTile : surrounds) {
-                        if (otherSet.contains(adjacentTile)) {
-                            for (var otherTile : otherSet) {
-                                set.add(otherTile);
-                            }
-                            mergeSetList.remove(otherSet);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-
-    
-    public ArrayList<Tile> getAdjacentTiles(Tile tile) {
-
-        ArrayList<Tile> adjacentTiles = new ArrayList<>();
-
-        for (int i = 0; i < surfaceTiles.length; i++) {
-            for (int j = 0; j < surfaceTiles[i].length; j++) {
-                if (tile.equals(surfaceTiles[i][j])) {
-                    var surroundingHexes = (new HexCoord(i-100, j-100)).getSurroundings();
-                    for (HexCoord surroundingHex : surroundingHexes) {
-                        adjacentTiles.add(getTile(surroundingHex));
-                    }
-                }
-            }
-        }
-        return adjacentTiles;
     }
 
     public Tile[][] getSurfaceTiles() {
