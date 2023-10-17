@@ -578,6 +578,43 @@ public class Board {
         return stars;
     }
 
+    /**
+     * Calculates the market score for this board's current state
+     * @param variant Determines whether to use the variant calculation
+     * @return A single number value representing this player's market score
+     * @author u7683699
+     */
+    public int calculateMarketScore(boolean variant) {
+
+        int marketStars = starCountOfType(District.MARKETS);
+        int totalMarketScore = 0;
+
+        var listOfCoords = getTilesOfType(District.MARKETS);
+
+        outerLoop:
+        for (var coord : listOfCoords) {
+
+            var adjacentTilePositions = coord.getSurroundings();
+            var variantMultiplier = 1;
+
+            for (var adjacentTilePosition : adjacentTilePositions) {
+
+                var adjacentTile = getTile(adjacentTilePosition);
+
+                if (adjacentTile != null && adjacentTile.getDistrictType().equals(District.MARKETS)) {
+                    if (!adjacentTile.getPlaza()) {
+                        continue outerLoop;
+                    }
+                    if (variant) {
+                        variantMultiplier = 2;
+                    }
+                }
+            }
+            totalMarketScore += (getTile(coord).getHeight() + 1) * variantMultiplier;
+        }
+        return totalMarketScore * marketStars;
+    }
+
     public Tile[][] getSurfaceTiles() {
         return surfaceTiles;
     }
