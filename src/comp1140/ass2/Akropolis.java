@@ -71,7 +71,7 @@ public class Akropolis {
         this.currentPlayers = new Player[numberOfPlayers];
         this.currentTurn = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
-            currentPlayers[i] = new Player(i,new Board(i),0);
+            currentPlayers[i] = new Player(i,new Board(i),i+1);
         }
         this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
         this.stack = new Stack(getInitialStack());

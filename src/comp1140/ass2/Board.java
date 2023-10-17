@@ -459,7 +459,7 @@ public class Board {
             }
         }
 
-        var stars = starCount(District.HOUSES);
+        var stars = starCountOfType(District.HOUSES);
         return largestScore * stars;
     }
 
@@ -487,11 +487,6 @@ public class Board {
         }
     }
 
-            return starCount(District.HOUSES) * totalValidHouses;
-        }
-        return 0;
-    }
-
     private ArrayList<HexCoord> getTilesOfType(District district) {
 
         ArrayList<HexCoord> listOfCoords = new ArrayList<>();
@@ -507,30 +502,7 @@ public class Board {
         return listOfCoords;
     }
 
-    private void merge(ArrayList<ArrayList<HexCoord>> mergeList, ArrayList<HexCoord> firstList, ArrayList<HexCoord> secondList) {
-        for (int i = 0; i < secondList.size(); i++) {
-            if (!firstList.contains(secondList.get(i))) {
-                firstList.add(secondList.get(i));
-            }
-        }
-        mergeList.remove(secondList);
-    }
-
-    private ArrayList<ArrayList<HexCoord>> splitHouseTiles() {
-        ArrayList<ArrayList<HexCoord>> mergeList = new ArrayList<>();
-        for (int i = 0; i < surfaceTiles.length; i++) {
-            for (int j = 0; j < surfaceTiles[i].length; j++) {
-                if (surfaceTiles[i][j] != null && surfaceTiles[i][j].getDistrictType().equals(District.HOUSES)) {
-                    ArrayList<HexCoord> singleTile = new ArrayList<>();
-                    singleTile.add(new HexCoord(i -100, j-100));
-                    mergeList.add(singleTile);
-                }
-            }
-        }
-        return mergeList;
-    }
-
-    private int starCount(District district) {
+    private int starCountOfType(District district) {
         int stars = 0;
         for (int i = 0; i < surfaceTiles.length; i++) {
             for (int j = 0; j < surfaceTiles[i].length; j++) {
