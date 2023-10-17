@@ -149,11 +149,32 @@ public class VisualBoard extends Group {
     private double[] windowPositionOfMove(Move move) {
         int xCoordinate = move.getPosition().getPos().getX();
         int yCoordinate = move.getPosition().getPos().getY();
+        Rotation rotation = move.getPosition().getRot();
+
+
+
         int sideLength = 30;
 
-        double xOffset = Math.abs(xCoordinate % 2);
         double yLength = sideLength * (Math.sin(Math.toRadians(60)));
 
+        switch (rotation) {
+            case DEG_120:
+                xCoordinate += 0;
+                yCoordinate += - 1;
+                break;
+            case DEG_240:
+                xCoordinate += -1;
+                yCoordinate += 0 - Math.abs(xCoordinate % 2);
+                break;
+            case DEG_180:
+                xCoordinate += -1;
+                yCoordinate += -1*Math.abs(xCoordinate % 2);
+                break;
+            case DEG_300:
+                yCoordinate += Math.abs(xCoordinate % 2);
+                xCoordinate += -1;
+        }
+        double xOffset = Math.abs(xCoordinate % 2);
         double xPos = 1.5 * xCoordinate * sideLength;
         double yPos = -2 * yCoordinate * yLength - xOffset * yLength;
 
