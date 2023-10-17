@@ -54,13 +54,22 @@ public class Viewer extends Application {
 
 
 
-        /* New Code to Display Scoreboard including Stones and playerScores
-        Scoreboard, scoreboard = new Scoreboard(state);
+        // New Code to Display Scoreboard including Stones and playerScores
+        Scoreboard scoreboard = new Scoreboard(akropolis);
+
+
+        var scoreboardPosX = VIEWER_WIDTH * 0.1;
+        var scoreboardPosY = (VIEWER_HEIGHT - scoreboard.getScoreboardHeight()) / 2;
+        scoreboard.setLayoutX(scoreboardPosX);
+        scoreboard.setLayoutY(scoreboardPosY);
         newView.getChildren().add(scoreboard);
-        */
 
         //Constructs A Visual Board Object by Creating the String Instanced Board Object
         VisualBoard currentBoard = new VisualBoard(akropolis.getCurrentPlayer().getBoard(), this);
+        var sitePosX = VIEWER_WIDTH * 0.85;
+        var sitePosY = VIEWER_HEIGHT*0.05;
+
+
         board = currentBoard;
 
         currentBoard.setLayoutX(VIEWER_WIDTH/2);
@@ -69,8 +78,6 @@ public class Viewer extends Application {
         newView.getChildren().add(currentBoard);
 
         //Constructs A Visual Construction Site Object by Instancing the Construction Site Class
-        var sitePosX = VIEWER_WIDTH * 0.85;
-        var sitePosY = VIEWER_HEIGHT*0.05;
         var subSite = akropolis.getConstructionSite();
 
         VisualConstructionSite currentConstructionSite = new VisualConstructionSite(sitePosX,

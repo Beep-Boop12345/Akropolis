@@ -1,6 +1,7 @@
 package comp1140.ass2.gui;
 
 
+import comp1140.ass2.Akropolis;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,8 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-import java.util.HashSet;
-import java.util.Random;
+
 
 /**
  * This class is responsible for initializing the game, allowing users to select the number of players and score variants.
@@ -22,13 +22,12 @@ import java.util.Random;
  */
 
 public class Setup {
-    private static String gameState;
     private static Stage primaryStage = new Stage();
     private static final int SETUP_WIDTH = 1200*3/4;
     private static final int SETUP_HEIGHT = 750*3/4;
     private static int playerCount = 2;
 
-    private static char[] scoreVariants = {'h', 'm', 'b', 't', 'g'};
+    private static boolean[] scoreVariants = {false,false,false,false,false};
     private static final StackPane background = new StackPane();
 
     private static final Group controls = new Group();
@@ -126,110 +125,55 @@ public class Setup {
 
         housesVariant.setOnAction(event -> {
             if (housesVariant.isSelected()) {
-                scoreVariants[0] = 'H';
+                scoreVariants[0] = true;
             } else {
-                scoreVariants[0] = 'h';
+                scoreVariants[0] = false;
             }
         });
 
         marketsVariant.setOnAction(event -> {
             if (marketsVariant.isSelected()) {
-                scoreVariants[1] = 'M';
+                scoreVariants[1] = true;
             } else {
-                scoreVariants[1] = 'm';
+                scoreVariants[1] = false;
             }
         });
 
         barracksVariant.setOnAction(event -> {
             if (barracksVariant.isSelected()) {
-                scoreVariants[2] = 'B';
+                scoreVariants[2] = true;
             } else {
-                scoreVariants[2] = 'b';
+                scoreVariants[2] = false;
             }
         });
 
         templesVariant.setOnAction(event -> {
             if (templesVariant.isSelected()) {
-                scoreVariants[3] = 'T';
+                scoreVariants[3] = true;
             } else {
-                scoreVariants[3] = 't';
+                scoreVariants[3] = false;
             }
         });
 
         gardensVariant.setOnAction(event -> {
             if (gardensVariant.isSelected()) {
-                scoreVariants[4] = 'G';
+                scoreVariants[4] = true;
             } else {
-                scoreVariants[4] = 'g';
+                scoreVariants[4] = false;
             }
         });
 
         /* If the playButton is hit the game will start, the play button generates
            the first gameState string that will start the game                     */
         playButton.setOnAction(e -> {
-            String settings = playerCount + new String(scoreVariants) + ";";
-            // Initialize tileID for playerCount
-            int maxTileID;
-            switch (playerCount) {
-                case 2: maxTileID = 37; break;
-                case 3: maxTileID = 49; break;
-                default: maxTileID = 61; break;
-            }
 
-            // Initialize shared to "0"
-            StringBuilder shared = new StringBuilder("0");
-
-            // Determine size of the construction site based on playerCount
-            int constructionSiteSize;
-            switch (playerCount) {
-                case 2: constructionSiteSize = 4; break;
-                case 3: constructionSiteSize = 5; break;
-                default: constructionSiteSize = 6; break;
-            }
-
-            // Create the construction site
-            java.util.Set<String> generatedTileIDs = new HashSet<>();
-            while (generatedTileIDs.size() < constructionSiteSize) {
-                Random random = new Random();
-                int tileID = random.nextInt(maxTileID + 1);
-                String tileIDString;
-
-                if (tileID < 10) {
-                    tileIDString = "0" + tileID;
-                } else {
-                    tileIDString = String.valueOf(tileID);
-                }
-
-                if (!generatedTileIDs.contains(tileIDString)) {
-                    generatedTileIDs.add(tileIDString);
-                }
-            }
-
-            // Append the construction site onto the shared string
-            for (String tileID : generatedTileIDs) {
-                shared.append(tileID);
-            }
-            shared.append(";");
-            String playerStrings;
-            switch (playerCount) {
-                case 2:
-                    playerStrings = "P001;P102;";
-                    break;
-                case 3:
-                    playerStrings = "P001;P102;P203;";
-                    break;
-                default:
-                    playerStrings = "P001;P102;P203;P304;";
-                    break;
-            }
-            gameState = settings + shared + playerStrings;
-            primaryStage.close();
+            Akropolis initalGame = new Akropolis(playerCount,scoreVariants);
 
 
             // Invoke a callback method with the gameState to return the gameState to start the game
-            // todo Akropolis.onGameStart(gameState);
+            // todo Akropolis.onGameStart(initialGame);
 
-            System.out.println(gameState);
+            System.out.println(initalGame);
         });
     }
 

@@ -1,5 +1,7 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gittest.A;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,18 +78,12 @@ public class Akropolis {
     /** Returns the pieces that will be in a newly initialized stack
      * @author u7646615*/
     private Piece[] getInitialStack() {
-        int idCap = 0;
-        switch (numberOfPlayers) {
-            case 2:
-                idCap = 37;
-                break;
-            case 3:
-                idCap = 49;
-                break;
-            case 4:
-                idCap = 61;
-                break;
-        }
+        int idCap = switch (numberOfPlayers) {
+            case 2 -> 37;
+            case 3 -> 49;
+            case 4 -> 61;
+            default -> 0;
+        };
         Piece[] heldPieces = new Piece[idCap];
         for (int i = 0; i < idCap; i++) {
             String pieceIDString = String.valueOf(i+1);
@@ -314,7 +310,7 @@ public class Akropolis {
         Akropolis akropolis = new Akropolis(gameState);
 
         //Resupply Its Construction Site
-        akropolis.constructionSite.resupply(akropolis.stack);
+        akropolis.resupplyConstructionSite();
 
         /*gets the new string representation and incorporates it into the gameState string*/
         String[] gameStateAsArray = gameState.split(";");
@@ -491,6 +487,11 @@ public class Akropolis {
         return newGameState.toString();
     }
 
+    /**
+     * Applies the move to the board and updates the turn
+     * @param move The move to be applied
+     * @author u7683699
+     */
     public void applyMove(Move move) {
 
         /*not required but will be useful when game becomes object reliant*/
@@ -518,17 +519,12 @@ public class Akropolis {
      * @return A set containing all moves that can be played.
  */
     public static Set<String> generateAllValidMoves(String gameState) {
-
         Akropolis akropolis = new Akropolis(gameState);
-
         var moveSet = akropolis.generateAllValidMoves();
-
         Set<String> validMoves = new HashSet<>();
-
         for (var move : moveSet) {
             validMoves.add(move.toString());
         }
-
         return validMoves;
     }
 
@@ -545,9 +541,9 @@ public class Akropolis {
 
         //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
-        System.out.println(boardRadiusX);
+        // System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
-        System.out.println(boardRadiusY);
+        // System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
         int avaliablePiece = constructionSite.getCurrentPieceCount();
@@ -579,16 +575,16 @@ public class Akropolis {
                     for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
-                        System.out.println(move);
+                        // System.out.println(move);
                         validMoves.add(move);
                         //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
-                        System.out.println(move1);
+                        // System.out.println(move1);
                         Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
-                        System.out.println(move2);
+                        // System.out.println(move2);
                         validMoves.add(move1);
                         validMoves.add(move2);
-                        System.out.println("_________________________");
+                        // System.out.println("_________________________");
                     }
                 }
 
@@ -672,135 +668,27 @@ public class Akropolis {
      *
      * @param gameState a state string.
      * @return An array containing the "House" component of the score for each player (ordered by ascending player ID).
+     * @author u7683699
      */
     public static int[] calculateHouseScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-
         return akropolis.calculateHouseScores();
-
     }
 
+    /**
+     * calculates the "House" component of the score for each player in this akropolis instance
+     * @return The house scores for each player
+     * @author u7683699
+     */
     public int[] calculateHouseScores() {
-
-
         int[] houseScoreArray = new int[numberOfPlayers];
-        var variant = scoreVariants[0];
+        boolean variant = scoreVariants[0];
 
         for (int i = 0; i < numberOfPlayers; i++) {
             houseScoreArray[i] = currentPlayers[i].getBoard().calculateHouseScore(variant);
         }
-        System.out.println("_______");
         return houseScoreArray;
     }
-
-    /**
-     * A simple index finder method to find the index of a HexCoord in a HexCoord array.
-     * Returns -1 if the element is not in the array.
-     * @param hexCoords the array you are searching through
-     * @param hexCoord the element in the array you are serching for
-     * @return the index of the element in the array
-     */
-    public static int indexOf(HexCoord[] hexCoords, HexCoord hexCoord) {
-        for (int index = 0; index < hexCoords.length; index++) {
-            if (hexCoords[index].equals(hexCoord)) {
-                return index;
-            }
-        }
-        return -1;
-    }
-
-
-    /**
-     * There's no simple getHexCoord method in board since tiles can be duplicate to one another other
-     * to find a HexCoord of an adjacent tile we have to reference the original tile's HexCoord and
-     * determine it based on that and its position in the surroundingTileHexCoord array found
-     * using the getSurroundings method in the HexCoord class
-     * @param board the original board
-     * @param tileToFind the surroundingTile HexCoord you're searching for
-     * @param point the original point in which the surroundingTile is adjacent to
-     * @return the HexCoord of the surroundingTile
-     */
-    public static HexCoord findSurroundingHexCoord(Board board, Tile tileToFind, HexCoord point) {
-        HexCoord[] surroundingHexCoords = point.getSurroundings();
-
-        for (HexCoord surroundings : surroundingHexCoords) {
-            if (board.getTile(surroundings) == tileToFind) {
-                int x = point.getX();
-                int y = point.getY();
-                int offset = Math.abs(x) % 2;
-                int surroundingTileIndex = indexOf(surroundingHexCoords, surroundings);
-
-                HexCoord surroundingHexCoord = switch (surroundingTileIndex) {
-                    case 0 -> new HexCoord(x, y + 1);
-                    case 1 -> new HexCoord(x + 1, y + offset);
-                    case 2 -> new HexCoord(x + 1, y - 1 + offset);
-                    case 3 -> new HexCoord(x, y - 1);
-                    case 4 -> new HexCoord(x - 1, y - 1 + offset);
-                    case 5 -> new HexCoord(x - 1, y + offset);
-                    default -> null;
-                };
-
-                return surroundingHexCoord;
-            }
-        }
-
-        return null; // Return null only if no matching tile is found in any surroundingHexCoords.
-    }
-
-
-    /**
-     * Given a house district tile, the board it came from and its corresponding HexCoord
-     * Return a set of house tiles that are directly adjacent to one another.
-     * This function is a recursive function taking in a Set of tiles and will stop recursing once it can no longer
-     * find adjacent house tiles within the board to add to the group of adjacent house tiles.
-     * Base Case: Once ALL the surrounding tiles are no longer houses within the board.
-     * @param board the board all the tiles originate from
-     * @param tile the tile you are searching for adjacent house groups for
-     *             (this will change during recursion)
-     * @param point the HexCoord of the tile as we cannot determine HexCoords just based on tiles
-     *                 (as there are duplicate tiles in board)
-     * @param group a set of tiles that represent the largest group of adjacent houses corresponding to a tile
-     *              (this will change during recursion)
-     */
-
-    public static void findHouseGroup(Board board, Tile tile, HexCoord point, Set<Tile> group) {
-        group.add(tile);
-
-        HexCoord[] surroundingHexCoords = point.getSurroundings();
-
-        // Base Case: If all the surroundingTiles are no longer houses that are within the board don't recurse
-        boolean notAllValidHouses = true;
-        for (HexCoord surroundings : surroundingHexCoords) {
-            Tile surroundingTile = board.getTile(surroundings);
-            HexCoord surroundingTileHexCoord = findSurroundingHexCoord(board, tile, point);
-            // If one of the surroundingTiles is valid stop searching for valid tiles and recurse
-            if (tile != null && point != null && surroundingTileHexCoord != null) {
-                if (board.inBounds(surroundingTileHexCoord) && (surroundingTile.getDistrictType() == District.HOUSES)) {
-                    notAllValidHouses = false;
-                    break;
-                }
-            }
-        }
-
-        // Only recurse if one of the surrounding tiles is a house and is within the board
-        if (!notAllValidHouses) {
-            for (HexCoord surroundings : surroundingHexCoords) {
-                Tile surroundingTile = board.getTile(surroundings);
-                HexCoord surroundingTileHexCoord = findSurroundingHexCoord(board, tile, point);
-
-                // If the adjacent tile is a district house add it to the group
-                if (board.inBounds(surroundingTileHexCoord) &&
-                        surroundingTile != null &&
-                        !group.contains(surroundingTile) &&
-                        surroundingTile.getDistrictType() == District.HOUSES &&
-                        !surroundingTile.getPlaza()) {
-                    findHouseGroup(board, surroundingTile, surroundingTileHexCoord, group);
-                }
-            }
-        }
-    }
-
-
 
     /**
      * Given a state string, calculates the "Market" component of the score for each player.
@@ -825,72 +713,17 @@ public class Akropolis {
      */
     public static int[] calculateMarketScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] marketScores = new int[numberOfPlayers];
-        boolean marketScoringVar = akropolis.scoreVariants[1];
+        return akropolis.calculateMarketScores();
+    }
 
-        // Iterate through all the player strings to calculate each player's score
+    public int[] calculateMarketScores() {
+        int[] marketScoreArray = new int[numberOfPlayers];
+        boolean variant = scoreVariants[1];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the markets and marketStars to be zero for each player
-            int totalMarketStars = 0;
-            int totalValidMarkets = 0;
-
-            // Iterate through the playerTiles to find marketPlazas stars and market districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalMarketStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.MARKETS) {
-                        totalMarketStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    int adjacentMarketDistricts = 0;
-                    int adjacentMarketPlazas = 0;
-                    // Count how many of the surrounding spaces are empty
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        Tile surroundingTile = board.getTile(surroundingHexCoords[j]);
-                        if (surroundingTile == null) { continue; }
-                        if (surroundingTile.getDistrictType() == District.MARKETS) {
-                            if (surroundingTile.getPlaza()) {
-                                adjacentMarketPlazas++;
-                            }
-                            else {
-                                adjacentMarketDistricts++;
-                            }
-                        }
-                    }
-
-                    // Increment the district count
-                    if (tile.getDistrictType() == District.MARKETS) {
-                        if (adjacentMarketDistricts == 0) {
-                            if (marketScoringVar && adjacentMarketPlazas >= 1) {
-                                    totalValidMarkets += 2 * (tile.getHeight() + 1);
-                            }
-                            else {
-                                totalValidMarkets += tile.getHeight()+1;
-                            }
-                        }
-                    }
-                }
-            }
-            int marketScore = totalMarketStars * totalValidMarkets;
-            marketScores[i] = marketScore;
+            marketScoreArray[i] = currentPlayers[i].getBoard().calculateMarketScore(variant);
         }
-        return marketScores;
+        return marketScoreArray;
     }
 
     /**
@@ -915,66 +748,20 @@ public class Akropolis {
      * @param gameState a state string.
      * @return An array containing the "Barracks" component of the score for each player (ordered by ascending player ID).
      */
+
     public static int[] calculateBarracksScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] barrackScores = new int[numberOfPlayers];
-        boolean barrackScoringVar = akropolis.scoreVariants[2];
+        return akropolis.calculateBarracksScores();
+    }
 
-        // Iterate through all the player strings to calculate each player's score
+    public int[] calculateBarracksScores() {
+        int[] barrackScoreArray = new int[numberOfPlayers];
+        boolean variant = scoreVariants[2];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the barracks and barrackStars to be zero for each player
-            int totalBarrackStars = 0;
-            int totalValidBarracks = 0;
-
-            // Iterate through the playerTiles to find barrackPlazas stars and barrack districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalBarrackStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.BARRACKS) {
-                        totalBarrackStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Count the emptySpaces of the current tile
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    int emptySpaces = 0;
-                    // Count how many of the surrounding spaces are empty
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        if (board.getTile(surroundingHexCoords[j]) == null) {
-                            emptySpaces ++;
-                        }
-                    }
-
-                    // Increment the district count
-                    if (tile.getDistrictType() == District.BARRACKS) {
-                        if (emptySpaces >= 1) {
-                            if (barrackScoringVar && (emptySpaces == 3 || emptySpaces == 4)) {
-                                totalValidBarracks += 2 * (tile.getHeight() + 1);
-                            }
-                            else {
-                                totalValidBarracks += tile.getHeight() + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            int barrackScore = totalBarrackStars * totalValidBarracks;
-            barrackScores[i] = barrackScore;
+            barrackScoreArray[i] = currentPlayers[i].getBoard().calculateBarrackScore(variant);
         }
-        return barrackScores;
+        return barrackScoreArray;
     }
 
 
@@ -1003,68 +790,18 @@ public class Akropolis {
      */
     public static int[] calculateTempleScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] templeScores = new int[numberOfPlayers];
-        boolean templeScoringVar = akropolis.scoreVariants[3];
-
-        // Iterate through all the player strings to calculate each player's score
-        for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the temples and templeStars to be zero for each player
-            int totalTempleStars = 0;
-            int totalValidTemples = 0;
-
-            // Iterate through the playerTiles to find templePlazas stars and temple districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null, ignore the current iteration
-                    if (tile == null) {
-                        continue;
-                    }
-
-                    // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.TEMPLES) {
-                        totalTempleStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Check if the tile is surrounded
-                    boolean isSurrounded = true;
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    // If any of the surrounding tiles are null, the temple isn't completely surrounded
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        if (board.getTile(surroundingHexCoords[j]) == null) {
-                            isSurrounded = false;
-                            break;
-                        }
-                    }
-
-                    // Increment district count
-                    if (tile.getDistrictType() == District.TEMPLES) {
-                        // If the temple is completely surrounded, the temple is valid for scoring
-                        if (isSurrounded) {
-                            if (templeScoringVar && tile.getHeight() >= 1) {
-                                    totalValidTemples += 2 * (tile.getHeight() + 1);
-                            } else {
-                                totalValidTemples += tile.getHeight() + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            int templeScore = totalTempleStars * totalValidTemples;
-            templeScores[i] = templeScore;
-        }
-        return templeScores;
+        return akropolis.calculateTempleScores();
     }
 
+    public int[] calculateTempleScores() {
+        int[] templeScoreArray = new int[numberOfPlayers];
+        boolean variant = scoreVariants[3];
 
+        for (int i = 0; i < numberOfPlayers; i++) {
+           templeScoreArray[i] = currentPlayers[i].getBoard().calculateTempleScore(variant);
+        }
+        return templeScoreArray;
+    }
 
     /**
      * Given a state string, calculates the "Garden" component of the score for each player.
@@ -1089,67 +826,20 @@ public class Akropolis {
      * @param gameState a state string.
      * @return An array containing the "Garden" component of the score for each player (ordered by ascending player ID).
      */
+
     public static int[] calculateGardenScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] gardenScores = new int[numberOfPlayers];
-        boolean gardenScoringVar = akropolis.scoreVariants[4];
+        return akropolis.calculateGardenScores();
+    }
 
-        // Iterate through all the player strings to calculate each player's score
+    public int[] calculateGardenScores() {
+        int[] gardenScoreArray = new int[numberOfPlayers];
+        boolean variant = scoreVariants[4];
+
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player player = akropolis.currentPlayers[i];
-            Board board = player.getBoard();
-            Tile[][] playerTiles = board.getSurfaceTiles();
-
-            // Initialize the gardens and gardenStars to be zero for each player
-            int totalGardenStars = 0;
-            int totalValidGardens = 0;
-
-            // Iterate through the playerTiles to find gardenPlazas stars and garden districts to calculate scores
-            for (int m = 0; m < playerTiles.length; m++) {
-                for (int n = 0; n < playerTiles[m].length; n++) {
-                    Tile tile = playerTiles[m][n];
-                    HexCoord point = new HexCoord(m - 100, n - 100);
-
-                    // If the tile is null ignore the current iteration
-                    if (tile == null) { continue; }
-
-
-                    // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
-                    if (tile.getPlaza() && tile.getDistrictType() == District.GARDENS) {
-                        totalGardenStars += tile.getStars(tile);
-                        continue;
-                    }
-
-                    // Check if the garden is adjacent to a lake
-                    HexCoord[] surroundingHexCoords = point.getSurroundings();
-                    boolean adjacentToLake = false;
-                    for (int j = 0; j < surroundingHexCoords.length; j++) {
-                        //System.out.println(board.isLakeSingleTile(surroundingHexCoords[j]));
-                        if (board.isLakeSingleTile(surroundingHexCoords[j])) {
-                            //System.out.println("Adjacent");
-                            adjacentToLake = true;
-                            break;
-                        }
-                    }
-
-                    // Increment the district count
-                    if (tile.getDistrictType() == District.GARDENS) {
-                        if (gardenScoringVar && adjacentToLake) {
-                            //System.out.println("Vraiant");
-                                totalValidGardens += 2 * (tile.getHeight()+1);
-                        } else {
-                            totalValidGardens += tile.getHeight()+1;
-                        }
-                    }
-                }
-            }
-            int gardenScore = totalGardenStars*totalValidGardens;
-            gardenScores[i] = gardenScore;
+            gardenScoreArray[i] = currentPlayers[i].getBoard().calculateGardenScore(variant);
         }
-
-        //System.out.println("------");
-        return gardenScores;
+        return gardenScoreArray;
     }
 
 
@@ -1168,22 +858,23 @@ public class Akropolis {
      * @return An array containing the score for each player (ordered by ascending player ID).
      */
     public static int[] calculateCompleteScores(String gameState) {
-        /*Finds how many players*/
-        int playerCount = Integer.parseInt(gameState.substring(0,1));
-        int[] completeScores = new int[playerCount];
-        int[] houseScores = calculateHouseScores(gameState);
-        int[] marketScores = calculateMarketScores(gameState);
-        int[] barrackScores = calculateBarracksScores(gameState);
-        int[] templeScores = calculateTempleScores(gameState);
-        int[] gardenScores = calculateGardenScores(gameState);
-        int[] stones = new int[playerCount];
-        for (int i = 0; i < playerCount; i ++) {
-            /*Will retrieve stone count from player object*/
-            Player hldrPlayer = new Player(gameState.split(";")[2+i]);
-            stones[i] = hldrPlayer.getStones();
-        }
-        /*Will calculate final scores*/
-        for (int i = 0; i < playerCount; i++) {
+        Akropolis akropolis = new Akropolis(gameState);
+        return akropolis.calculateCompleteScores();
+    }
+
+    public int[] calculateCompleteScores() {
+        int[] completeScores = new int[numberOfPlayers];
+
+        // Calculate scores for each district type
+        int[] houseScores = calculateHouseScores();
+        int[] marketScores = calculateMarketScores();
+        int[] barrackScores = calculateBarracksScores();
+        int[] templeScores = calculateTempleScores();
+        int[] gardenScores = calculateGardenScores();
+        int[] stones = calculatePlayerStones();
+
+        for (int i = 0; i < numberOfPlayers; i++) {
+            // Sum up scores for all district types and player stones
             completeScores[i] = houseScores[i] +
                     marketScores[i] +
                     barrackScores[i] +
@@ -1191,8 +882,10 @@ public class Akropolis {
                     gardenScores[i] +
                     stones[i];
         }
+
         return completeScores;
     }
+
 
     /**
      * Generate a move using your AI.
@@ -1204,24 +897,96 @@ public class Akropolis {
      *
      * @param gameState a state string.
      * @return An AI generated move.
+     * @author u7330006
      */
+
     public static String generateAIMove(String gameState) {
-        return ""; // FIXME Task 22
+        Akropolis akropolis = new Akropolis(gameState);
+        return akropolis.generateAIMove(gameState, 2);
+    }
+
+    public String generateAIMove(String gameState, int depth) {
+        int turn = new Akropolis(gameState).currentTurn;
+
+        // Generate an array of validMoves to determine the best move
+        Set<String> allValidMoves = generateAllValidMoves(gameState);
+        String[] validMovesArray = allValidMoves.toArray(new String[0]);
+
+        // Set default values for the moves in case it times out
+        int bestScore = Integer.MIN_VALUE;
+        String bestMove = null;
+
+        // Apply a search through the moves to determine the best move
+        for (String moveString : validMovesArray) {
+            String gameAfterMove = applyMove(gameState, moveString);
+            int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+
+            if (eval > bestScore) {
+                bestScore = eval;
+                bestMove = moveString;
+            }
+        }
+
+        return bestMove;
     }
 
 
     /**
+     * Minimax algorithm on the current gameState using alpha-beta pruning for optimization.
+     *
+     * @param gameState The current game state to evaluate.
+     * @param depth The search depth, indicating how many moves ahead to look.
+     * @param player The current player's turn for which we want to find the best move.
+     * @param alpha The best score for the maximizing player found so far in the current branch.
+     * @param beta The best score for the minimizing player found so far in the current branch.
+     * @param maximizingPlayer A boolean flag indicating whether the current player is maximizing
+     *        (true for AI player) or minimizing (false for opponent).
+     * @return The evaluation score for the uppermost move, considering the specified search depth
+     *         and any pruning applied using alpha-beta.
+     * @author u7330006
+     */
+
+    public static int minimax(String gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
+        if (depth == 0) {
+            return calculateCompleteScores(gameState)[player];
+        }
+
+        Set<String> validMoves = generateAllValidMoves(gameState);
+        for (String moveString : validMoves) {
+            String gameAfterMove = applyMove(gameState, moveString);
+            int eval = minimax(gameAfterMove, depth - 1, player, alpha, beta, !maximizingPlayer);
+
+            if (maximizingPlayer) {
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            } else {
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+        }
+
+        return maximizingPlayer ? alpha : beta;
+    }
+
+
+
+    /**
      * Given a state string, calculate the stone count for each player.
+     * @author u7330006
      * @return array of stone counts for each player in ascending order
      */
     public static int[] calculatePlayerStones(String gameState) {
-      Akropolis akropolis = new Akropolis(gameState);
-      int numberOfPlayers = akropolis.numberOfPlayers;
-      int[] playerStones;
-      Player[] currentPlayers = akropolis.currentPlayers;
+        Akropolis akropolis = new Akropolis(gameState);
+        return akropolis.calculatePlayerStones();
+    }
 
+    public int[] calculatePlayerStones() {
       // Find the playerStones
-      playerStones = new int[numberOfPlayers];
+      int[] playerStones = new int[numberOfPlayers];
       for (int i = 0; i < numberOfPlayers; i++) {
             playerStones[i] = currentPlayers[i].getStones();
       }
