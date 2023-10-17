@@ -1,5 +1,7 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gittest.A;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -895,48 +897,81 @@ public class Akropolis {
      *
      * @param gameState a state string.
      * @return An AI generated move.
+     * @author u7330006
      */
-    public static String generateAIMove(String gameState) {
-        Akropolis currentGame = new Akropolis(gameState);
-        int turn = currentGame.currentTurn;
 
-        // Generate an array of validMoves to determine the best move for now
+    public static String generateAIMove(String gameState) {
+        Akropolis akropolis = new Akropolis(gameState);
+        return akropolis.generateAIMove(gameState, 2);
+    }
+
+    public String generateAIMove(String gameState, int depth) {
+        int turn = new Akropolis(gameState).currentTurn;
+
+        // Generate an array of validMoves to determine the best move
         Set<String> allValidMoves = generateAllValidMoves(gameState);
         String[] validMovesArray = allValidMoves.toArray(new String[0]);
-        int[] evaluationAfterMove = new int[allValidMoves.size()];
 
-        /* Initialize the bestScore to be the current score of the player
-           and set the bestMoveIndex to be 0
-         */
-        int bestScore = currentGame.calculateCompleteScores()[turn];
-        int bestMoveIndex = 0;
+        // Set default values for the moves in case it times out
+        int bestScore = Integer.MIN_VALUE;
+        String bestMove = null;
 
-        // Set a 3-second timeout
-        long startTime = System.currentTimeMillis();
-        long timeout = 3000; // 3 seconds in milliseconds
+        // Apply a search through the moves to determine the best move
+        for (String moveString : validMovesArray) {
+            String gameAfterMove = applyMove(gameState, moveString);
+            int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
-        // Calculate the scores applied after each move
-        for (int i = 0; i < validMovesArray.length; i++) {
-            String moveString = validMovesArray[i];
-            Akropolis gameAfterMove = new Akropolis(applyMove(gameState, moveString));
-            int eval = gameAfterMove.calculateCompleteScores()[turn];
-            evaluationAfterMove[i] = eval;
-
-            // Find the move with the bestScore
             if (eval > bestScore) {
                 bestScore = eval;
-                bestMoveIndex = i;
-            }
-
-            // Check for the timeout
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - startTime >= timeout) {
-                break; // Exit the loop if the timeout is reached
+                bestMove = moveString;
             }
         }
 
-        return validMovesArray[bestMoveIndex];
+        return bestMove;
     }
+
+
+    /**
+     * Minimax algorithm on the current gameState using alpha-beta pruning for optimization.
+     *
+     * @param gameState The current game state to evaluate.
+     * @param depth The search depth, indicating how many moves ahead to look.
+     * @param player The current player's turn for which we want to find the best move.
+     * @param alpha The best score for the maximizing player found so far in the current branch.
+     * @param beta The best score for the minimizing player found so far in the current branch.
+     * @param maximizingPlayer A boolean flag indicating whether the current player is maximizing
+     *        (true for AI player) or minimizing (false for opponent).
+     * @return The evaluation score for the uppermost move, considering the specified search depth
+     *         and any pruning applied using alpha-beta.
+     * @author u7330006
+     */
+
+    public static int minimax(String gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
+        if (depth == 0) {
+            return calculateCompleteScores(gameState)[player];
+        }
+
+        Set<String> validMoves = generateAllValidMoves(gameState);
+        for (String moveString : validMoves) {
+            String gameAfterMove = applyMove(gameState, moveString);
+            int eval = minimax(gameAfterMove, depth - 1, player, alpha, beta, !maximizingPlayer);
+
+            if (maximizingPlayer) {
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            } else {
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+        }
+
+        return maximizingPlayer ? alpha : beta;
+    }
+
 
 
     /**
