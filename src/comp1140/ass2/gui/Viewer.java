@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -15,6 +17,8 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
+
+import static javafx.scene.paint.Color.*;
 
 public class Viewer extends Application {
 
@@ -44,6 +48,28 @@ public class Viewer extends Application {
 
         int currentTurnId = akropolis.currentTurn;
 
+        Rectangle backGround = new Rectangle();
+        backGround.setX(0);
+        backGround.setY(0);
+        backGround.setHeight(VIEWER_HEIGHT);
+        backGround.setWidth(VIEWER_WIDTH);
+        switch (currentTurnId) {
+            case 0:
+                backGround.setFill(RED);
+                break;
+            case 1:
+                backGround.setFill(BLUE);
+                break;
+            case 2:
+                backGround.setFill(GREEN);
+                break;
+            case 3:
+                backGround.setFill(YELLOW);
+                break;
+        }
+        backGround.setOpacity(0.5);
+        backGround.toBack();
+        newView.getChildren().add(backGround);
 
         // Old Code to Display Stones
         int stones = akropolis.getCurrentPlayer().getStones();
