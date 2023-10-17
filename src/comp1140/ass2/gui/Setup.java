@@ -166,14 +166,7 @@ public class Setup {
         /* If the playButton is hit the game will start, the play button generates
            the first gameState string that will start the game                     */
         playButton.setOnAction(e -> {
-
             Akropolis initalGame = new Akropolis(playerCount,scoreVariants);
-
-
-            // Invoke a callback method with the gameState to return the gameState to start the game
-            // todo Akropolis.onGameStart(initialGame);
-
-            System.out.println(initalGame);
             primaryStage.close();
         });
     }

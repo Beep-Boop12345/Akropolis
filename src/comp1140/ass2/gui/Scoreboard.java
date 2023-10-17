@@ -21,13 +21,18 @@ public class Scoreboard extends Label {
         int[] scores = akropolis.calculateCompleteScores();
         int numberOfPlayers = akropolis.numberOfPlayers;
         int[] playerStones = akropolis.calculatePlayerStones();
+        int turn = akropolis.currentTurn;
 
 
         // Organise the scoreboard into a vertical box
         scoreboardVBox.setAlignment(Pos.CENTER);
 
-        // Apply stone texture to the VBox
-        scoreboardVBox.setStyle("-fx-background-color: lightblue;");
+        // Apply transparency to the VBox background
+        scoreboardVBox.setStyle(
+                "-fx-background-color: " + Color.LIGHTGRAY.interpolate(Color.TRANSPARENT, 0.2).toString().replace("0x", "#") + ";" +
+                        "-fx-padding: 10px;"  // Add padding around the VBox
+        );
+
 
 
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -42,12 +47,14 @@ public class Scoreboard extends Label {
             // Customize the label style
             playerInfoLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
-            // Customize the HBox style
-            playerHBox.setStyle(
-                    "-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).toString().replace("0x", "#") + ";" +
-                            "-fx-border-color: black;" +  // Border color
-                            "-fx-border-width: 2px;"      // Border width
-            );
+            // Highlight the score of the current player whose turn it is
+            if (i == turn) {
+                playerHBox.setOpacity(1);
+            } else {
+                playerHBox.setOpacity(0.3);
+            }
+
+
 
             // Add the player info label to the playerHBox
             playerHBox.getChildren().add(playerInfoLabel);

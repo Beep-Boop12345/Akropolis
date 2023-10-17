@@ -95,76 +95,64 @@ public class PurchasablePiece extends Group {
         }
 
         /*Dragging functionality for Purchasable Piece*/
-        this.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (!playable) {
-                    return;
-                }
-                mousePositionX = event.getSceneX();
-                mousePositionY = event.getSceneY();
-                mousePosDiffX = mousePositionX - getLayoutX();
-                mousePosDiffY = mousePositionY - getLayoutY();
-                size = 30;
+        this.setOnMousePressed(event -> {
+            if (!playable) {
+                return;
+            }
+            mousePositionX = event.getSceneX();
+            mousePositionY = event.getSceneY();
+            mousePosDiffX = mousePositionX - getLayoutX();
+            mousePosDiffY = mousePositionY - getLayoutY();
+            size = 30;
+            updateShape();
+            isPressed =true;
+            reflected = !event.isPrimaryButtonDown();
+            toFront();
+        });
+
+        this.setOnScroll(event -> {
+            if (!playable) {
+                return;
+            }
+            double deltaY = event.getDeltaY();
+            rotation += deltaY/40;
+            updateShape();
+        });
+
+        this.setOnMouseDragged(event -> {
+            if (!playable) {
+                return;
+            }
+            double moveX = event.getSceneX() - mousePositionX;
+            double moveY = event.getSceneY() - mousePositionY;
+            setLayoutX(moveX+mousePositionX-mousePosDiffX);
+            setLayoutY(moveY+mousePositionY-mousePosDiffY);
+            viewer.getBoard().activateClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                    moveX+mousePositionX-mousePosDiffX,
+                    moveY+mousePositionY-mousePosDiffY,
+                    Rotation.getAngle (60 * ((int) (rotation))));
+            toFront();
+        });
+
+        this.setOnMouseReleased(event -> {
+            if (!playable) {
+                return;
+            }
+            double moveX = event.getSceneX() - mousePositionX;
+            double moveY = event.getSceneY() - mousePositionY;
+            isPressed = false;
+            Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
+                    moveX + mousePositionX - mousePosDiffX,
+                    moveY + mousePositionY - mousePosDiffY,
+                    Rotation.getAngle(60 * ((int) (rotation))));
+            if (moveSelected == null) {
+                setLayoutX(x);
+                setLayoutY(y);
+                size = 25;
                 updateShape();
-                isPressed =true;
-                reflected = !event.isPrimaryButtonDown();
-                toFront();
             }
-        });
-
-        this.setOnScroll(new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent event) {
-                if (!playable) {
-                    return;
-                }
-                double deltaY = event.getDeltaY();
-                rotation += deltaY/40;
-                updateShape();
-            }
-        });
-
-        this.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (!playable) {
-                    return;
-                }
-                double moveX = event.getSceneX() - mousePositionX;
-                double moveY = event.getSceneY() - mousePositionY;
-                setLayoutX(moveX+mousePositionX-mousePosDiffX);
-                setLayoutY(moveY+mousePositionY-mousePosDiffY);
-                viewer.getBoard().activateClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
-                        moveX+mousePositionX-mousePosDiffX,
-                        moveY+mousePositionY-mousePosDiffY,
-                        Rotation.getAngle (60 * ((int) (rotation))));
-                toFront();
-            }
-        });
-
-        this.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (!playable) {
-                    return;
-                }
-                double moveX = event.getSceneX() - mousePositionX;
-                double moveY = event.getSceneY() - mousePositionY;
-                isPressed = false;
-                Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
-                        moveX+mousePositionX-mousePosDiffX,
-                        moveY+mousePositionY-mousePosDiffY,
-                        Rotation.getAngle (60 * ((int) (rotation))));
-                if (moveSelected == null) {
-                    setLayoutX(x);
-                    setLayoutY(y);
-                    size = 25;
-                    updateShape();
-                }
-                akropolis.applyMove(moveSelected);
-                viewer.updateView();
-            }
+            akropolis.applyMove(moveSelected);
+            viewer.updateView();
         });
     }
 

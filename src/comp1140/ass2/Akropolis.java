@@ -117,11 +117,6 @@ public class Akropolis {
 
         // Set maxPieceID based on numberOfPlayers
         int maxPieceID = 61;
-//        switch (numberOfPlayers) {
-//            case 2: maxPieceID = 37; break;
-//            case 3: maxPieceID = 49; break;
-//            default: maxPieceID = 61;
-//        }
 
         // Get the pieceID
         int pieceID;

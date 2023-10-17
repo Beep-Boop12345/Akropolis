@@ -2,6 +2,7 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.*;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -58,13 +60,13 @@ public class Viewer extends Application {
                 backGround.setFill(RED);
                 break;
             case 1:
-                backGround.setFill(BLUE);
+                backGround.setFill(LIGHTBLUE);
                 break;
             case 2:
                 backGround.setFill(GREEN);
                 break;
             case 3:
-                backGround.setFill(YELLOW);
+                backGround.setFill(YELLOWGREEN);
                 break;
         }
         backGround.setOpacity(0.5);
@@ -85,7 +87,7 @@ public class Viewer extends Application {
 
 
         var scoreboardPosX = VIEWER_WIDTH * 0.1;
-        var scoreboardPosY = (VIEWER_HEIGHT - scoreboard.getScoreboardHeight()) / 2;
+        var scoreboardPosY = 0.875*(VIEWER_HEIGHT - scoreboard.getScoreboardHeight()) / 2;
         scoreboard.setLayoutX(scoreboardPosX);
         scoreboard.setLayoutY(scoreboardPosY);
         newView.getChildren().add(scoreboard);
@@ -115,12 +117,15 @@ public class Viewer extends Application {
         site = currentConstructionSite;
 
         //Creates A Label to Display Current Turn
-        Label playerLabel = new Label("Player " + (currentTurnId + 1));
-        playerLabel.setTextAlignment(TextAlignment.CENTER);
+        VBox playerTurnBox = new VBox();
+        playerTurnBox.setAlignment(Pos.CENTER);
+        playerTurnBox.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 10px;");
+        Text playerLabel = new Text("Player " + (currentTurnId + 1));
         playerLabel.setFont(Font.font(40));
-        playerLabel.setLayoutX((VIEWER_WIDTH/2) - 70);
-        playerLabel.setLayoutY(10);
-        newView.getChildren().add(playerLabel);
+        playerTurnBox.getChildren().add(playerLabel);
+        playerTurnBox.setTranslateY(50);
+        playerTurnBox.setTranslateX(0.43*(VIEWER_WIDTH-playerTurnBox.getMinWidth()));
+        newView.getChildren().add(playerTurnBox);
 
         //Creates A Label to Display Board Instructions
         Label instructionLabel = new Label("Click and Drag Map With Mouse");
@@ -195,7 +200,21 @@ public class Viewer extends Application {
     /**Updates the viewed state
      * @author u7646615*/
     public void updateView() {
-        displayState(akropolis);
+        if (akropolis.isGameOver()) {
+            Gameover.display(akropolis);
+            // Close the viewer window
+            closeViewerWindow();
+        } else {
+            displayState(akropolis);
+        }
+    }
+
+    /**
+     * Closes the current viewer window used for Gameover
+     * @author u7330006 */
+    private void closeViewerWindow() {
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.close();
     }
 
     public VisualBoard getBoard() {
