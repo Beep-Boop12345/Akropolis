@@ -174,6 +174,7 @@ public class Setup {
             // todo Akropolis.onGameStart(initialGame);
 
             System.out.println(initalGame);
+            primaryStage.close();
         });
     }
 
