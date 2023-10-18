@@ -20,6 +20,14 @@ public class Tile {
         this.piece = pieceID;
     }
 
+    public Tile(Tile original) {
+        this.districtType = original.districtType;
+        this.isPlaza = original.isPlaza;
+        this.height = original.height;
+        this.isOccupied = original.isOccupied;
+        this.piece = original.piece;
+    }
+
     //Character Constructor for a tile
     public Tile(char tileChar, int pieceID) {
 
@@ -46,7 +54,7 @@ public class Tile {
         } else if (tileChar == 'q') {
             return District.QUARRY;
         } else {
-            System.out.println("Missing Accurate District Type");
+            System.out.println("Missing Accurate District Type, Got: " + tileChar);
             return District.HOUSES;
         }
     }

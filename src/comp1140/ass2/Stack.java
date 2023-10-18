@@ -14,6 +14,15 @@ public class Stack {
         currentPieces = pieces;
     }
 
+    public Stack(Stack original) {
+        pieceCount = original.pieceCount;
+        currentPieces = new Piece[pieceCount];
+        for (int i = 0; i < pieceCount; i++) {
+            currentPieces[i] = new Piece(original.currentPieces[i]);
+        }
+    }
+
+
     public Stack (String gamestate) {
         int[] pieceIDsConstructionSite = constructionSitePieces(gamestate);
         int[] pieceIDsActive = activePieces(gamestate);
