@@ -2,6 +2,8 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.*;
 import javafx.application.Application;
+import javafx.application.HostServices;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -19,6 +21,8 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
+
+import java.io.File;
 
 import static javafx.scene.paint.Color.*;
 
@@ -167,6 +171,21 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
+    private void makeGameControls() {
+        Button officialRulesButton = new Button("Official rules");
+        File gameRules = new File("assets/rules.pdf");
+        officialRulesButton.setLayoutX(50);
+        officialRulesButton.setLayoutY(100);
+        controls.getChildren().add(officialRulesButton);
+        officialRulesButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                HostServices hostServices = getHostServices();
+                hostServices.showDocument(gameRules.getAbsolutePath());
+            }
+        });
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Akropolis Viewer");
@@ -188,6 +207,8 @@ public class Viewer extends Application {
         this.scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         displayState(akropolis);
         primaryStage.setScene(scene);
+        makeGameControls();
+        root.getChildren().add(controls);
         primaryStage.show();
 
     }
