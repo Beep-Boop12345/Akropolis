@@ -173,15 +173,27 @@ public class Viewer extends Application {
 
     private void makeGameControls() {
         Button officialRulesButton = new Button("Official rules");
+        Button guideButton = new Button("UI guide");
         File gameRules = new File("assets/rules.pdf");
+        File guide = new File("assets/UIGuideAkropolis.pdf");
         officialRulesButton.setLayoutX(50);
         officialRulesButton.setLayoutY(100);
+        guideButton.setLayoutX(50);
+        guideButton.setLayoutY(150);
         controls.getChildren().add(officialRulesButton);
+        controls.getChildren().add(guideButton);
         officialRulesButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 HostServices hostServices = getHostServices();
                 hostServices.showDocument(gameRules.getAbsolutePath());
+            }
+        });
+        guideButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                HostServices hostServices = getHostServices();
+                hostServices.showDocument(guide.getAbsolutePath());
             }
         });
     }
