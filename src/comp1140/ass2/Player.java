@@ -24,6 +24,12 @@ public class Player {
         this.board = new Board(this.id, movesMade);
     }
 
+    Player(Player original) {
+        this.id = original.id;
+        this.stones = original.stones;
+        this.board = new Board(original.board);
+    }
+
     /*Applies a move to a board and/pays collects stones*/
     public void applyMove(ConstructionSite constructionSite, Move move) {
         int price = constructionSite.findPrice(move.getPiece());

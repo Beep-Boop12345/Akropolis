@@ -23,7 +23,19 @@ public class Piece {
         int index = globalTilePool.indexOf(pieceID);
         this.pieceID = Integer.parseInt(pieceID);
         for (int i = 0; i < 3; i++) {
+            System.out.println("IndexChar Good: " + globalTilePool.charAt(index+2+i));
             this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i), this.pieceID);
+        }
+    }
+
+    public Piece(Piece original) {
+        this.pieceID = original.pieceID;
+        String globalTilePool = Akropolis.TILE_POOL;
+        int index = globalTilePool.indexOf(this.pieceID);
+        tiles = new Tile[3];
+        for (int i = 0; i < 3; i++) {
+            System.out.println("IndexChar: " + globalTilePool.charAt(index+5+i));
+            this.tiles[i] = new Tile(globalTilePool.charAt(index+5+i), this.pieceID);
         }
     }
 

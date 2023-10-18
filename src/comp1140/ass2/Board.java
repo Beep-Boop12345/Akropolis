@@ -12,7 +12,7 @@ public class Board {
     private Tile[][] surfaceTiles = new Tile[200][200];
 
     /*Player ID 0 to P-1 inclusive, P is number of players*/
-    private final int player;
+    //private final int player;
 
     private int stonesInHold;
 
@@ -25,7 +25,7 @@ public class Board {
      * @param player the player id of the player that owns this board
      * */
     public Board(int player) {
-        this.player = player;
+        //this.player = player;
         stonesInHold = 0;
         /*Places the initial tiles*/
         this.surfaceTiles[100][100] = new Tile(District.HOUSES, true, 0);
@@ -43,7 +43,7 @@ public class Board {
      * @param player the player id of the player that owns this board
      * @param movesString the string representing the moves applied to this board*/
     public Board(int player, String movesString) {
-        this.player = player;
+        //this.player = player;
         this.stonesInHold = 0;
         /*Converts string of moves into Array of move objects*/
         Move[] move = movesFromString(movesString);
@@ -57,6 +57,21 @@ public class Board {
         /*Makes all the moves listed in the moveString*/
         for (int i = 0; i < move.length; i++) {
             placePiece(move[i], true);
+        }
+    }
+
+    Board(Board original) {
+        this.stonesInHold = original.stonesInHold;
+        this.boardRadiusX = original.boardRadiusX;
+        this.boardRadiusY = original.boardRadiusY;
+        this.surfaceTiles = new Tile[200][200];
+
+        for (int i = 0; i < original.surfaceTiles.length; i++) {
+            for (int j = 0; j < surfaceTiles[i].length; j++) {
+                if (original.surfaceTiles[i][j] != null) {
+                    this.surfaceTiles[i][j] = new Tile(original.surfaceTiles[i][j]);
+                }
+            }
         }
     }
 

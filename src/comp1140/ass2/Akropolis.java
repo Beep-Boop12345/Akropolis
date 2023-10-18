@@ -79,6 +79,21 @@ public class Akropolis {
         this.viewer = new Viewer(this);
     }
 
+    public Akropolis(Akropolis original) {
+        this.numberOfPlayers = original.numberOfPlayers;
+        this.scoreVariants = original.scoreVariants;
+        this.currentPlayers = new Player[this.numberOfPlayers];
+
+        for (int i = 0; i < numberOfPlayers; i++) {
+            currentPlayers[i] = new Player(original.currentPlayers[i]);
+        }
+
+        this.currentTurn = original.currentTurn;
+        this.constructionSite = new ConstructionSite(original.constructionSite);
+        this.stack = new Stack(original.stack);
+
+    }
+
     /** Returns the pieces that will be in a newly initialized stack
      * @author u7646615*/
     private Piece[] getInitialStack() {
@@ -510,6 +525,12 @@ public class Akropolis {
         }
     }
 
+    private Akropolis applyMoveSafe(Move move) {
+        var newAkropolis = new Akropolis(this);
+        newAkropolis.applyMove(move);
+        return newAkropolis;
+    }
+
     /**
      * Given a state string, returns a set of move strings containing all the moves that can be played.
      * @author u7646615
@@ -908,28 +929,29 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.generateAIMove(gameState, 2);
+        return akropolis.generateAIMove(2).toString();
     }
 
-    public String generateAIMove(String gameState, int depth) {
-        int turn = new Akropolis(gameState).currentTurn;
+    public Move generateAIMove(int depth) {
+        //int turn = new Akropolis(gameState).currentTurn;
+        var turn = currentTurn;
 
         // Generate an array of validMoves to determine the best move
-        Set<String> allValidMoves = generateAllValidMoves(gameState);
-        String[] validMovesArray = allValidMoves.toArray(new String[0]);
+        Set<Move> allValidMoves = generateAllValidMoves();
+        Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
 
         // Set default values for the moves in case it times out
         int bestScore = Integer.MIN_VALUE;
-        String bestMove = null;
+        Move bestMove = validMovesArray[0];
 
         // Apply a search through the moves to determine the best move
-        for (String moveString : validMovesArray) {
-            String gameAfterMove = applyMove(gameState, moveString);
+        for (Move move : validMovesArray) {
+            Akropolis gameAfterMove = applyMoveSafe(move);
             int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
             if (eval > bestScore) {
                 bestScore = eval;
-                bestMove = moveString;
+                bestMove = move;
             }
         }
 
@@ -952,14 +974,14 @@ public class Akropolis {
      * @author u7330006
      */
 
-    public static int minimax(String gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
+    public static int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0) {
-            return calculateCompleteScores(gameState)[player];
+            return gameState.calculateCompleteScores()[player];
         }
 
-        Set<String> validMoves = generateAllValidMoves(gameState);
-        for (String moveString : validMoves) {
-            String gameAfterMove = applyMove(gameState, moveString);
+        Set<Move> validMoves = gameState.generateAllValidMoves();
+        for (Move move : validMoves) {
+            Akropolis gameAfterMove = gameState.applyMoveSafe(move);
             int eval = minimax(gameAfterMove, depth - 1, player, alpha, beta, !maximizingPlayer);
 
             if (maximizingPlayer) {

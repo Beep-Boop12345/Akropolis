@@ -9,6 +9,15 @@ public class ConstructionSite {
     public Piece[] currentPieces;
 
 
+    public ConstructionSite(ConstructionSite original) {
+        this.size = original.size;
+        this.currentPieces = new Piece[this.size];
+        for (int i =0; i < original.currentPieces.length; i++) {
+            if (currentPieces[i] != null) {
+                this.currentPieces[i] = new Piece(original.currentPieces[i]);
+            }
+        }
+    }
     public ConstructionSite (int playercount, Piece[] initialPieces) {
         this.size = playercount + 2;
         this.currentPieces = new Piece[this.size];
