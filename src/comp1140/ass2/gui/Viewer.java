@@ -2,15 +2,15 @@ package comp1140.ass2.gui;
 
 import comp1140.ass2.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -37,6 +37,9 @@ public class Viewer extends Application {
     private Akropolis akropolis;
     private VisualBoard board;
     private VisualConstructionSite site;
+
+
+    private Scene scene;
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
@@ -49,29 +52,22 @@ public class Viewer extends Application {
         Group newView  = new Group();
 
         int currentTurnId = akropolis.currentTurn;
-
-        Rectangle backGround = new Rectangle();
-        backGround.setX(0);
-        backGround.setY(0);
-        backGround.setHeight(VIEWER_HEIGHT);
-        backGround.setWidth(VIEWER_WIDTH);
+        Color fillColor = TRANSPARENT;
         switch (currentTurnId) {
             case 0:
-                backGround.setFill(RED);
+                fillColor = PINK;
                 break;
             case 1:
-                backGround.setFill(LIGHTBLUE);
+                fillColor = LIGHTBLUE;
                 break;
             case 2:
-                backGround.setFill(GREEN);
+                fillColor = LIGHTGREEN;
                 break;
             case 3:
-                backGround.setFill(YELLOWGREEN);
+                fillColor = LEMONCHIFFON;
                 break;
         }
-        backGround.setOpacity(0.5);
-        backGround.toBack();
-        newView.getChildren().add(backGround);
+        this.scene.setFill(fillColor);
 
         // Old Code to Display Stones
         int stones = akropolis.getCurrentPlayer().getStones();
@@ -189,9 +185,8 @@ public class Viewer extends Application {
     public Viewer(Akropolis akropolis) {
         this.akropolis = akropolis;
         Stage primaryStage = new Stage();
-        Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        this.scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         displayState(akropolis);
-        //root.getChildren().add(currentView);
         primaryStage.setScene(scene);
         primaryStage.show();
 
