@@ -929,11 +929,10 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.generateAIMove(2).toString();
+        return akropolis.generateAIMove(1).toString();
     }
 
     public Move generateAIMove(int depth) {
-        //int turn = new Akropolis(gameState).currentTurn;
         var turn = currentTurn;
 
         // Generate an array of validMoves to determine the best move
