@@ -95,29 +95,7 @@ public class PurchasablePiece extends Group {
             this.playable = false;
         }
 
-        /* Generate AI move if AI variant enabled */
 
-//        if (akropolis.aiVariant) {
-//            // In single-player only the AI is playing
-//            if (akropolis.numberOfPlayers == 1) {
-//                Move aiMove = new Move(akropolis.generateAIMove());
-//                akropolis.applyMove(aiMove);
-//                viewer.updateView();
-//            } else {
-//                // AI's are set to be all player's except the first player in multiplayer
-//                if (akropolis.currentTurn != 0) {
-//                    Move aiMove = new Move(akropolis.generateAIMove());
-//                    if (aiMove == null) {
-//                        setLayoutX(x);
-//                        setLayoutY(y);
-//                        size = 25;
-//                        updateShape();
-//                    }
-//                    akropolis.applyMove(aiMove);
-//                    viewer.updateView();
-//                }
-//            }
-//        }
 
 
 

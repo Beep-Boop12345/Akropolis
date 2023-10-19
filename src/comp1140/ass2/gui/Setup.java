@@ -59,7 +59,7 @@ public class Setup {
     static CheckBox templesVariant;
     static CheckBox gardensVariant;
 
-    static CheckBox playAI;
+
 
     /**
      * Initializes/formats the controls
@@ -69,27 +69,33 @@ public class Setup {
         // Label for displaying "Number of Players" text
         Label playerCountLabel = new Label("Number of Players");
         playerCountLabel.setTextFill(Color.WHITE);
-        playerCountLabel.setStyle("-fx-font-weight: bold;");
+        playerCountLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
 
         // Create a label for displaying the player count
-        playerCountDisplay.setStyle("-fx-font-weight: bold;");
+        playerCountDisplay.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         // Buttons to adjust the number of players
-        incrementPlayersButton = createButton("+", "-fx-background-color: red; -fx-text-fill: black;");
-        decrementPlayersButton = createButton("-", "-fx-background-color: yellow; -fx-text-fill: black;");
+        incrementPlayersButton = createButton("+", "-fx-background-color: lightblue; -fx-text-fill: white;" +
+                "                                             -fx-font-weight: bold;");
+        decrementPlayersButton = createButton("-", "-fx-background-color: lightgray; -fx-text-fill: white;" +
+                "                                             -fx-font-weight: bold;");
+
+
 
         // Label for displaying "Number of AIs" text
         Label aiCountLabel = new Label("Number of AIs");
         aiCountLabel.setTextFill(Color.WHITE);
-        aiCountLabel.setStyle("-fx-font-weight: bold;");
+        aiCountLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         // Create a label for displaying the ai count
         aiCountDisplay.setStyle("-fx-font-weight: bold;");
 
         // Buttons to adjust the number of ai
-        incrementAIButton = createButton("+", "-fx-background-color: red; -fx-text-fill: black;");
-        decrementAIButton = createButton("-", "-fx-background-color: yellow; -fx-text-fill: black;");
+        incrementAIButton = createButton("+", "-fx-background-color: lightblue; -fx-text-fill: white;" +
+                "                                             -fx-font-weight: bold;");
+        decrementAIButton = createButton("-", "-fx-background-color: lightgray; -fx-text-fill: white;" +
+                "                                             -fx-font-weight: bold;");
 
         // Checkbox buttons for scoring variants
         housesVariant = createCheckBox("Houses Scoring Variant");
@@ -98,7 +104,6 @@ public class Setup {
         templesVariant = createCheckBox("Temples Scoring Variant");
         gardensVariant = createCheckBox("Gardens Scoring Variant");
 
-        //playAI = createCheckBox("Play AI");
 
 
 
@@ -123,8 +128,8 @@ public class Setup {
         VBox controlVBox = new VBox(10);
         controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, aiCountLabel, aiCountHBox, housesVariant,
                 marketsVariant, barracksVariant, templesVariant, gardensVariant, playButtonHBox);
-        controlVBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).
-                toString().replace("0x", "#") + ";");
+        controlVBox.setStyle("-fx-background-color: " + Color.LIGHTGRAY.interpolate(Color.TRANSPARENT, 0.5)
+                .toString().replace("0x", "#") + ";");
         controlVBox.setAlignment(Pos.CENTER);
         controlVBox.setPadding(new Insets(10,10,10,10));
 
@@ -236,7 +241,6 @@ public class Setup {
             Akropolis initialGame = new Akropolis(playerCount, aiCount, scoreVariants);
 
             System.out.println("Vars: " + Arrays.toString(initialGame.scoreVariants));
-            //initialGame.setAiVariant(aiVariant);
             new Viewer(initialGame);
             primaryStage.close();
         });
