@@ -88,7 +88,7 @@ public class Gameover {
         boolean multipleWinner = winners.size() > 1;
         String gameOverMessage;
         if (multipleWinner) {
-            gameOverMessage = "The winners are:";
+            gameOverMessage = "The Winners Are:";
             for (int i = 0; i < winners.size(); i++) {
                 gameOverMessage += " Player " + (winners.get(i) + 1);
                 if (i != winners.size() - 1) {
@@ -96,7 +96,7 @@ public class Gameover {
                 }
             }
         } else {
-            gameOverMessage = "The winner is player " + (winners.get(0) + 1);
+            gameOverMessage = "The Winner is Player " + (winners.get(0) + 1 ) + "!";
         }
 
         // Set text for the winner label
