@@ -35,7 +35,8 @@ public class Gameover {
 
     static Button exitButton;
     static HBox exitHBox;
-    static Label gameOverLabel;
+    static Label gameOverLabel = new Label();
+    static Label winnerLabel = new Label();
 
     // Create a method to display the game over screen
     public static void display(Akropolis akropolis) {
@@ -53,9 +54,10 @@ public class Gameover {
         VBox controlsVBox = new VBox(30);
         controlsVBox.setAlignment(Pos.CENTER);
         gameOverLabel.setAlignment(Pos.CENTER);
+        winnerLabel.setAlignment(Pos.CENTER);
         exitHBox.setAlignment(Pos.CENTER);
 
-        controlsVBox.getChildren().addAll(gameOverLabel, scoreboard, exitHBox);
+        controlsVBox.getChildren().addAll(gameOverLabel, winnerLabel, scoreboard, exitHBox);
 
         controls = new Group(controlsVBox);
         root.getChildren().add(controls);
@@ -68,26 +70,30 @@ public class Gameover {
 
     public static void makeControls(Akropolis akropolis) {
         // Generate the "Game over" text
-        //Set Game over label to display winner/s
+        gameOverLabel.setText("Game Over");
+        gameOverLabel.setTextFill(Color.BLACK);
+        gameOverLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 36;");
+
+        // Finding the winners
         List<Integer> winners = akropolis.getWinner();
         boolean multipleWinner = winners.size() > 1;
         String gameOverMessage;
         if (multipleWinner) {
-            gameOverMessage = "Game over \n The winners are:";
+            gameOverMessage = "The winners are:";
             for (int i = 0; i < winners.size(); i++) {
                 gameOverMessage += " Player " + (winners.get(i) + 1);
-                if (i != winners.size() -1 ) {
+                if (i != winners.size() - 1) {
                     gameOverMessage += ",";
                 }
             }
         } else {
-            gameOverMessage = "Game over \n The winner is " + (winners.get(0) + 1);
+            gameOverMessage = "The winner is player " + (winners.get(0) + 1);
         }
 
-        // Label for displaying "Game Over" text
-        gameOverLabel = new Label(gameOverMessage);
-        gameOverLabel.setTextFill(Color.BLACK);
-        gameOverLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 36;");
+        // Set text for the winner label
+        winnerLabel.setText(gameOverMessage);
+        winnerLabel.setTextFill(Color.BLACK);
+        winnerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 36;");
 
         // Create an HBox for the "Exit" button
         exitButton = new Button("Exit");
@@ -100,6 +106,4 @@ public class Gameover {
 
         exitHBox = new HBox(exitButton);
     }
-
-
 }
