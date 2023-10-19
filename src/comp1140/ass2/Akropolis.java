@@ -22,6 +22,8 @@ public class Akropolis {
 
     public int currentTurn;
 
+    public boolean aiVariant = false; // Assume AI variant is always false this can be changed by setup
+
     /**
      * Constructs an Akropolis Class from its string representation for testing
      * @author u7683699
@@ -100,6 +102,14 @@ public class Akropolis {
         this.constructionSite = new ConstructionSite(original.constructionSite);
         this.stack = new Stack(original.stack);
 
+    }
+
+    /**
+     * Setter method for AI variant
+     * @param aiVariant
+     */
+    public void setAiVariant(boolean aiVariant) {
+        this.aiVariant = aiVariant;
     }
 
     /** Returns the pieces that will be in a newly initialized stack
@@ -937,13 +947,13 @@ public class Akropolis {
 
     public int calculateCompleteScoreIndividual(int playerId) {
         var playerBoard = currentPlayers[playerId].getBoard();
-        int houseScore = playerBoard.calculateHouseScore(false);
-        int mScore = playerBoard.calculateMarketScore(false);
-        int bScore = playerBoard.calculateBarracksScore(false);
-        int tScore = playerBoard.calculateTempleScore(false);
-        int gScore = playerBoard.calculateGardenScore(false);
+        int hScore = playerBoard.calculateHouseScore(scoreVariants[0]);
+        int mScore = playerBoard.calculateMarketScore(scoreVariants[1]);
+        int bScore = playerBoard.calculateBarracksScore(scoreVariants[2]);
+        int tScore = playerBoard.calculateTempleScore(scoreVariants[3]);
+        int gScore = playerBoard.calculateGardenScore(scoreVariants[4]);
         int stones = currentPlayers[playerId].getStones();
-        return houseScore + mScore + bScore + tScore + gScore + stones;
+        return hScore + mScore + bScore + tScore + gScore + stones;
     }
     /**
      * Calculates the complete scores of every player in this akropolis instance
@@ -991,9 +1001,16 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.firstLegalMove().toString();
+        return akropolis.generateAIMove();
     }
 
+    /**
+     * generateAIMove method using akropolis objects
+     * @author u7330006
+     */
+    public String generateAIMove() {
+        return firstLegalMove().toString(); // Change the AI to the AI wanted
+    }
 
     /**
      * Simple AI to return firstLegalMove

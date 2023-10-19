@@ -201,6 +201,7 @@ public class Setup {
            the first gameState string that will start the game                     */
         playButton.setOnAction(e -> {
             Akropolis initialGame = new Akropolis(playerCount,scoreVariants);
+            initialGame.setAiVariant(aiVariant);
             new Viewer(initialGame);
             primaryStage.close();
         });
