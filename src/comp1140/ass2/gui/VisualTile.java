@@ -91,14 +91,15 @@ public class VisualTile extends Group {
 
         }
 
-        for (int i = 1; i < this.tile.getHeight() + 1; i++) {
-            var rectangleHeight = 3;
-            var rectangleWidth = 8;
-            var newIndicator = new heightIndicator(-rectangleWidth * 0.5, this.sideLength* 0.75 - i*(rectangleHeight + 1), rectangleHeight, rectangleWidth, Color.WHITE);
-            newIndicator.toFront();
-            this.getChildren().add(newIndicator);
-
-        }
+        // Adds height indicators if needed
+//        for (int i = 1; i < this.tile.getHeight() + 1; i++) {
+//            var rectangleHeight = 3;
+//            var rectangleWidth = 8;
+//            var newIndicator = new heightIndicator(-rectangleWidth * 0.5, this.sideLength* 0.75 - i*(rectangleHeight + 1), rectangleHeight, rectangleWidth, Color.WHITE);
+//            newIndicator.toFront();
+//            this.getChildren().add(newIndicator);
+//
+//        }
 
         this.setLayoutX(x);
         this.setLayoutY(y);

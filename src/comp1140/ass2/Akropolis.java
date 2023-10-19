@@ -82,7 +82,7 @@ public class Akropolis {
         for (int i = numberOfPlayers; i < numberOfAI + numberOfPlayers; i++) {
             currentPlayers[i] = new Player(i,new Board(),i+1, true);
         }
-        this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
+        this.constructionSite = new ConstructionSite(this.numberOfPlayers, new Piece[this.numberOfPlayers + 2]);
         this.stack = new Stack(getInitialStack());
         resupplyConstructionSite();
     }
