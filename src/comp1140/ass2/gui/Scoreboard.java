@@ -20,7 +20,7 @@ public class Scoreboard extends Label {
     Scoreboard(Akropolis akropolis) {
         int[] scores = akropolis.calculateCompleteScores();
         int numberOfPlayers = akropolis.numberOfPlayers;
-        int[] playerStones = akropolis.calculatePlayerStones();
+        int[] playerStones = akropolis.retrievePlayerStones();
         int turn = akropolis.currentTurn;
 
 
