@@ -200,7 +200,8 @@ public class Setup {
         /* If the playButton is hit the game will start, the play button generates
            the first gameState string that will start the game                     */
         playButton.setOnAction(e -> {
-            Akropolis initalGame = new Akropolis(playerCount,scoreVariants);
+            Akropolis initialGame = new Akropolis(playerCount,scoreVariants);
+            new Viewer(initialGame);
             primaryStage.close();
         });
     }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import comp1140.ass2.gui.Viewer;
+
 
 public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
@@ -19,8 +19,6 @@ public class Akropolis {
     public Stack stack;
 
     public boolean[] scoreVariants = new boolean[5];
-
-    //public GameState gameStage;
 
     public int currentTurn;
 
@@ -82,7 +80,6 @@ public class Akropolis {
         this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
         this.stack = new Stack(getInitialStack());
         resupplyConstructionSite();
-        new Viewer(this);
     }
 
     /**

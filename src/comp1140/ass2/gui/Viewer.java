@@ -74,12 +74,8 @@ public class Viewer extends Application {
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
         newView.getChildren().add(stoneLabel);
 
-
-
         // New Code to Display Scoreboard including Stones and playerScores
         Scoreboard scoreboard = new Scoreboard(akropolis);
-
-
         var scoreboardPosX = VIEWER_WIDTH * 0.1;
         var scoreboardPosY = 0.875*(VIEWER_HEIGHT - scoreboard.getScoreboardHeight()) / 2;
         scoreboard.setLayoutX(scoreboardPosX);
