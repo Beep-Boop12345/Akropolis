@@ -1,7 +1,9 @@
 package comp1140.ass2;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import comp1140.ass2.gui.Viewer;
 
@@ -1077,6 +1079,32 @@ public class Akropolis {
 
 
         return maximizingPlayer ? alpha : beta;
+    }
+
+    /**
+     * Returns a list of the winners of the game
+     * @author u7646615
+     *
+     * @return list of the winners of the game*/
+    public List<Integer> getWinner() {
+        int[] scores = this.calculateCompleteScores();
+        //Finds the winners
+        List<Integer> winners = new ArrayList<Integer>();
+        winners.add(0);
+        for (int i = 0; i < scores.length; i++) {
+            if (scores[i] > winners.get(0)) {
+                winners = new ArrayList<>();
+                winners.add(i);
+            } else if (scores[i] == winners.get(0)) {
+                if(this.currentPlayers[i].getStones() > currentPlayers[winners.get(0)].getStones()) {
+                    winners = new ArrayList<>();
+                    winners.add(i);
+                } else if (this.currentPlayers[i].getStones() == currentPlayers[winners.get(0)].getStones()) {
+                    winners.add(i);
+                }
+            }
+        }
+        return winners;
     }
 
     /**

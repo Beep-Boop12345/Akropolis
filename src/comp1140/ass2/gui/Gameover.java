@@ -12,6 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 /**
  * This class is responsible for ending the game, displaying the scores and allowing the user to exit.
  * Its primary purpose is to provide a display method that can be utilized in any other JavaFX executable class. This method
@@ -43,7 +47,7 @@ public class Gameover {
         scoreboard.setTranslateY(10);
 
         // Create the Exit Button and Game Over Label
-        makeControls();
+        makeControls(akropolis);
 
         // Organize everything into a vertical box with 30 pixel spacing
         VBox controlsVBox = new VBox(30);
@@ -62,9 +66,26 @@ public class Gameover {
         primaryStage.show();
     }
 
-    public static void makeControls() {
+    public static void makeControls(Akropolis akropolis) {
+        // Generate the "Game over" text
+        //Set Game over label to display winner/s
+        List<Integer> winners = akropolis.getWinner();
+        boolean multipleWinner = winners.size() > 1;
+        String gameOverMessage;
+        if (multipleWinner) {
+            gameOverMessage = "Game over \n The winners are:";
+            for (int i = 0; i < winners.size(); i++) {
+                gameOverMessage += " Player " + (winners.get(i) + 1);
+                if (i != winners.size() -1 ) {
+                    gameOverMessage += ",";
+                }
+            }
+        } else {
+            gameOverMessage = "Game over \n The winner is " + (winners.get(0) + 1);
+        }
+
         // Label for displaying "Game Over" text
-        gameOverLabel = new Label("Game Over");
+        gameOverLabel = new Label(gameOverMessage);
         gameOverLabel.setTextFill(Color.BLACK);
         gameOverLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 36;");
 
@@ -79,4 +100,6 @@ public class Gameover {
 
         exitHBox = new HBox(exitButton);
     }
+
+
 }

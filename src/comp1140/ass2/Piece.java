@@ -2,20 +2,12 @@ package comp1140.ass2;
 
 public class Piece {
     /* Tile array of the tiles associated to the piece from top left,
-       bottom left and bottom right                                */
+       bottom left and bottom right at standard rotation                               */
     private Tile[] tiles = new Tile[3];
     private int pieceID;
 
-    /* Missing position field
-       Requires more than just the pieceID to match the position field transform
-       as knowing the current position requires the most recently played
-       moveString stored in the gameState which cannot be deduced just from the pieceID
-       2 digit pieceID
 
-       Maybe getPosition method?
-     */
-
-    /** Constructor for instance of piece class
+    /** Constructor for piece from string representation
      * @oaram Two-digit number pieceID
      */
     public Piece(String pieceID) {
