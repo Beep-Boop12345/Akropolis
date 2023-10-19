@@ -28,6 +28,12 @@ public class VisualBoard extends Group {
     private Double mouseX;
     private Double mouseY;
 
+    /**
+     * Constructor
+     * @author u7683699
+     *
+     * @param board the board that it represents
+     * @param viewer that it is in*/
     VisualBoard(Board board, Viewer viewer) {
         this.board = board;
         this.viewer = viewer;
@@ -97,7 +103,9 @@ public class VisualBoard extends Group {
 
     }
 
-    //Lower height tiles are displayed as darker
+   /**
+    * darkens tiles that are on lower heights
+    * @author u7683699*/
     private void heightDarken() {
         for (VisualTile vTile : tiles) {
             int metaTileHeight = vTile.getTile().getHeight();
@@ -107,7 +115,11 @@ public class VisualBoard extends Group {
         }
     }
 
-    //Connectors are placed between tile that came from the same piece
+    /**
+     * Draws lines between tiles from the same piece
+     * @author u7683699
+     *
+     * @param sideLength the length of a side of a hexagon*/
     private void connectPieces(int sideLength) {
         for (VisualTile vTile : tiles) {
 
@@ -201,7 +213,8 @@ public class VisualBoard extends Group {
         double trueYPos = y + viewer.getSite().getLayoutY();
         double relativeXPos = trueXPos - getLayoutX();
         double relativeYPos = trueYPos - getLayoutY();
-        return Math.sqrt((relativeXPos - movePosition[0])*(relativeXPos - movePosition[0]) + (relativeYPos - movePosition[1])*(relativeYPos - movePosition[1]));
+        return Math.sqrt((relativeXPos - movePosition[0])*(relativeXPos - movePosition[0]) +
+                (relativeYPos - movePosition[1])*(relativeYPos - movePosition[1]));
     }
     /**
      * Given a set of moves and a point will return the closest move with the same rotation.
@@ -210,7 +223,7 @@ public class VisualBoard extends Group {
      * @param moves all the moves being evaluated
      * @param x x-coordinate of point
      * @param y y-coordinate of point
-     * @param rotation wthe pieces rotation only moves with the same rotation will be returned
+     * @param rotation the pieces rotation only moves with the same rotation will be returned
      **/
     public Move findClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         Move closest = null;
@@ -234,7 +247,7 @@ public class VisualBoard extends Group {
      * @param moves all the moves being evaluated
      * @param x x-coordinate of point
      * @param y y-coordinate of point
-     * @param rotation wthe pieces rotation only moves with the same rotation will be activated
+     * @param rotation the pieces rotation only moves with the same rotation will be activated
      **/
     public void activateClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         if (closestMove != null) {

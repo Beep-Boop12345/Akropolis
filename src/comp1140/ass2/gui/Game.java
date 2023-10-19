@@ -5,10 +5,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 
-// FIXME Task 13  - Basic Playable Game
-// FIXME Task 21  - Fully Working Game
-// FIXME Task 23G - Variant Scoring
-
 public class Game extends Application {
 
     private final Group root = new Group();
@@ -21,20 +17,9 @@ public class Game extends Application {
 
     private static VisualConstructionSite purchasablePieces;
 
-    private static PieceStack pieceStack;
 
     @Override
     public void start(Stage stage) throws Exception {
         Setup.display();
-    }
-
-    /*Initializes the start of a newGame*/
-    private void newGame() {
-
-    }
-
-    /*Checks if new game*/
-    private boolean nextTurnCheck() {
-        return true;
     }
 }

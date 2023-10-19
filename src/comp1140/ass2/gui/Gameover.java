@@ -38,7 +38,11 @@ public class Gameover {
     static Label gameOverLabel = new Label();
     static Label winnerLabel = new Label();
 
-    // Create a method to display the game over screen
+    /**
+     * Displays the gameOver screen
+     * @u7330006
+     *
+     * @param akropolis represents the state of the finished game*/
     public static void display(Akropolis akropolis) {
         primaryStage = new Stage();
         primaryStage.setTitle("Game Over");
@@ -68,6 +72,11 @@ public class Gameover {
         primaryStage.show();
     }
 
+    /**
+     * Initialize and format control objects
+     * @u7330006
+     *
+     * @param akropolis object representing the finished game*/
     public static void makeControls(Akropolis akropolis) {
         // Generate the "Game over" text
         gameOverLabel.setText("Game Over");

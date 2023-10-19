@@ -15,19 +15,22 @@ import javafx.geometry.Pos;
 
 
 /**
- * This class is responsible for initializing the game, allowing users to select the number of players and score variants.
- * Its primary purpose is to provide a display method that can be utilized in any other JavaFX executable class. This method
- * initializes the initial gameState string and creates instances of Akropolis objects using said string to commence the game.
+ * This class is responsible for initializing the game, allowing users to select the number of players and score
+ * variants.
+ * Its primary purpose is to provide a display method that can be utilized in any other JavaFX executable class.
+ * This method
+ * initializes the initial gameState string and creates instances of Akropolis objects using said string to commence
+ * the game.
  * @author u7330006
  */
 
 public class Setup {
-    private static Stage primaryStage = new Stage();
+    private static final Stage primaryStage = new Stage();
     private static final int SETUP_WIDTH = 1200*3/4;
     private static final int SETUP_HEIGHT = 750*3/4;
     private static int playerCount = 2;
 
-    private static boolean[] scoreVariants = {false,false,false,false,false};
+    private static final boolean[] scoreVariants = {false,false,false,false,false};
 
     private static boolean aiVariant = false;
     private static final StackPane background = new StackPane();
@@ -49,6 +52,10 @@ public class Setup {
 
     static CheckBox playAI;
 
+    /**
+     * Initializes/formats the controls
+     * @author u7330006
+     **/
     public static void makeControls() {
         // Label for displaying "Number of Players" text
         Label playerCountLabel = new Label("Number of Players");
@@ -80,15 +87,18 @@ public class Setup {
         playerCountHBox.getChildren().addAll(decrementPlayersButton, playerCountDisplay, incrementPlayersButton);
 
         // Create an HBox for the "Play" button
-        playButton = createButton("Play", "-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold;");
+        playButton = createButton("Play", "-fx-background-color: yellow; -fx-text-fill: black;" +
+                " -fx-font-weight: bold;");
         playButton.setMinWidth(80);
         HBox playButtonHBox = new HBox(playButton);
         playButtonHBox.setAlignment(Pos.CENTER);
 
         // Create a VBox to organize the controls vertically
         VBox controlVBox = new VBox(20);
-        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, housesVariant, marketsVariant, barracksVariant, templesVariant, gardensVariant, playAI, playButtonHBox);
-        controlVBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).toString().replace("0x", "#") + ";");
+        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, housesVariant,
+                marketsVariant, barracksVariant, templesVariant, gardensVariant, playAI, playButtonHBox);
+        controlVBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).
+                toString().replace("0x", "#") + ";");
         controlVBox.setAlignment(Pos.CENTER);
 
         // Event Handling
@@ -99,7 +109,11 @@ public class Setup {
         controls.getChildren().add(controlVBox);
     }
 
-    // Helper method to create buttons (of all the same size)
+    /** Helper method to create buttons (of all the same size)
+     * @author u7330006
+     *
+     * @param text the text the button displays
+     * @param style the String representing standard javaFX style parameters*/
     private static Button createButton(String text, String style) {
         Button button = new Button(text);
         button.setStyle(style);
@@ -108,7 +122,11 @@ public class Setup {
         return button;
     }
 
-    // Helper method to create checkboxes (of the same size)
+    /**
+     * Helper method to create checkboxes (of the same size)
+     *
+     * @author u7330006
+     * @param text that the checkbox displays*/
     private static CheckBox createCheckBox(String text) {
         CheckBox checkBox = new CheckBox(text);
         checkBox.setStyle("-fx-font-weight: bold;");

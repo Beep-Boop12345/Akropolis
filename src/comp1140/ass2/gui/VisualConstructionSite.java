@@ -17,6 +17,15 @@ public class VisualConstructionSite extends Group {
     /*Holds the backend ConstructionSite*/
     public static ConstructionSite site;
 
+    /**
+     * Constructor
+     * @author u7683699
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param site the site that it represents
+     * @param viewer that is displaying it
+     * @param akropolis game object that it is representing*/
     VisualConstructionSite(double x, double y, ConstructionSite site, Viewer viewer, Akropolis akropolis) {
         this.site = site;
         purchasablePieces = new ArrayList<>();

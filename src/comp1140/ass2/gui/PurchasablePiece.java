@@ -5,12 +5,7 @@ import comp1140.ass2.Move;
 import comp1140.ass2.Piece;
 import comp1140.ass2.Rotation;
 import comp1140.ass2.Tile;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -20,16 +15,16 @@ public class PurchasablePiece extends Group {
     /*The back end piece this represents*/
     private final Piece piece;
 
+    //Painted objects
     private final ArrayList<VisualTile> vTiles;
 
     private final ArrayList<Line> connectors;
 
+    //Fields tracking geometry
     private double rotation;
 
     private double size;
-
-    private boolean reflected;
-
+    //If it can be played
     private boolean playable;
 
     //Fields to track movement
@@ -41,21 +36,24 @@ public class PurchasablePiece extends Group {
     private double mousePositionX;
     private double mousePositionY;
 
-    //Fields to track events
-    private boolean isPressed;
-
-    /**    A visual piece that is used in the visual construction site.
+    /**
+     * A visual piece that is used in the visual construction site.
      * @author u7683699, @author u7646615
-     *
+     * <p>
+     * Can be interracted with to make moves
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param piece backend object it is representing
+     * @param sideLength size of the lines on the hexagons that make it up
+     * @param viewer that is displaying it
+     * @param akropolis back end game representation of game that it is in
      */
     PurchasablePiece(double x, double y, Piece piece, double sideLength, Viewer viewer, Akropolis akropolis){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
-        this.isPressed = false;
         this.rotation = 0;
         this.size = sideLength;
-        this.reflected = false;
         this.playable = true;
 
         Tile[] tiles = piece.getTiles();
@@ -73,7 +71,10 @@ public class PurchasablePiece extends Group {
 
             //Connects the tiles to form a piece
             for (VisualTile vTile : vTiles) {
-                Line connectorLine = new Line(newTile.getLayoutX(), newTile.getLayoutY(), vTile.getLayoutX(), vTile.getLayoutY());
+                Line connectorLine = new Line(newTile.getLayoutX(),
+                        newTile.getLayoutY(),
+                        vTile.getLayoutX(),
+                        vTile.getLayoutY());
                 connectorLine.setStrokeWidth(sideLength);
                 connectorLine.setStroke(Color.LIGHTSLATEGRAY);
                 this.connectors.add(connectorLine);
@@ -105,8 +106,6 @@ public class PurchasablePiece extends Group {
             mousePosDiffY = mousePositionY - getLayoutY();
             size = 30;
             updateShape();
-            isPressed =true;
-            reflected = !event.isPrimaryButtonDown();
             toFront();
         });
 
@@ -140,7 +139,6 @@ public class PurchasablePiece extends Group {
             }
             double moveX = event.getSceneX() - mousePositionX;
             double moveY = event.getSceneY() - mousePositionY;
-            isPressed = false;
             Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
                     moveX + mousePositionX - mousePosDiffX,
                     moveY + mousePositionY - mousePosDiffY,
@@ -157,7 +155,8 @@ public class PurchasablePiece extends Group {
     }
 
 
-    /** updates the connectors. @u7646615
+    /** updates the connectors.
+     * @author u7646615
      * */
     private void updateConnectors(){
         for (int i = 0; i < 3; i++) {
@@ -174,7 +173,8 @@ public class PurchasablePiece extends Group {
     }
 
 
-    /**Rotates the piece. @u7646615
+    /**Rotates the piece.
+     * @author u7646615
      *
      */
     private void updateShape(){
@@ -187,7 +187,8 @@ public class PurchasablePiece extends Group {
         updateConnectors();
     }
 
-    /**Finds the relative position on the window of each piece.@u7646615
+    /**Finds the relative position on the window of each piece.
+     * @author u7646615
      *
      **/
     private double[] findRelativeWindowPosition(){

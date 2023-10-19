@@ -17,6 +17,12 @@ import javafx.scene.paint.Color;
  // Dependency on score calculation tasks
 public class Scoreboard extends Label {
     private final VBox scoreboardVBox = new VBox(10);
+
+    /**Constructor
+     * @author u7330006
+     *
+     * @param akropolis game object that it reflect the scores of
+     * */
     Scoreboard(Akropolis akropolis) {
         int[] scores = akropolis.calculateCompleteScores();
         int numberOfPlayers = akropolis.numberOfPlayers;

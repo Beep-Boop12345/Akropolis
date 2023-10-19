@@ -18,6 +18,15 @@ public class VisualTile extends Group {
     ArrayList<StarIcon> currentStars;
 
     double sideLength;
+
+    /**
+     * Constructor
+     * @author u7683699
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param side the length of a side of the hexagon
+     * @param tile the tile in the backend that it represents*/
     VisualTile(double x, double y, double side, Tile tile) {
 
         this.tile = tile;
@@ -87,11 +96,12 @@ public class VisualTile extends Group {
         this.currentColor = districtColor;
 
     }
-
-    public Tile getTile() {
-        return tile;
-    }
-
+    /**
+     * Matches a district to a colour
+     * @author u7683699
+     *
+     * @param d the district that is being matched
+     * @return Color that corresponds to the district*/
     private Color districtToColour(District d) {
         switch (d) {
             case MARKETS:
@@ -110,7 +120,13 @@ public class VisualTile extends Group {
 
     }
 
-    //Makes the colours darker due to height difference
+    /**
+     * Updates the colour
+     * @author u7683699
+     * <p>
+     * Used to update the colour to make it darker if on a lower level
+     *
+     * */
     public void updateColor() {
         currentColor = currentColor.darker();
         currentHexagon.setFill(currentColor);
@@ -126,8 +142,16 @@ public class VisualTile extends Group {
         this.currentHexagon.resizeHexagon(size*0.9);
     }
 
-    //Creates the desired hexagon tile shape
+    /**
+     * Creates a hexagon shape
+     * @author u7683699*/
     private class Hexagon extends Polygon {
+        /**
+         * Constructor
+         * @author u7683699
+         *
+         * @param side the length of one of its sides
+         * @param color its fill color*/
         Hexagon(double side, Color color) {
             Double[] pointArray = new Double[12];
             for (int i = 0; i < 6; i++) {
@@ -142,7 +166,8 @@ public class VisualTile extends Group {
             this.setStrokeWidth(side * 0.1);
         }
 
-        /** Chnages the size of the hexagon. @u7646615
+        /** Changes the size of the hexagon.
+         * @author u7646615
          *
          * @param size the new size
         * */
@@ -159,8 +184,19 @@ public class VisualTile extends Group {
         }
     }
 
-    //Creates the desired star shape
+    /**
+     * Creates a star shape
+     * @author u7683699
+     **/
     private class StarIcon extends Polygon {
+        /**
+         * Constructor
+         * @author u7683699
+         *
+         * @param x x-coordinate
+         * @param y y-coordinate
+         * @param length of distance between points
+         * @param color its fill color*/
         StarIcon(double x, double y, double length, Color color) {
 
             ArrayList<Double> pointArray = new ArrayList<>();
@@ -189,7 +225,8 @@ public class VisualTile extends Group {
         }
     }
 
-    public void setSideLength(double sideLength) {
-        this.sideLength = sideLength;
+    public Tile getTile() {
+        return tile;
     }
+
 }

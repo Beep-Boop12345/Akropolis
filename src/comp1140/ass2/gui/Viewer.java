@@ -39,8 +39,9 @@ public class Viewer extends Application {
     private Scene scene;
     /**
      * Draw a placement in the window, removing any previously drawn placements
+     * @author u7683699
      *
-     * @param akropolis representitive of the state as an object
+     * @param akropolis game object representing the state
      */
     void displayState(Akropolis akropolis) {
 
@@ -134,7 +135,8 @@ public class Viewer extends Application {
     }
 
     /**
-     * Create a basic text field for input and a refresh button.
+     * Creates a text field for input and a refresh button.
+     * @author u7646615 u7683699 u7330006
      */
     private void makeControls() {
         Label gameLabel = new Label("Game State:");
@@ -164,6 +166,9 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
+    /** Initializes and formats the controls for the game
+     * @author u7646615 u7683699 u7330006
+     * */
     private void makeGameControls() {
         Button officialRulesButton = new Button("Official rules");
         Button guideButton = new Button("UI guide");
@@ -185,6 +190,12 @@ public class Viewer extends Application {
         });
     }
 
+    /**
+     * Main method for when run by intelliJ
+     * @author u7683699 u7330006
+     * <p>
+     * Will display controls to enter gameString
+     * */
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Akropolis Viewer");
@@ -200,6 +211,13 @@ public class Viewer extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Constructor
+     * @author u7646615
+     * <p>
+     * will not display controls
+     * @param akropolis object that it represents
+     * */
     public Viewer(Akropolis akropolis) {
         this.akropolis = akropolis;
         Stage primaryStage = new Stage();
@@ -225,7 +243,7 @@ public class Viewer extends Application {
     }
 
     /**
-     * Closes the current viewer window used for Gameover
+     * Closes the current viewer window used for Game over
      * @author u7330006 */
     private void closeViewerWindow() {
         Stage stage = (Stage) root.getScene().getWindow();
@@ -238,13 +256,5 @@ public class Viewer extends Application {
 
     public VisualConstructionSite getSite() {
         return site;
-    }
-
-    public static double getViewerWidth() {
-        return VIEWER_WIDTH;
-    }
-
-    public static double getViewerHeight() {
-        return VIEWER_HEIGHT;
     }
 }
