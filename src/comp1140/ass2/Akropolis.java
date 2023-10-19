@@ -71,13 +71,17 @@ public class Akropolis {
      * @param numberOfPlayers how many players in the game
      * @param scoringVariants a boolean array describing which scoring variants are active
      * */
-    public Akropolis(int numberOfPlayers, boolean[] scoringVariants) {
-        this.numberOfPlayers = numberOfPlayers;
+    public Akropolis(int numberOfPlayers, int numberOfAI, boolean[] scoringVariants) {
+        this.numberOfPlayers = numberOfPlayers + numberOfAI;
         this.scoreVariants = scoringVariants;
-        this.currentPlayers = new Player[numberOfPlayers];
+        this.currentPlayers = new Player[this.numberOfPlayers];
+        System.out.println(currentPlayers.length + " Length");
         this.currentTurn = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
-            currentPlayers[i] = new Player(i,new Board(),i+1);
+            currentPlayers[i] = new Player(i,new Board(),i+1, false);
+        }
+        for (int i = numberOfPlayers; i < numberOfAI + numberOfPlayers; i++) {
+            currentPlayers[i] = new Player(i,new Board(),i+1, true);
         }
         this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
         this.stack = new Stack(getInitialStack());
@@ -1001,15 +1005,18 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.generateAIMove();
+        return akropolis.generateAIMove(false).toString();
     }
 
     /**
      * generateAIMove method using akropolis objects
      * @author u7330006
      */
-    public String generateAIMove() {
-        return firstLegalMove().toString(); // Change the AI to the AI wanted
+    public Move generateAIMove(boolean complex) {
+        if (complex) {
+            return generateLookaheadAIMove(1);
+        }
+        return firstLegalMove(); // Change the AI to the AI wanted
     }
 
     /**
@@ -1110,10 +1117,13 @@ public class Akropolis {
     public int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
         // Base Case: Finish Searching all nodes return the eval
         if (depth <= 0) {
+            System.out.println("Reached Bottom");
             return calculateCompleteScoreIndividual(player);
         }
 
+
         Set<Move> validMoves = gameState.generateAllValidMoves();
+        System.out.println(validMoves.size());
         for (Move move : validMoves) {
             Akropolis gameAfterMove = gameState.applyMoveSafe(move);
             int eval = minimax(gameAfterMove, depth - 1, player, alpha, beta, !maximizingPlayer);

@@ -7,6 +7,8 @@ public class Player {
     private final Board board;
     private int stones;
 
+    public boolean isAI;
+
 
     /**
      * Constructor for player form internal representation
@@ -15,10 +17,11 @@ public class Player {
      * @param id the player's id
      * @param board the player's board
      * @param stones the amount of stone the player has*/
-    Player(int id, Board board, int stones) {
+    Player(int id, Board board, int stones, boolean ai) {
         this.id = id;
         this.board = board;
         this.stones = stones;
+        this.isAI = ai;
     }
 
     /**
@@ -35,6 +38,7 @@ public class Player {
 
         String movesMade = playerString.substring(4);
         this.board = new Board(movesMade);
+        this.isAI = false;
     }
 
     /**
@@ -46,6 +50,7 @@ public class Player {
         this.id = original.id;
         this.stones = original.stones;
         this.board = new Board(original.board);
+        this.isAI = original.isAI;
     }
 
     /**

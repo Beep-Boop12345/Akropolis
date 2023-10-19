@@ -2,6 +2,7 @@ package comp1140.ass2.gui;
 
 
 import comp1140.ass2.Akropolis;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +13,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
+
+import java.util.Arrays;
 
 
 /**
@@ -30,9 +33,11 @@ public class Setup {
     private static final int SETUP_HEIGHT = 750*3/4;
     private static int playerCount = 2;
 
+    private static int aiCount = 0;
+
     private static final boolean[] scoreVariants = {false,false,false,false,false};
 
-    private static boolean aiVariant = false;
+    //private static boolean aiVariant = false;
     private static final StackPane background = new StackPane();
 
     private static final Group controls = new Group();
@@ -40,9 +45,13 @@ public class Setup {
     private static final StackPane root = new StackPane();
 
     private static Label playerCountDisplay = new Label("2");
+    private static Label aiCountDisplay = new Label("0");
 
     static Button incrementPlayersButton;
     static Button decrementPlayersButton;
+
+    static Button incrementAIButton;
+    static Button decrementAIButton;
     static Button playButton;
     static CheckBox housesVariant;
     static CheckBox marketsVariant;
@@ -70,6 +79,18 @@ public class Setup {
         incrementPlayersButton = createButton("+", "-fx-background-color: red; -fx-text-fill: black;");
         decrementPlayersButton = createButton("-", "-fx-background-color: yellow; -fx-text-fill: black;");
 
+        // Label for displaying "Number of AIs" text
+        Label aiCountLabel = new Label("Number of AIs");
+        aiCountLabel.setTextFill(Color.WHITE);
+        aiCountLabel.setStyle("-fx-font-weight: bold;");
+
+        // Create a label for displaying the ai count
+        aiCountDisplay.setStyle("-fx-font-weight: bold;");
+
+        // Buttons to adjust the number of ai
+        incrementAIButton = createButton("+", "-fx-background-color: red; -fx-text-fill: black;");
+        decrementAIButton = createButton("-", "-fx-background-color: yellow; -fx-text-fill: black;");
+
         // Checkbox buttons for scoring variants
         housesVariant = createCheckBox("Houses Scoring Variant");
         marketsVariant = createCheckBox("Markets Scoring Variant");
@@ -77,7 +98,7 @@ public class Setup {
         templesVariant = createCheckBox("Temples Scoring Variant");
         gardensVariant = createCheckBox("Gardens Scoring Variant");
 
-        playAI = createCheckBox("Play AI");
+        //playAI = createCheckBox("Play AI");
 
 
 
@@ -85,6 +106,11 @@ public class Setup {
         HBox playerCountHBox = new HBox(50);
         playerCountHBox.setAlignment(Pos.CENTER);
         playerCountHBox.getChildren().addAll(decrementPlayersButton, playerCountDisplay, incrementPlayersButton);
+
+        // Create an HBox for the increment and decrement buttons, along with the ai count
+        HBox aiCountHBox = new HBox(50);
+        aiCountHBox.setAlignment(Pos.CENTER);
+        aiCountHBox.getChildren().addAll(decrementAIButton, aiCountDisplay, incrementAIButton);
 
         // Create an HBox for the "Play" button
         playButton = createButton("Play", "-fx-background-color: yellow; -fx-text-fill: black;" +
@@ -94,12 +120,13 @@ public class Setup {
         playButtonHBox.setAlignment(Pos.CENTER);
 
         // Create a VBox to organize the controls vertically
-        VBox controlVBox = new VBox(20);
-        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, housesVariant,
-                marketsVariant, barracksVariant, templesVariant, gardensVariant, playAI, playButtonHBox);
+        VBox controlVBox = new VBox(10);
+        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, aiCountLabel, aiCountHBox, housesVariant,
+                marketsVariant, barracksVariant, templesVariant, gardensVariant, playButtonHBox);
         controlVBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).
                 toString().replace("0x", "#") + ";");
         controlVBox.setAlignment(Pos.CENTER);
+        controlVBox.setPadding(new Insets(10,10,10,10));
 
         // Event Handling
         setupEventHandlers();
@@ -136,16 +163,30 @@ public class Setup {
     // Method for event handling
     private static void setupEventHandlers() {
         incrementPlayersButton.setOnAction(event -> {
-            if (playerCount < 4) {
+            if ((playerCount + aiCount) < 4) {
                 playerCount++;
                 playerCountDisplay.setText(Integer.toString(playerCount));
             }
         });
 
         decrementPlayersButton.setOnAction(event -> {
-            if (playerCount > 1) {
+            if ((playerCount) > 1) {
                 playerCount--;
                 playerCountDisplay.setText(Integer.toString(playerCount));
+            }
+        });
+
+        incrementAIButton.setOnAction(event -> {
+            if ((playerCount + aiCount) < 4) {
+                aiCount++;
+                aiCountDisplay.setText(Integer.toString(aiCount));
+            }
+        });
+
+        decrementAIButton.setOnAction(event -> {
+            if (aiCount > 0) {
+                aiCount--;
+                aiCountDisplay.setText(Integer.toString(aiCount));
             }
         });
 
@@ -189,19 +230,13 @@ public class Setup {
             }
         });
 
-        playAI.setOnAction(event -> {
-            if (playAI.isSelected()) {
-                aiVariant = true;
-            } else {
-                aiVariant = false;
-            }
-        });
-
         /* If the playButton is hit the game will start, the play button generates
            the first gameState string that will start the game                     */
         playButton.setOnAction(e -> {
-            Akropolis initialGame = new Akropolis(playerCount,scoreVariants);
-            initialGame.setAiVariant(aiVariant);
+            Akropolis initialGame = new Akropolis(playerCount, aiCount, scoreVariants);
+
+            System.out.println("Vars: " + Arrays.toString(initialGame.scoreVariants));
+            //initialGame.setAiVariant(aiVariant);
             new Viewer(initialGame);
             primaryStage.close();
         });

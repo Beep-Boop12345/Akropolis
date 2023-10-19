@@ -3,6 +3,7 @@ package comp1140.ass2.gui;
 import comp1140.ass2.*;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -128,6 +129,11 @@ public class Viewer extends Application {
         //Completes Task by Adding the New View to the Scene
         root.getChildren().add(newView);
         currentView = newView;
+
+        if (akropolis.currentPlayers[akropolis.currentTurn].isAI) {
+            delay(100, () -> aiTurn());
+        }
+
     }
 
     /**
@@ -234,8 +240,27 @@ public class Viewer extends Application {
             // Close the viewer window
             closeViewerWindow();
         } else {
-            displayState(akropolis);
+            delay(100, () -> displayState(akropolis));
         }
+    }
+
+    public static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException e) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
+    }
+
+    private void aiTurn() {
+        var aiMove = akropolis.generateAIMove(true);
+        akropolis.applyMove(aiMove);
+        updateView();
     }
 
     /**
