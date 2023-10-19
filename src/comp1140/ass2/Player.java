@@ -21,7 +21,7 @@ public class Player {
         this.stones = Integer.parseInt(stones);
 
         String movesMade = playerString.substring(4);
-        this.board = new Board(this.id, movesMade);
+        this.board = new Board(movesMade);
     }
 
     Player(Player original) {

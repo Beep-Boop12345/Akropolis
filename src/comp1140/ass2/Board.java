@@ -35,9 +35,8 @@ public class Board {
     /**Constructs board from String.
      * @author u7646615
      *
-     * @param player the player id of the player that owns this board
      * @param movesString the string representing the moves applied to this board*/
-    public Board(int player, String movesString) {
+    public Board(String movesString) {
         this.stonesInHold = 0;
         /*Converts string of moves into Array of move objects*/
         Move[] move = movesFromString(movesString);
@@ -130,7 +129,7 @@ public class Board {
     * The order of the positions is the same as the order of tiles
      *
     * @param moveToMake, the move for which all the tile positions will be returns
-    * @return HexCoord[] an array containing the positions of each piece*/
+    * @return  an array containing the positions of each piece*/
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
         HexCoord basePos = moveToMake.getPosition().getPos();
@@ -242,15 +241,16 @@ public class Board {
     }
 
     //Remove if we never use it
-/*    *//**
+    /**
     * Given a hexCoord describing a point of the board will check if it is a part of a lake.
-     * @author u7646615
-     * <p>
-     * A lake is a part of the board where no piece has been placed but is surrounded by tiles
-     *
-     * @param point the point on the board that will be checked if it is a tile
-     * @return boolean, true if it is a lake
-     **//*
+    * @author u7646615
+    * <p>
+    * A lake is a part of the board where no piece has been placed but is surrounded by tiles
+    *
+    * @param point the point on the board that will be checked if it is a tile
+    * @return boolean, true if it is a lake
+    **/
+    /*
     public boolean isLake(HexCoord point) {
         if (getTile(point) != null) {
             return false;
@@ -316,7 +316,7 @@ public class Board {
 //    }
 
     //Remove if no lake
-   /* *//**
+     /**
      * Given a point will construct the set of adjacent empty tile.
      * @author u7646615
      * <p>
@@ -325,7 +325,8 @@ public class Board {
      *
      * @param point the point from where the all adjacent tiles will be checked.
      * @param noTileGroup the set which collects points reffering to empty tiles.
-     * *//*
+     * */
+     /*
     private void groupOfNoTiles(HexCoord point, Set<HexCoord> noTileGroup) {
         if (noTileGroup.size() > 20) {
             return;
@@ -565,8 +566,7 @@ public class Board {
                 }
             }
         }
-        int marketScore = totalMarketStars * totalValidMarkets;
-        return marketScore;
+        return totalMarketStars * totalValidMarkets;
     }
 
     /**
@@ -623,8 +623,7 @@ public class Board {
                 }
             }
         }
-        int barrackScore = totalBarrackStars * totalValidBarracks;
-        return barrackScore;
+        return totalBarrackStars * totalValidBarracks;
     }
 
 
@@ -680,8 +679,7 @@ public class Board {
                 }
             }
         }
-        int templeScore = totalTempleStars * totalValidTemples;
-        return templeScore;
+        return totalTempleStars * totalValidTemples;
     }
 
     /**
@@ -732,8 +730,7 @@ public class Board {
                 }
             }
         }
-        int gardenScore = totalGardenStars * totalValidGardens;
-        return gardenScore;
+        return totalGardenStars * totalValidGardens;
     }
 
 
@@ -777,7 +774,7 @@ public class Board {
      * Returns the star count of a given district plaza
      * @author u7683699
      *
-     * @param district
+     * @param district the type of district for which stars are being counted
      * @return star count*/
     private int starCountOfType(District district) {
         int stars = 0;

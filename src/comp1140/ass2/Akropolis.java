@@ -1,8 +1,6 @@
 package comp1140.ass2;
 
-import comp1140.ass2.gittest.A;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import comp1140.ass2.gui.Viewer;
@@ -11,7 +9,7 @@ public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
 
 
-    private Viewer viewer;
+
     public int numberOfPlayers;
 
     public Player[] currentPlayers;
@@ -67,7 +65,7 @@ public class Akropolis {
         }
     }
     /**
-     * Constructs an Akropolis class as it should be at the begin of the game from settings choices
+     * Constructs an Akropolis class as it should be at the begining of the game from settings choices
      * @author u7646615
      *
      * @param numberOfPlayers how many players in the game
@@ -84,7 +82,7 @@ public class Akropolis {
         this.constructionSite = new ConstructionSite(numberOfPlayers, new Piece[numberOfPlayers + 2]);
         this.stack = new Stack(getInitialStack());
         resupplyConstructionSite();
-        this.viewer = new Viewer(this);
+        new Viewer(this);
     }
 
     /**
@@ -112,11 +110,9 @@ public class Akropolis {
     private Piece[] getInitialStack() {
         // Determine the maximum piece ID allowed
         int idCap = switch (numberOfPlayers) {
-            case 1 -> 61;
             case 2 -> 37;
             case 3 -> 49;
-            case 4 -> 61;
-            default -> 0;
+            default -> 61;
         };
         Piece[] heldPieces = new Piece[idCap];
         // Iterate through the possible piece IDs and initials and add pieces
@@ -938,12 +934,11 @@ public class Akropolis {
      * <p>
      * Assumes all scoring variants are false
      *
-     * @param playerId
+     * @param playerId the id of the player
      * @return the players total score
      * */
 
     public int calculateCompleteScoreIndividual(int playerId) {
-        int completeScore = 0;
         var playerBoard = currentPlayers[playerId].getBoard();
         int houseScore = playerBoard.calculateHouseScore(false);
         int mScore = playerBoard.calculateMarketScore(false);
