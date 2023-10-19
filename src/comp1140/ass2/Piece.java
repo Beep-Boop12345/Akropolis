@@ -8,6 +8,7 @@ public class Piece {
 
 
     /** Constructor for piece from string representation
+     * @author u7330006 u7646615
      * @oaram Two-digit number pieceID
      */
     public Piece(String pieceID) {
@@ -20,6 +21,11 @@ public class Piece {
         }
     }
 
+    /**
+     * Copy constructor for piece
+     * @author u7683699
+     *
+     * @param original the piece it is copying*/
     public Piece(Piece original) {
         this.pieceID = original.pieceID;
         //System.out.println("New Piece Id: " + pieceID);
@@ -41,13 +47,7 @@ public class Piece {
         }
     }
 
-    /*move the piece by replacing position with you Transform
 
-    is this likely to be used?
-    * @Param the new Transform*/
-    private void movePiece (Transform transform) {
-
-    }
     public Tile[] getTiles() {
         return this.tiles;
     }
@@ -56,9 +56,7 @@ public class Piece {
         return pieceID;
     }
 
-    /*Checks if this piece object is equal to another peice
-    * @Param Piece compare piece to be compared to
-    * @return true if both objects refer to the same piece*/
+
     public boolean equals(Piece compare) {
         if (compare == null) {
             return false;

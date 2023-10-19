@@ -9,9 +9,16 @@ public class Tile {
 
     private Boolean isOccupied;
 
-    /*The piece that it came from*/
+    /*The piece ID of piece that it came from*/
     private int piece;
 
+    /**
+     * Constructor from internal representation
+     * @author u7683699
+     *
+     * @param districtType type of district the tile is
+     * @param isPlaza true if the tile is a plaza
+     * @param pieceID the pieceID of the piece it is from*/
     public Tile(District districtType, Boolean isPlaza, int pieceID) {
         this.districtType = districtType;
         this.isPlaza = isPlaza;
@@ -20,6 +27,12 @@ public class Tile {
         this.piece = pieceID;
     }
 
+    /**
+     * Copy constructor for Tile
+     * @author u7683699
+     *
+     * @param original the tile that it is copying
+     * */
     public Tile(Tile original) {
         this.districtType = original.districtType;
         this.isPlaza = original.isPlaza;
@@ -28,7 +41,12 @@ public class Tile {
         this.piece = original.piece;
     }
 
-    //Character Constructor for a tile
+    /**
+     * Constructor for tile using String representation
+     * @author u7683699
+     *
+     * @param tileChar character that corresponds to tile
+     * @param pieceID pieceID of the piece that it belongs to*/
     public Tile(char tileChar, int pieceID) {
 
         this.districtType = characterToDistrict(tileChar);
@@ -39,7 +57,11 @@ public class Tile {
 
     };
 
-    // Turns the character representation of a tile to its district type
+    /**
+     * Matches the character that represents a tile to a district type
+     * @author u7683699 u7330006
+     *
+     * @param  tileChar the character that represents the tile*/
     private static District characterToDistrict(char tileChar) {
         char tileCharLower = Character.toLowerCase(tileChar);
         switch (tileCharLower) {
@@ -58,6 +80,26 @@ public class Tile {
             default:
                 System.out.println("Missing Accurate District Type, Got: " + tileChar);
                 return District.HOUSES;
+        }
+    }
+
+    /**
+     * Getter method to retrieve stars from a tile (Useful for scores calculations Tasks 15-20, 23A-F)
+     * @author u7330006
+     *
+     */
+    public int getStars() {
+        // Only Plaza's have stars
+        if (this.isPlaza) {
+            return switch (this.districtType) {
+                case HOUSES -> 1;
+                case MARKETS, TEMPLES, BARRACKS -> 2;
+                case GARDENS -> 3;
+                // Return 0 if it doesn't match a district
+                default -> 0;
+            };
+        } else {
+            return 0;
         }
     }
 
@@ -82,31 +124,14 @@ public class Tile {
     }
 
 
-    /**
-     * Getter method to retrieve stars from a tile (Useful for scores calculations Tasks 15-20, 23A-F)
-     * @author u7330006
-    */
-    public int getStars(Tile tile) {
-        // Only Plaza's have stars
-        if (tile.isPlaza) {
-            return switch (tile.districtType) {
-                case HOUSES -> 1;
-                case MARKETS, TEMPLES, BARRACKS -> 2;
-                case GARDENS -> 3;
-                // Return 0 if it doesn't match a district
-                default -> 0;
-            };
-        } else {
-            return 0;
-        }
-    }
 
-
+    //For testing
     @Override
     public String toString() {
         return "Tile( " + districtType + " | isPlaza: " + isPlaza + " | height: " + height + " | isOccupied: " + isOccupied + ")";
     }
 
+    //For recovering gameString
     public char toStringRep() {
         switch (districtType) {
             case HOUSES:

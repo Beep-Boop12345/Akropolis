@@ -2,17 +2,30 @@ package comp1140.ass2;
 
 public class Player {
 
-    private int id;
-    private Board board;
-    private int stones = 0;
+    // The players ID
+    private final int id;
+    private final Board board;
+    private int stones;
 
+
+    /**
+     * Constructor for player form internal representation
+     * @author u7683699
+     *
+     * @param id the player's id
+     * @param board the player's board
+     * @param stones the amount of stone the player has*/
     Player(int id, Board board, int stones) {
         this.id = id;
         this.board = board;
         this.stones = stones;
     }
 
-    // Takes in only a Player string representation and constructs a board based on the moves made.
+    /**
+     * Constructor for player using string representation
+     * @author u7683699
+     *
+     * @param playerString region of the gameString referring to this player*/
     Player(String playerString) {
         char idChar = playerString.charAt(1);
         this.id = Character.getNumericValue(idChar);
@@ -24,13 +37,23 @@ public class Player {
         this.board = new Board(movesMade);
     }
 
+    /**
+     * Copy constructor for the player
+     * @author u7683699
+     *
+     * @param original the player that is being copied*/
     Player(Player original) {
         this.id = original.id;
         this.stones = original.stones;
         this.board = new Board(original.board);
     }
 
-    /*Applies a move to a board and/pays collects stones*/
+    /**
+     * Applies a move to a board and/pays collects stones
+     * @author u746615
+     *
+     * @param constructionSite the site where piece are being taken from
+     * @param move that is being applied*/
     public void applyMove(ConstructionSite constructionSite, Move move) {
         int price = constructionSite.findPrice(move.getPiece());
         constructionSite.removePiece(move.getPiece());
@@ -39,23 +62,9 @@ public class Player {
         stones = stones - price + profit;
     }
 
-    // To string method that displays player id and current stone count
     @Override
     public String toString() {
         return "Player " + id + " | Stones " + stones;
-    }
-
-    // Used to test Constructor
-    public static void main(String[] args) {
-        Player newPlayer1 = new Player("P00119S00E02R2");
-        Player newPlayer2 = new Player("P10057S02E01R4");
-        Player newPlayer3 = new Player("P20341S01E03R5");
-        Player newPlayer4 = new Player("P304");
-        System.out.println(newPlayer1);
-        System.out.println(newPlayer2);
-        System.out.println(newPlayer3);
-        System.out.println(newPlayer4);
-
     }
 
     public Board getBoard() {

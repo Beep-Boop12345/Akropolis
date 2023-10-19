@@ -1,19 +1,26 @@
 package comp1140.ass2;
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class Stack {
 
     private int pieceCount;
 
     private Piece[] currentPieces;
 
+    /**
+     * Constructor using internal representation
+     * @author u7646615
+     *
+     * @param pieces the piece that the stack contains*/
     public Stack (Piece[] pieces){
         pieceCount = pieces.length;
         currentPieces = pieces;
     }
 
+    /**
+     * Copy constructor for the Stack
+     * @author u7683699
+     *
+     * @param original Stack*/
     public Stack(Stack original) {
         pieceCount = original.pieceCount;
         currentPieces = new Piece[pieceCount];
@@ -23,9 +30,14 @@ public class Stack {
     }
 
 
-    public Stack (String gamestate) {
-        int[] pieceIDsConstructionSite = constructionSitePieces(gamestate);
-        int[] pieceIDsActive = activePieces(gamestate);
+    /**
+     * Constructor from string representation
+     * @author u7646615
+     *
+     * @param gameState the string representing the gameState*/
+    public Stack (String gameState) {
+        int[] pieceIDsConstructionSite = constructionSitePieces(gameState);
+        int[] pieceIDsActive = activePieces(gameState);
         /*Combine the two arrays into 1*/
         int[] allPieceIDs = new int[pieceIDsActive.length + pieceIDsConstructionSite.length];
         if (pieceIDsConstructionSite.length > 0) {
@@ -39,7 +51,7 @@ public class Stack {
             }
         }
         /*Find what pieces can be in the game*/
-        int playerCount = Integer.parseInt(gamestate.substring(0,1));
+        int playerCount = Integer.parseInt(gameState.substring(0,1));
         int idCap = 0;
         switch (playerCount) {
             case 2:
@@ -67,11 +79,14 @@ public class Stack {
         }
     }
 
-    /*Produces int array for all the piece IDs of pieces in the constructionSite
-     * @Param String gamestate
-     * @Return int[] pieceIDs the IDs of the pieces in the constructions site*/
-    private static int[] constructionSitePieces (String gamestate) {
-        String shared = gamestate.split(";")[1];
+    /**
+     * Produces array for all the piece IDs of pieces in the constructionSite from game string
+     * @author u7646615
+     *
+     * @param gameState
+     * @return int[] of the IDs of the pieces in the constructions site*/
+    private static int[] constructionSitePieces (String gameState) {
+        String shared = gameState.split(";")[1];
         int[] pieceIDs = new int[(shared.length() -1)/2];
         for (int i = 0; i < pieceIDs.length; i++) {
             pieceIDs[i] = Integer.parseInt(shared.substring((i*2)+1,(i*2)+3));
@@ -79,9 +94,11 @@ public class Stack {
         return pieceIDs;
     }
 
-    /*Finds the pieceID of all placed pieces from a gameState
-    * @Param String gameState
-    * @Return int[] for all the activePieceIDs*/
+    /**Produces array for all the piece IDs of pieces in active play from game string
+     * @author u7646615
+     *
+     * @param gameState
+     * @return int[] of the IDs of the active pieces*/
     private static int[] activePieces (String gameState) {
         int activePieceCount = 0;
         String[] gameStateAsArray = gameState.split(";");
@@ -104,6 +121,14 @@ public class Stack {
         return activePieceIDs;
     }
 
+    /**
+     * Helper method, return true when an integer is in an integer array
+     * @author u7646615
+     *
+     * @param arr array to be searched
+     * @param key the integer that will be compared to values in array
+     * @return true if piece is in the stack
+     * */
     private static boolean in(int[] arr, int key) {
         for(int i:arr) {
             if (i == key) {
@@ -114,7 +139,11 @@ public class Stack {
     }
 
 
-    /*Chooses a random tile to give to constructionSite. Give choose a more descriptive name*/
+    /**Chooses a random tile to give to constructionSite.
+     * @author u7646615
+     * <p>
+     * Will remove the piece from the Stack
+     **/
     public Piece choose() {
         if (pieceCount == 0) {
             return null;

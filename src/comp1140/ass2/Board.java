@@ -531,7 +531,7 @@ public class Board {
 
                 // Increment the totalMarketStars if they are a plaza and don't count plazas for districts
                 if (tile.getPlaza() && tile.getDistrictType() == District.MARKETS) {
-                    totalMarketStars += tile.getStars(tile);
+                    totalMarketStars += tile.getStars();
                     continue;
                 }
 
@@ -596,7 +596,7 @@ public class Board {
 
                 // Increment the totalBarrackStars if they are a plaza and don't count plazas for districts
                 if (tile.getPlaza() && tile.getDistrictType() == District.BARRACKS) {
-                    totalBarrackStars += tile.getStars(tile);
+                    totalBarrackStars += tile.getStars();
                     continue;
                 }
 
@@ -651,7 +651,7 @@ public class Board {
 
                 // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
                 if (tile.getPlaza() && tile.getDistrictType() == District.TEMPLES) {
-                    totalTempleStars += tile.getStars(tile);
+                    totalTempleStars += tile.getStars();
                     continue;
                 }
 
@@ -706,7 +706,7 @@ public class Board {
 
                 // Increment the totalTempleStars if they are a plaza and don't count plazas for districts
                 if (tile.getPlaza() && tile.getDistrictType() == District.GARDENS) {
-                    totalGardenStars += tile.getStars(tile);
+                    totalGardenStars += tile.getStars();
                     continue;
                 }
 
@@ -782,7 +782,7 @@ public class Board {
             for (int j = 0; j < surfaceTiles[i].length; j++) {
                 if (surfaceTiles[i][j] != null && surfaceTiles[i][j].getDistrictType().equals(district)) {
                     if (surfaceTiles[i][j].getPlaza()) {
-                        stars += surfaceTiles[i][j].getStars(surfaceTiles[i][j]);
+                        stars += surfaceTiles[i][j].getStars();
                     }
                 }
             }
