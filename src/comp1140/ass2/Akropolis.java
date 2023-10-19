@@ -66,6 +66,13 @@ public class Akropolis {
             throw new IllegalArgumentException("Invalid gameState: " + gameState);
         }
     }
+    /**
+     * Constructs an Akropolis class as it should be at the begin of the game from settings choices
+     * @author u7646615
+     *
+     * @param numberOfPlayers how many players in the game
+     * @param scoringVariants a boolean array describing which scoring variants are active
+     * */
     public Akropolis(int numberOfPlayers, boolean[] scoringVariants) {
         this.numberOfPlayers = numberOfPlayers;
         this.scoreVariants = scoringVariants;
@@ -80,6 +87,11 @@ public class Akropolis {
         this.viewer = new Viewer(this);
     }
 
+    /**
+     * Constructs a deep copy of an akropolis objects
+     * @author 7683688
+     *
+     * @param original the original akropolis*/
     public Akropolis(Akropolis original) {
         this.numberOfPlayers = original.numberOfPlayers;
         this.scoreVariants = original.scoreVariants;
@@ -98,6 +110,7 @@ public class Akropolis {
     /** Returns the pieces that will be in a newly initialized stack
      * @author u7646615*/
     private Piece[] getInitialStack() {
+        // Determine the maximum piece ID allowed
         int idCap = switch (numberOfPlayers) {
             case 2 -> 37;
             case 3 -> 49;
@@ -105,6 +118,7 @@ public class Akropolis {
             default -> 0;
         };
         Piece[] heldPieces = new Piece[idCap];
+        // Iterate through the possible piece IDs and initials and add pieces
         for (int i = 0; i < idCap; i++) {
             String pieceIDString = String.valueOf(i+1);
             if (pieceIDString.length() == 1) {
@@ -120,6 +134,7 @@ public class Akropolis {
     /**
      * Given a move string, checks whether it is well-formed according to the specified rules.
      * @author u7330006
+     *
      * @param move a move string.
      * @return true is the move string is well-formed, false otherwise.
      */
@@ -274,10 +289,11 @@ public class Akropolis {
     }
 
     /**
-     * @author u7683699
+     *
      * Given a state string, checks whether the game has ended.
      * <p>
      * The game ends when there is only one tile left in the Construction Site and all other tiles have been played.
+     *@author u7683699
      *
      * @param gameState a state string.
      * @return true if the game is over, false otherwise.
@@ -289,8 +305,9 @@ public class Akropolis {
     }
 
     /**
-     * @author u7683699
      * Checks if this akropolis game instance has ended
+     * @author u7683699
+     *
      * @return true if the game is over, false otherwise.
      */
     public boolean isGameOver() {
@@ -333,6 +350,10 @@ public class Akropolis {
         return String.join(";", gameStateAsArray) + ";";
     }
 
+    /**
+     * Resupplies an akropolis instance construction site
+     * @author u7646615
+     **/
     private void resupplyConstructionSite() {
         constructionSite.resupply(stack);
     }
@@ -402,6 +423,7 @@ public class Akropolis {
 
     /**
      * Given a state string and a move string, checks whether the move can be made.
+     * @author u7683699 @u7646615
      * <p>
      * A move is valid if the following conditions all hold:
      * 1. The tile is in the Construction Site.
@@ -432,16 +454,12 @@ public class Akropolis {
 
     public boolean isMoveValid(Move move) {
         if (move == null) {
-            //System.out.println("Nuller");
             return false;
         }
         int price = constructionSite.findPrice(move.getPiece());
         Player player = currentPlayers[currentTurn];
 
         if (price < 0 || price > player.getStones()) {
-            //System.out.println(player.getStones());
-            //System.out.println(price);
-            //System.out.println("Pricer");
             return false;
         }
 
@@ -508,36 +526,33 @@ public class Akropolis {
 
     /**
      * Applies the move to the board and updates the turn
+     * @author u7683699 u7646615
      * @param move The move to be applied
-     * @author u7683699
+     *
      */
     public void applyMove(Move move) {
 
-        //System.out.println("apply");
-        /*not required but will be useful when game becomes object reliant*/
         if (!isMoveValid(move)) {
-            //System.out.println("invalid");
             return;
         }
 
         var player = currentPlayers[currentTurn];
 
-        /*Compute changes to objects*/
         player.applyMove(constructionSite, move);
         constructionSite.resupply(stack);
 
-        /*Update turn if needed*/
         if (!isGameOver()) {
-            //System.out.println("Move");
             currentTurn = (currentTurn + 1) % numberOfPlayers;
         }
     }
 
+    /** Returns a new akropolis with a move applied without applying the move to the original akropolis
+     * @author u7683699
+     *
+     * @param  move the move to be safely applied*/
     private Akropolis applyMoveSafe(Move move) {
         var newAkropolis = new Akropolis(this);
-        //System.out.println("Before: " + newAkropolis.currentTurn);
         newAkropolis.applyMove(move);
-        //System.out.println("After: " + newAkropolis.currentTurn);
         return newAkropolis;
     }
 
@@ -557,6 +572,11 @@ public class Akropolis {
         }
         return validMoves;
     }
+    /**
+     * return all the moves that can be applied to this akropolis object
+     * @author u7646615
+     *
+     * @return all the valid moves*/
 
     private Set<Move> generateAllValidMoves() {
 
@@ -698,7 +718,7 @@ public class Akropolis {
      *
      * @param gameState a state string.
      * @return An array containing the "House" component of the score for each player (ordered by ascending player ID).
-     * @author u7683699
+     * @author u7683699 @author u7330006
      */
     public static int[] calculateHouseScores(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
@@ -746,6 +766,11 @@ public class Akropolis {
         return akropolis.calculateMarketScores();
     }
 
+    /**
+     * calculates the "Market" component of the score for each player in this akropolis instance
+     * @return The market scores for each player
+     * @author u7683699
+     */
     public int[] calculateMarketScores() {
         int[] marketScoreArray = new int[numberOfPlayers];
         boolean variant = scoreVariants[1];
@@ -829,7 +854,11 @@ public class Akropolis {
         Akropolis akropolis = new Akropolis(gameState);
         return akropolis.calculateTempleScores();
     }
-
+    /**
+     * calculates the "Temple" component of the score for each player in this akropolis instance
+     * @return The temple scores for each player
+     * @author u7330006
+     */
     public int[] calculateTempleScores() {
         int[] templeScoreArray = new int[numberOfPlayers];
         boolean variant = scoreVariants[3];
@@ -868,7 +897,11 @@ public class Akropolis {
         Akropolis akropolis = new Akropolis(gameState);
         return akropolis.calculateGardenScores();
     }
-
+    /**
+     * calculates the "Garden" component of the score for each player in this akropolis instance
+     * @return The garden scores for each player
+     * @author u7330006
+     */
     public int[] calculateGardenScores() {
         int[] gardenScoreArray = new int[numberOfPlayers];
         boolean variant = scoreVariants[4];
@@ -898,6 +931,15 @@ public class Akropolis {
         Akropolis akropolis = new Akropolis(gameState);
         return akropolis.calculateCompleteScores();
     }
+    /**
+     * Calculates an individual players score
+     * @author u7683699
+     * <p>
+     * Assumes all scoring variants are false
+     *
+     * @param playerId
+     * @return the players total score
+     * */
 
     public int calculateCompleteScoreIndividual(int playerId) {
         int completeScore = 0;
@@ -910,6 +952,11 @@ public class Akropolis {
         int stones = currentPlayers[playerId].getStones();
         return houseScore + mScore + bScore + tScore + gScore + stones;
     }
+    /**
+     * Calculates the complete scores of every player in this akropolis instance
+     * @author u7646615 u7330006
+     *
+     * @return array of every player's complete scores in order of player id*/
 
     public int[] calculateCompleteScores() {
         int[] completeScores = new int[numberOfPlayers];
@@ -920,7 +967,7 @@ public class Akropolis {
         int[] barrackScores = calculateBarracksScores();
         int[] templeScores = calculateTempleScores();
         int[] gardenScores = calculateGardenScores();
-        int[] stones = calculatePlayerStones();
+        int[] stones = retrievePlayerStones();
 
         for (int i = 0; i < numberOfPlayers; i++) {
             // Sum up scores for all district types and player stones
@@ -1037,19 +1084,12 @@ public class Akropolis {
         return maximizingPlayer ? alpha : beta;
     }
 
-
-
     /**
-     * Given a state string, calculate the stone count for each player.
+     * Retrieves the stone count of every player in a given akropolis instance
      * @author u7330006
-     * @return array of stone counts for each player in ascending order
-     */
-    public static int[] calculatePlayerStones(String gameState) {
-        Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.calculatePlayerStones();
-    }
-
-    public int[] calculatePlayerStones() {
+     *
+     * @return array of every player's stones in order of player id*/
+    public int[] retrievePlayerStones() {
       // Find the playerStones
       int[] playerStones = new int[numberOfPlayers];
       for (int i = 0; i < numberOfPlayers; i++) {
@@ -1058,9 +1098,6 @@ public class Akropolis {
         return playerStones;
     }
 
-    public Stack getStack() {
-        return stack;
-    }
 
     public Player getCurrentPlayer() {
         return currentPlayers[currentTurn];
@@ -1069,31 +1106,5 @@ public class Akropolis {
     public ConstructionSite getConstructionSite() {
         return constructionSite;
     }
-
-    //    public static Piece[] createPieceArray(int numberOfPlayers) {
-//
-//        String currentPool = TILE_POOL;
-//        Piece[] pieceArray = new Piece[pieceCount];
-//
-//        for (int i = 1; i < numberOfPlayers + 1; i++) {
-//            String splitPoint  = Integer.toString(i + 1) + ":";
-//            String[] splitPool = currentPool.split(splitPoint);
-//            currentPool = splitPool[0];
-//            for (int j = 0; j < (currentPool.length()/5); j++) {
-//                String subString = currentPool.substring((j*5), (j*5) + 5);
-//                String pieceId = subString.substring(0,2);
-//                int pieceIndex = Integer.parseInt(pieceId);
-//
-//                pieceArray[pieceIndex] = new Piece(subString);
-//            }
-//            System.out.println(currentPool);
-//            currentPool = splitPool[1];
-//            System.out.println(currentPool);
-//        }
-//
-//        return new Piece[0];
-//    }
-
-
-
 }
+
