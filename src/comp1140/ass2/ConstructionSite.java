@@ -13,7 +13,7 @@ public class ConstructionSite {
         this.size = original.size;
         this.currentPieces = new Piece[this.size];
         for (int i =0; i < original.currentPieces.length; i++) {
-            if (currentPieces[i] != null) {
+            if (original.currentPieces[i] != null) {
                 this.currentPieces[i] = new Piece(original.currentPieces[i]);
             }
         }
@@ -107,6 +107,8 @@ public class ConstructionSite {
     * @Return int price price of selection, -1 if not possible*/
     public int findPrice(Piece purchase) {
         if (getCurrentPieceCount() < 2) {
+            //System.out.println(getCurrentPieceCount() + " : Piece");
+            //System.out.println("Low");
             return -1;
         }
         for (int i = 0; i < size; i++) {
@@ -114,6 +116,7 @@ public class ConstructionSite {
                 return i;
             }
         }
+        //System.out.println("Cant");
         return -1;
     }
 

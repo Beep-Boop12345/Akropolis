@@ -23,19 +23,29 @@ public class Piece {
         int index = globalTilePool.indexOf(pieceID);
         this.pieceID = Integer.parseInt(pieceID);
         for (int i = 0; i < 3; i++) {
-            System.out.println("IndexChar Good: " + globalTilePool.charAt(index+2+i));
+            //System.out.println("IndexChar Good: " + globalTilePool.charAt(index+2+i));
             this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i), this.pieceID);
         }
     }
 
     public Piece(Piece original) {
         this.pieceID = original.pieceID;
+        //System.out.println("New Piece Id: " + pieceID);
         String globalTilePool = Akropolis.TILE_POOL;
-        int index = globalTilePool.indexOf(this.pieceID);
+
+        var stringID = "";
+
+        if (this.pieceID < 10) {
+            stringID = "0" + Integer.toString(this.pieceID);
+        } else {
+            stringID = Integer.toString(this.pieceID);
+        }
+
+        int index = globalTilePool.indexOf(stringID);
         tiles = new Tile[3];
         for (int i = 0; i < 3; i++) {
-            System.out.println("IndexChar: " + globalTilePool.charAt(index+5+i));
-            this.tiles[i] = new Tile(globalTilePool.charAt(index+5+i), this.pieceID);
+            //System.out.println("IndexChar: " + globalTilePool.charAt(index+2+i));
+            this.tiles[i] = new Tile(globalTilePool.charAt(index+2+i), this.pieceID);
         }
     }
 
@@ -75,5 +85,10 @@ public class Piece {
             output = "0" + output;
         }
         return output;
+    }
+
+    public static void main(String[] args) {
+        var testPiece = new Piece("01");
+        var testPiece2 = new Piece(testPiece);
     }
 }

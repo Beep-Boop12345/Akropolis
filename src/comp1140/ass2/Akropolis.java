@@ -2,6 +2,7 @@ package comp1140.ass2;
 
 import comp1140.ass2.gittest.A;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import comp1140.ass2.gui.Viewer;
@@ -431,12 +432,16 @@ public class Akropolis {
 
     public boolean isMoveValid(Move move) {
         if (move == null) {
+            //System.out.println("Nuller");
             return false;
         }
         int price = constructionSite.findPrice(move.getPiece());
         Player player = currentPlayers[currentTurn];
 
         if (price < 0 || price > player.getStones()) {
+            //System.out.println(player.getStones());
+            //System.out.println(price);
+            //System.out.println("Pricer");
             return false;
         }
 
@@ -508,8 +513,10 @@ public class Akropolis {
      */
     public void applyMove(Move move) {
 
+        //System.out.println("apply");
         /*not required but will be useful when game becomes object reliant*/
         if (!isMoveValid(move)) {
+            //System.out.println("invalid");
             return;
         }
 
@@ -521,13 +528,16 @@ public class Akropolis {
 
         /*Update turn if needed*/
         if (!isGameOver()) {
+            //System.out.println("Move");
             currentTurn = (currentTurn + 1) % numberOfPlayers;
         }
     }
 
     private Akropolis applyMoveSafe(Move move) {
         var newAkropolis = new Akropolis(this);
+        //System.out.println("Before: " + newAkropolis.currentTurn);
         newAkropolis.applyMove(move);
+        //System.out.println("After: " + newAkropolis.currentTurn);
         return newAkropolis;
     }
 
@@ -889,6 +899,18 @@ public class Akropolis {
         return akropolis.calculateCompleteScores();
     }
 
+    public int calculateCompleteScoreIndividual(int playerId) {
+        int completeScore = 0;
+        var playerBoard = currentPlayers[playerId].getBoard();
+        int houseScore = playerBoard.calculateHouseScore(false);
+        int mScore = playerBoard.calculateMarketScore(false);
+        int bScore = playerBoard.calculateBarracksScore(false);
+        int tScore = playerBoard.calculateTempleScore(false);
+        int gScore = playerBoard.calculateGardenScore(false);
+        int stones = currentPlayers[playerId].getStones();
+        return houseScore + mScore + bScore + tScore + gScore + stones;
+    }
+
     public int[] calculateCompleteScores() {
         int[] completeScores = new int[numberOfPlayers];
 
@@ -929,11 +951,14 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        return akropolis.generateAIMove(2).toString();
+        System.out.println("Start");
+        Set<Move> allValidMoves = akropolis.generateAllValidMoves();
+        Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
+        //return validMovesArray[0].toString();
+        return akropolis.generateAIMove(-1).toString();
     }
 
     public Move generateAIMove(int depth) {
-        //int turn = new Akropolis(gameState).currentTurn;
         var turn = currentTurn;
 
         // Generate an array of validMoves to determine the best move
@@ -944,16 +969,25 @@ public class Akropolis {
         int bestScore = Integer.MIN_VALUE;
         Move bestMove = validMovesArray[0];
 
+        //System.out.println("Valid Moves Size: " + validMovesArray.length );
         // Apply a search through the moves to determine the best move
         for (Move move : validMovesArray) {
+            //System.out.println(move);
             Akropolis gameAfterMove = applyMoveSafe(move);
-            int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            //System.out.println(Arrays.toString(gameAfterMove.calculateCompleteScores()));
+            int eval = gameAfterMove.calculateCompleteScoreIndividual(currentTurn);
+            //System.out.println(eval);
+            //int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
             if (eval > bestScore) {
                 bestScore = eval;
                 bestMove = move;
             }
+
+            //System.out.println("Best: " + bestMove);
         }
+
+        //System.out.println("return");
 
         return bestMove;
     }
@@ -975,7 +1009,8 @@ public class Akropolis {
      */
 
     public static int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0) {
+        if (depth <= 0) {
+            System.out.println("end of branch");
             return gameState.calculateCompleteScores()[player];
         }
 
@@ -996,6 +1031,8 @@ public class Akropolis {
                 }
             }
         }
+
+        //System.out.println("Minimax");
 
         return maximizingPlayer ? alpha : beta;
     }

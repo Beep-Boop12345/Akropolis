@@ -28,6 +28,8 @@ public class Setup {
     private static int playerCount = 2;
 
     private static boolean[] scoreVariants = {false,false,false,false,false};
+
+    private static boolean aiVariant = false;
     private static final StackPane background = new StackPane();
 
     private static final Group controls = new Group();
@@ -44,6 +46,8 @@ public class Setup {
     static CheckBox barracksVariant;
     static CheckBox templesVariant;
     static CheckBox gardensVariant;
+
+    static CheckBox playAI;
 
     public static void makeControls() {
         // Label for displaying "Number of Players" text
@@ -66,6 +70,10 @@ public class Setup {
         templesVariant = createCheckBox("Temples Scoring Variant");
         gardensVariant = createCheckBox("Gardens Scoring Variant");
 
+        playAI = createCheckBox("Play AI");
+
+
+
         // Create an HBox for the increment and decrement buttons, along with the player count
         HBox playerCountHBox = new HBox(50);
         playerCountHBox.setAlignment(Pos.CENTER);
@@ -79,7 +87,7 @@ public class Setup {
 
         // Create a VBox to organize the controls vertically
         VBox controlVBox = new VBox(20);
-        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, housesVariant, marketsVariant, barracksVariant, templesVariant, gardensVariant, playButtonHBox);
+        controlVBox.getChildren().addAll(playerCountLabel, playerCountHBox, housesVariant, marketsVariant, barracksVariant, templesVariant, gardensVariant, playAI, playButtonHBox);
         controlVBox.setStyle("-fx-background-color: " + Color.LIGHTBLUE.interpolate(Color.TRANSPARENT, 0.5).toString().replace("0x", "#") + ";");
         controlVBox.setAlignment(Pos.CENTER);
 
@@ -160,6 +168,14 @@ public class Setup {
                 scoreVariants[4] = true;
             } else {
                 scoreVariants[4] = false;
+            }
+        });
+
+        playAI.setOnAction(event -> {
+            if (playAI.isSelected()) {
+                aiVariant = true;
+            } else {
+                aiVariant = false;
             }
         });
 

@@ -34,6 +34,15 @@ public class Scoreboard extends Label {
         );
 
 
+        // Create a label to display player number, score, and number of stones
+        HBox playerHeaderHBox = new HBox(10);
+        playerHeaderHBox.setAlignment(Pos.CENTER);
+        Label playerInfoHeader  = new Label("Player " +  "Score " + "Stones");
+        // Customize the label style
+        playerInfoHeader.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+        playerHeaderHBox.getChildren().add(playerInfoHeader);
+        scoreboardVBox.getChildren().add(playerHeaderHBox);
+
 
         for (int i = 0; i < numberOfPlayers; i++) {
             // For each player make a horizontal box to display their scores and stone count
@@ -42,10 +51,11 @@ public class Scoreboard extends Label {
 
 
             // Create a label to display player number, score, and number of stones
-            Label playerInfoLabel = new Label("Player " + (i + 1) + ": Score: " + scores[i] + " Stones: " + playerStones[i]);
+            Label playerInfoScores = new Label
+                    ( (i + 1) + "          " +  scores[i] + "          " + playerStones[i]);
 
             // Customize the label style
-            playerInfoLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+            playerInfoScores.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
             // Highlight the score of the current player whose turn it is
             if (i == turn) {
@@ -54,10 +64,17 @@ public class Scoreboard extends Label {
                 playerHBox.setOpacity(0.3);
             }
 
+            // Make scores all visible at the end
+            if (akropolis.isGameOver()) {
+                playerHBox.setOpacity(1);
+            }
+
+
+
 
 
             // Add the player info label to the playerHBox
-            playerHBox.getChildren().add(playerInfoLabel);
+            playerHBox.getChildren().add(playerInfoScores);
 
             // Add the playerHBox to the scoreboardVBox
             scoreboardVBox.getChildren().add(playerHBox);
