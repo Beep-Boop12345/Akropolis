@@ -132,14 +132,14 @@ public class Board {
     * @return  an array containing the positions of each piece*/
     private HexCoord[] findTilePosition (Move moveToMake) {
         HexCoord[] tilePosition = new HexCoord[3];
-        HexCoord basePos = moveToMake.getPosition().getPos();
+        HexCoord basePos = moveToMake.getTransform().getPos();
         tilePosition[0] = basePos;
         /*Offset to account for hexagonal grid, odd and even columns are shifted from each other*/
         int offset = 0;
         if (Math.abs(basePos.getX()) % 2 == 1) {
             offset = 1;
         }
-        switch (moveToMake.getPosition().getRot()) {
+        switch (moveToMake.getTransform().getRot()) {
             case DEG_0:
                 tilePosition[1] = basePos.add(new HexCoord(0,1));
                 tilePosition[2] = basePos.add(new HexCoord(1,offset));

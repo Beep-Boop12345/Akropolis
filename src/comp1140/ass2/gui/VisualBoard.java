@@ -147,9 +147,9 @@ public class VisualBoard extends Group {
      * @return double array containing the x and y coordinate
      * */
     private double[] windowPositionOfMove(Move move) {
-        int xCoordinate = move.getPosition().getPos().getX();
-        int yCoordinate = move.getPosition().getPos().getY();
-        Rotation rotation = move.getPosition().getRot();
+        int xCoordinate = move.getTransform().getPos().getX();
+        int yCoordinate = move.getTransform().getPos().getY();
+        Rotation rotation = move.getTransform().getRot();
 
 
 
@@ -215,7 +215,7 @@ public class VisualBoard extends Group {
     public Move findClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         Move closest = null;
         for (Move move : moves) {
-            if (move.getPosition().getRot() == rotation) {
+            if (move.getTransform().getRot() == rotation) {
                 if (moveDistance(move,x,y) < moveDistance(closest,x,y)) {
                     closest = move;
                 }

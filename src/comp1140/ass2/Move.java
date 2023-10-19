@@ -2,36 +2,44 @@ package comp1140.ass2;
 
 public class Move {
     /*The Piece used*/
-    private Piece piece;
-
-    /*The player making the move (0 to p-1)*/
-    //private int player;
+    private final Piece piece;
 
     /*The position of the piece*/
-    private Transform position;
-    //private int cost;
+    private final Transform transform;
 
+    /**
+     * Constructor of Move using internal representations
+     * @author y7683699
+     *
+     * @param piece the move's piece
+     * @param newTransform the move's position and rotation*/
     Move(Piece piece, Transform newTransform) {
         this.piece = piece;
-        this.position = newTransform;
+        this.transform = newTransform;
     }
+    /**
+     * Constructor of Move using string representation
+     * @author u7683699
+     *
+     * @param moveString string representing the move */
     public Move(String moveString) {
         String pieceId = moveString.substring(0, 2);
         this.piece = new Piece (pieceId);
         String transformString = moveString.substring(2);
-        this.position = new Transform(transformString);
+        this.transform = new Transform(transformString);
     }
 
     /**
-     * Gets the neighbours of the piece.@u7646615
+     * Gets the neighbours of the piece.
+     * @author u7646615
      *
-     * @return HexCoord[] with the piece neighbours*/
+     * @return The piece's neighbours*/
     public HexCoord[] getPieceNeighbours(){
-        int x = position.getPos().getX();
-        int y = position.getPos().getY();
+        int x = transform.getPos().getX();
+        int y = transform.getPos().getY();
         HexCoord[] neighbours = new HexCoord[9];
         int offset = Math.abs(x) % 2;
-        switch (position.getRot()) {
+        switch (transform.getRot()) {
             case DEG_0:
                 neighbours[0] = new HexCoord(x+1,y-1+offset);
                 neighbours[1] = new HexCoord(x,y-1);
@@ -101,8 +109,8 @@ public class Move {
         return neighbours;
     }
 
-    public Transform getPosition () {
-        return this.position;
+    public Transform getTransform () {
+        return this.transform;
     }
 
     public Piece getPiece() {
@@ -111,6 +119,6 @@ public class Move {
 
     @Override
     public String toString() {
-       return piece + position.toString();
+       return piece + transform.toString();
     }
 }
