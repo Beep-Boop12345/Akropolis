@@ -3,9 +3,9 @@ package comp1140.ass2;
 
 public class ConstructionSite {
 
-    public int size;
+    private int size;
 
-    public Piece[] currentPieces;
+    private Piece[] currentPieces;
 
     /**
      * Constructor for construction site using internal representations
