@@ -9,3 +9,6 @@ of our project implements the following features:
 
 additional features...
 - Button to open instructions
+- Play against up to 3 computer opponents
+- Single player mode given all tiles for a high score
+- Current Scoreboard displayed throughout the game
