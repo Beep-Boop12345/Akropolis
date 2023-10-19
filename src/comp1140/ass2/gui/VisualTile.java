@@ -5,6 +5,7 @@ import comp1140.ass2.Tile;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,15 @@ public class VisualTile extends Group {
                     this.currentStars.add(newStar6);
                     break;
             }
+
+        }
+
+        for (int i = 1; i < this.tile.getHeight() + 1; i++) {
+            var rectangleHeight = 3;
+            var rectangleWidth = 8;
+            var newIndicator = new heightIndicator(-rectangleWidth * 0.5, this.sideLength* 0.75 - i*(rectangleHeight + 1), rectangleHeight, rectangleWidth, Color.WHITE);
+            newIndicator.toFront();
+            this.getChildren().add(newIndicator);
 
         }
 
@@ -220,6 +230,28 @@ public class VisualTile extends Group {
             this.setStroke(Color.BLACK);
             this.setStrokeWidth(length * 0.1);
 
+            this.setLayoutX(x);
+            this.setLayoutY(y);
+        }
+    }
+
+    /**
+     * Creates a small rectangle that stacks to show height of a tile
+     * @author u7683699
+     */
+    private class heightIndicator extends Rectangle {
+        /**
+         * Constructor
+         * @author u7683699
+         *
+         * @param x x-coordinate
+         * @param y y-coordinate
+         * @param length of distance between points
+         * @param color its fill color*/
+        heightIndicator(double x, double y, double length, double width, Color color) {
+            this.setHeight(length);
+            this.setWidth(width);
+            this.setFill(color);
             this.setLayoutX(x);
             this.setLayoutY(y);
         }
