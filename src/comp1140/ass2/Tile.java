@@ -41,21 +41,23 @@ public class Tile {
 
     // Turns the character representation of a tile to its district type
     private static District characterToDistrict(char tileChar) {
-        if ((tileChar == 'h') || (tileChar == 'H')) {
-            return District.HOUSES;
-        } else if ((tileChar == 'm') || (tileChar == 'M')) {
-            return District.MARKETS;
-        } else if ((tileChar == 'b') || (tileChar == 'B')) {
-            return District.BARRACKS;
-        } else if ((tileChar == 't') || (tileChar == 'T')) {
-            return District.TEMPLES;
-        } else if ((tileChar == 'g') || (tileChar == 'G')) {
-            return District.GARDENS;
-        } else if (tileChar == 'q') {
-            return District.QUARRY;
-        } else {
-            System.out.println("Missing Accurate District Type, Got: " + tileChar);
-            return District.HOUSES;
+        char tileCharLower = Character.toLowerCase(tileChar);
+        switch (tileCharLower) {
+            case 'h':
+                return District.HOUSES;
+            case 'm':
+                return District.MARKETS;
+            case 'b':
+                return District.BARRACKS;
+            case 't':
+                return District.TEMPLES;
+            case 'g':
+                return District.GARDENS;
+            case 'q':
+                return District.QUARRY;
+            default:
+                System.out.println("Missing Accurate District Type, Got: " + tileChar);
+                return District.HOUSES;
         }
     }
 
@@ -145,21 +147,5 @@ public class Tile {
                 }
         }
         return '0';
-    }
-
-    //Constructor testing code
-    public static void main(String[] args) {
-        System.out.println(new Tile('h',0));
-        System.out.println(new Tile('H',0));
-        System.out.println(new Tile('m',0));
-        System.out.println(new Tile('M',0));
-        System.out.println(new Tile('b',0));
-        System.out.println(new Tile('B',0));
-        System.out.println(new Tile('t',0));
-        System.out.println(new Tile('T',0));
-        System.out.println(new Tile('g',0));
-        System.out.println(new Tile('G',0));
-        System.out.println(new Tile('q',0));
-
     }
 }

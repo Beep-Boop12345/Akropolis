@@ -3,8 +3,6 @@ package comp1140.ass2.gui;
 import comp1140.ass2.*;
 import javafx.application.Application;
 import javafx.application.HostServices;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,15 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-
 import java.io.File;
 
 import static javafx.scene.paint.Color.*;
@@ -182,19 +175,13 @@ public class Viewer extends Application {
         guideButton.setLayoutY(150);
         controls.getChildren().add(officialRulesButton);
         controls.getChildren().add(guideButton);
-        officialRulesButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                HostServices hostServices = getHostServices();
-                hostServices.showDocument(gameRules.getAbsolutePath());
-            }
+        officialRulesButton.setOnAction(event -> {
+            HostServices hostServices = getHostServices();
+            hostServices.showDocument(gameRules.getAbsolutePath());
         });
-        guideButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                HostServices hostServices = getHostServices();
-                hostServices.showDocument(guide.getAbsolutePath());
-            }
+        guideButton.setOnAction(event -> {
+            HostServices hostServices = getHostServices();
+            hostServices.showDocument(guide.getAbsolutePath());
         });
     }
 

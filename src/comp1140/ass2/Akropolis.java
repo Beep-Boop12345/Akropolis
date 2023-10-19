@@ -10,8 +10,6 @@ import comp1140.ass2.gui.Viewer;
 public class Akropolis {
     public final static String TILE_POOL = "2:01hbt02Mbq03qhb04Bhq05Bqq06Bht07gqq08qbm09qtm10qmb11Gqh12qmh13Ghq14qtb15hgm16Bmh17Mhg18Hmb19qhh20hgb21Mth22Mqq23Tqq24Gqq25qmg26mqq27qbm28Hqq29Thq30tqq31Tqh32Hgq33Hqq34Thb35htm36qmt37Hqq3:38hmb39qth40qbg41qhh42qhm43Tqq44hqq45qmh46Htm47Ghb48Bqh49Mqq4:50bqq51Bqq52Hqm53Gmh54Mqt55qht56Thm57qgh58qhh59qbh60qhb61qhm";
 
-
-
     public int numberOfPlayers;
 
     public Player[] currentPlayers;
@@ -89,7 +87,7 @@ public class Akropolis {
 
     /**
      * Constructs a deep copy of an akropolis objects
-     * @author 7683688
+     * @author u7683688
      *
      * @param original the original akropolis*/
     public Akropolis(Akropolis original) {
@@ -997,15 +995,16 @@ public class Akropolis {
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
         System.out.println("Start");
-        Set<Move> allValidMoves = akropolis.generateAllValidMoves();
-        Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
-        //return validMovesArray[0].toString();
-        return akropolis.generateAIMove(-1).toString();
+        return akropolis.generateGreedyAIMove().toString();
     }
 
-    public Move generateAIMove(int depth) {
-        var turn = currentTurn;
-
+    /**
+     * Greedy AI algorithm plays the move with the maximum gain in score at the current moment.
+     * Doesn't try to lookahead or prevent other players from scoring.
+     * @return Move leading to the highest scoring in current moment
+     * @author u7683699
+     */
+    public Move generateGreedyAIMove() {
         // Generate an array of validMoves to determine the best move
         Set<Move> allValidMoves = generateAllValidMoves();
         Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
@@ -1014,33 +1013,70 @@ public class Akropolis {
         int bestScore = Integer.MIN_VALUE;
         Move bestMove = validMovesArray[0];
 
-        //System.out.println("Valid Moves Size: " + validMovesArray.length );
+        // Find the player's score we want to maximise before applying the move (applyMove updates turn)
+        int playerTurn = currentTurn;
+
         // Apply a search through the moves to determine the best move
         for (Move move : validMovesArray) {
             //System.out.println(move);
             Akropolis gameAfterMove = applyMoveSafe(move);
-            //System.out.println(Arrays.toString(gameAfterMove.calculateCompleteScores()));
             int eval = gameAfterMove.calculateCompleteScoreIndividual(currentTurn);
-            //System.out.println(eval);
-            //int eval = minimax(gameAfterMove, depth - 1, turn, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
+            // Update the bestMove based on the eval
             if (eval > bestScore) {
                 bestScore = eval;
                 bestMove = move;
             }
+        }
+        return bestMove;
+    }
 
+
+    /**
+     * Smart AI algorithm implementing a lookahead it will try to maximise the score for the current player whose
+     * turn it is while trying to minimise the scores of everyone else.
+     * @param depth how far the lookahead will search
+     * @return AI move
+     * @author u7330006
+     */
+    public Move generateAIMove(int depth) {
+        // Generate an array of validMoves to determine the best move
+        Set<Move> allValidMoves = generateAllValidMoves();
+        Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
+
+        // Set default values for the moves in case it times out
+        int bestScore = Integer.MIN_VALUE;
+        Move bestMove = validMovesArray[0];
+
+        // Find the player's score we want to maximise before applying the move (applyMove updates turn)
+        int playerTurn = currentTurn;
+
+
+        // Apply a search through the moves to determine the best move
+        for (Move move : validMovesArray) {
+
+            Akropolis gameAfterMove = applyMoveSafe(move);
+
+
+            int eval = minimax(gameAfterMove, depth - 1, playerTurn, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+
+
+            // Update the bestMove based on the eval
+            if (eval > bestScore) {
+                bestScore = eval;
+                bestMove = move;
+            }
             //System.out.println("Best: " + bestMove);
         }
-
         //System.out.println("return");
-
         return bestMove;
     }
 
 
     /**
      * Minimax algorithm on the current gameState using alpha-beta pruning for optimization.
-     *
+     * It will try to maximise the AI's score while trying to minimize every other player's scores by
+     * picking items out of the construction site.
      * @param gameState The current game state to evaluate.
      * @param depth The search depth, indicating how many moves ahead to look.
      * @param player The current player's turn for which we want to find the best move.
@@ -1054,9 +1090,9 @@ public class Akropolis {
      */
 
     public static int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
+        // For non-lookahead depths use greedyAI
         if (depth <= 0) {
-            System.out.println("end of branch");
-            return gameState.calculateCompleteScores()[player];
+            return gameState.calculateCompleteScoreIndividual(player);
         }
 
         Set<Move> validMoves = gameState.generateAllValidMoves();
@@ -1076,8 +1112,6 @@ public class Akropolis {
                 }
             }
         }
-
-
         return maximizingPlayer ? alpha : beta;
     }
 

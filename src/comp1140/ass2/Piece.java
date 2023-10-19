@@ -79,8 +79,4 @@ public class Piece {
         return output;
     }
 
-    public static void main(String[] args) {
-        var testPiece = new Piece("01");
-        var testPiece2 = new Piece(testPiece);
-    }
 }

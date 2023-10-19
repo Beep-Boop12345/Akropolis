@@ -27,7 +27,7 @@ public class VisualMove extends Group {
         Polygon hex1;
         Polygon hex2;
         Polygon hex3;
-        switch (move.getPosition().getRot()) {
+        switch (move.getTransform().getRot()) {
             case DEG_0:
                 hex1 = makeHexagon();
                 hex1.setLayoutX(0);
