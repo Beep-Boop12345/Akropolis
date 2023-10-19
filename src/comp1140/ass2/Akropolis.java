@@ -994,9 +994,22 @@ public class Akropolis {
 
     public static String generateAIMove(String gameState) {
         Akropolis akropolis = new Akropolis(gameState);
-        System.out.println("Start");
-        return akropolis.generateGreedyAIMove().toString();
+        return akropolis.firstLegalMove().toString();
     }
+
+
+    /**
+     * Simple AI to return firstLegalMove
+     * @return firstLegalMove
+     * @author u7330006
+     */
+    public Move firstLegalMove() {
+        Set<Move> allValidMoves = generateAllValidMoves();
+        Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
+        return validMovesArray[0];
+    }
+
+    /* These AI's that involve score calculation are timing out due to long calculation times of scores */
 
     /**
      * Greedy AI algorithm plays the move with the maximum gain in score at the current moment.
@@ -1020,7 +1033,7 @@ public class Akropolis {
         for (Move move : validMovesArray) {
             //System.out.println(move);
             Akropolis gameAfterMove = applyMoveSafe(move);
-            int eval = gameAfterMove.calculateCompleteScoreIndividual(currentTurn);
+            int eval = gameAfterMove.calculateCompleteScoreIndividual(playerTurn);
 
             // Update the bestMove based on the eval
             if (eval > bestScore) {
@@ -1039,7 +1052,7 @@ public class Akropolis {
      * @return AI move
      * @author u7330006
      */
-    public Move generateAIMove(int depth) {
+    public Move generateLookaheadAIMove(int depth) {
         // Generate an array of validMoves to determine the best move
         Set<Move> allValidMoves = generateAllValidMoves();
         Move[] validMovesArray = allValidMoves.toArray(new Move[0]);
@@ -1048,35 +1061,26 @@ public class Akropolis {
         int bestScore = Integer.MIN_VALUE;
         Move bestMove = validMovesArray[0];
 
-        // Find the player's score we want to maximise before applying the move (applyMove updates turn)
+        // Find the player's score we want to maximize before applying the move (applyMove updates turn)
         int playerTurn = currentTurn;
-
 
         // Apply a search through the moves to determine the best move
         for (Move move : validMovesArray) {
-
             Akropolis gameAfterMove = applyMoveSafe(move);
-
-
             int eval = minimax(gameAfterMove, depth - 1, playerTurn, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-
 
             // Update the bestMove based on the eval
             if (eval > bestScore) {
                 bestScore = eval;
                 bestMove = move;
             }
-            //System.out.println("Best: " + bestMove);
         }
-        //System.out.println("return");
         return bestMove;
     }
 
-
     /**
      * Minimax algorithm on the current gameState using alpha-beta pruning for optimization.
-     * It will try to maximise the AI's score while trying to minimize every other player's scores by
-     * picking items out of the construction site.
+     * Currently timing out due to score calculation and not evaluating opponent scores.
      * @param gameState The current game state to evaluate.
      * @param depth The search depth, indicating how many moves ahead to look.
      * @param player The current player's turn for which we want to find the best move.
@@ -1089,10 +1093,10 @@ public class Akropolis {
      * @author u7330006
      */
 
-    public static int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
-        // For non-lookahead depths use greedyAI
+    public int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
+        // Base Case: Finish Searching all nodes return the eval
         if (depth <= 0) {
-            return gameState.calculateCompleteScoreIndividual(player);
+            return calculateCompleteScoreIndividual(player);
         }
 
         Set<Move> validMoves = gameState.generateAllValidMoves();
@@ -1112,6 +1116,7 @@ public class Akropolis {
                 }
             }
         }
+
         return maximizingPlayer ? alpha : beta;
     }
 
