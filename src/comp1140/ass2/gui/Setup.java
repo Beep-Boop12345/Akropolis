@@ -125,7 +125,7 @@ public class Setup {
         });
 
         decrementPlayersButton.setOnAction(event -> {
-            if (playerCount > 2) {
+            if (playerCount > 1) {
                 playerCount--;
                 playerCountDisplay.setText(Integer.toString(playerCount));
             }

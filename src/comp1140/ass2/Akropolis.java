@@ -99,6 +99,7 @@ public class Akropolis {
      * @author u7646615*/
     private Piece[] getInitialStack() {
         int idCap = switch (numberOfPlayers) {
+            case 1 -> 61;
             case 2 -> 37;
             case 3 -> 49;
             case 4 -> 61;
