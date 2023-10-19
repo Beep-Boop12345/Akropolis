@@ -22,7 +22,6 @@ public class Akropolis {
 
     public int currentTurn;
 
-    public boolean aiVariant = false; // Assume AI variant is always false this can be changed by setup
 
     /**
      * Constructs an Akropolis Class from its string representation for testing
@@ -108,13 +107,7 @@ public class Akropolis {
 
     }
 
-    /**
-     * Setter method for AI variant
-     * @param aiVariant
-     */
-    public void setAiVariant(boolean aiVariant) {
-        this.aiVariant = aiVariant;
-    }
+
 
     /** Returns the pieces that will be in a newly initialized stack
      * @author u7646615*/

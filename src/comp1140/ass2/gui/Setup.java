@@ -98,7 +98,6 @@ public class Setup {
         templesVariant = createCheckBox("Temples Scoring Variant");
         gardensVariant = createCheckBox("Gardens Scoring Variant");
 
-        //playAI = createCheckBox("Play AI");
 
 
 
@@ -236,7 +235,6 @@ public class Setup {
             Akropolis initialGame = new Akropolis(playerCount, aiCount, scoreVariants);
 
             System.out.println("Vars: " + Arrays.toString(initialGame.scoreVariants));
-            //initialGame.setAiVariant(aiVariant);
             new Viewer(initialGame);
             primaryStage.close();
         });
