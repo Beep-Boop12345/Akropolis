@@ -89,7 +89,7 @@ public class Setup {
         aiCountLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         // Create a label for displaying the ai count
-        aiCountDisplay.setStyle("-fx-font-weight: bold;");
+        aiCountDisplay.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         // Buttons to adjust the number of ai
         incrementAIButton = createButton("+", "-fx-background-color: lightblue; -fx-text-fill: white;" +
@@ -118,7 +118,7 @@ public class Setup {
         aiCountHBox.getChildren().addAll(decrementAIButton, aiCountDisplay, incrementAIButton);
 
         // Create an HBox for the "Play" button
-        playButton = createButton("Play", "-fx-background-color: yellow; -fx-text-fill: black;" +
+        playButton = createButton("Play", "-fx-background-color: lightgoldenrodyellow; -fx-text-fill: black;" +
                 " -fx-font-weight: bold;");
         playButton.setMinWidth(80);
         HBox playButtonHBox = new HBox(playButton);
