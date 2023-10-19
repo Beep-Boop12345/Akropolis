@@ -112,6 +112,7 @@ public class Akropolis {
     private Piece[] getInitialStack() {
         // Determine the maximum piece ID allowed
         int idCap = switch (numberOfPlayers) {
+            case 1 -> 61;
             case 2 -> 37;
             case 3 -> 49;
             case 4 -> 61;
