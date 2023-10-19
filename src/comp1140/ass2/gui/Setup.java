@@ -73,13 +73,12 @@ public class Setup {
 
 
         // Create a label for displaying the player count
-        playerCountDisplay.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+        playerCountDisplay.setStyle("-fx-font-weight: bold;");
 
         // Buttons to adjust the number of players
-        incrementPlayersButton = createButton("+", "-fx-background-color: lightblue; -fx-text-fill: white;" +
-                "                                             -fx-font-weight: bold;");
-        decrementPlayersButton = createButton("-", "-fx-background-color: lightgray; -fx-text-fill: white;" +
-                "                                             -fx-font-weight: bold;");
+        incrementPlayersButton = createButton("+", "-fx-background-color: lightblue; -fx-font-weight: bold;");
+        decrementPlayersButton = createButton("-", "-fx-background-color: lightgray; -fx-font-weight: bold;");
+
 
 
 
@@ -89,13 +88,12 @@ public class Setup {
         aiCountLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         // Create a label for displaying the ai count
-        aiCountDisplay.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+        aiCountDisplay.setStyle("-fx-font-weight: bold;");
 
         // Buttons to adjust the number of ai
-        incrementAIButton = createButton("+", "-fx-background-color: lightblue; -fx-text-fill: white;" +
-                "                                             -fx-font-weight: bold;");
-        decrementAIButton = createButton("-", "-fx-background-color: lightgray; -fx-text-fill: white;" +
-                "                                             -fx-font-weight: bold;");
+        incrementAIButton = createButton("+", "-fx-background-color: lightblue; -fx-font-weight: bold;");
+        decrementAIButton = createButton("-", "-fx-background-color: lightgray; -fx-font-weight: bold;");
+
 
         // Checkbox buttons for scoring variants
         housesVariant = createCheckBox("Houses Scoring Variant");
