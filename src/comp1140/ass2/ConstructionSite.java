@@ -1,6 +1,5 @@
 package comp1140.ass2;
 
-import java.lang.Math;
 
 public class ConstructionSite {
 
@@ -8,7 +7,37 @@ public class ConstructionSite {
 
     public Piece[] currentPieces;
 
-
+    /**
+     * Constructor for construction site using internal representations
+     * @author u7646615
+     *
+     * @param playerCount how many players are in the game
+     * @param initialPieces the pieces in the construction site
+     * */
+    public ConstructionSite (int playerCount, Piece[] initialPieces) {
+        this.size = playerCount + 2;
+        this.currentPieces = new Piece[this.size];
+        for (int i =0; i < initialPieces.length; i++) {
+            this.currentPieces[i] = initialPieces[i];
+        }
+    }
+    /**Constructor from string input
+     * @author u7646615
+     *
+     * @param gameState string representing the gameState*/
+    public ConstructionSite (String gameState) {
+        Piece[] pieces = isolateConstructionSite(gameState);
+        int playerCount = findPlayerCount(gameState);
+        this.size = playerCount + 2;
+        this.currentPieces = new Piece[this.size];
+        for (int i =0; i < pieces.length; i++) {
+            this.currentPieces[i] = pieces[i];
+        }
+    }
+    /**
+     * Copy constructor for construction site
+     * @author u7683688
+     * @param original the original construction site*/
     public ConstructionSite(ConstructionSite original) {
         this.size = original.size;
         this.currentPieces = new Piece[this.size];
@@ -18,27 +47,14 @@ public class ConstructionSite {
             }
         }
     }
-    public ConstructionSite (int playercount, Piece[] initialPieces) {
-        this.size = playercount + 2;
-        this.currentPieces = new Piece[this.size];
-        for (int i =0; i < initialPieces.length; i++) {
-            this.currentPieces[i] = initialPieces[i];
-        }
-    }
-    /*Constructor from string input*/
-    public ConstructionSite (String gamestate) {
-        Piece[] pieces = isolateConstructionSite(gamestate);
-        int playerCount = findPlayerCount(gamestate);
-        this.size = playerCount + 2;
-        this.currentPieces = new Piece[this.size];
-        for (int i =0; i < pieces.length; i++) {
-            this.currentPieces[i] = pieces[i];
-        }
-    }
 
-    /*Finds the Pieces in the construction site from the gameState string
-    * @Param String gamestate
-    * @Return Piece[] the pieces in the constructions site*/
+    /**
+     * Finds the Pieces in the construction site from the gameState string
+     * @author u7646615
+     *
+    * @param gameState string representation of the current gameState
+    * @return Piece[] the pieces in the constructions site
+     * */
     private static Piece[] isolateConstructionSite (String gameState) {
         String shared = gameState.split(";")[1];
         Piece[] initialPieces = new Piece[(shared.length() - 1)/2];
@@ -48,13 +64,22 @@ public class ConstructionSite {
         return initialPieces;
     }
 
-    /*Extracts playerCount from gameState String
-    * @Param String gameState
-    * @Return int playerCount*/
+    /**
+     * Extracts playerCount from gameState String
+     * @author u7646615
+     * @param gameState the state of the game in string form
+     * @return int playerCount*/
     private static int findPlayerCount (String gameState) {
         return Integer.parseInt(gameState.substring(0,1));
     }
 
+    /**
+     * Resupplies the construction site
+     * @author u7646615
+     * <p>
+     * random pieces are chosen from the stack, and removed from the stack
+     * @param  stack the stack that pieces are taken from
+     * */
     public void resupply (Stack stack) {
         if (!isEmpty()) {
             return;
@@ -65,50 +90,23 @@ public class ConstructionSite {
         }
     }
 
-    /*Evaluates whether refilling is needed
-    * @Return True if only one piece in construction site*/
+    /**
+     * Evaluates whether refilling is needed
+     * @author u7646615
+     * @return true if only one or no piece in construction site*/
     private boolean isEmpty() {
-        if (getCurrentPieceCount() < 2) {
-            return true;
-        }
-        return false;
+        return getCurrentPieceCount() < 2;
     }
 
-//    public int countPieces() {
-//        int count = 0;
-//        for (int i = 0; i < size; i++) {
-//            if (currentPieces[i] != null) {
-//                count += 1;
-//            }
-//        }
-//        return count;
-//    }
-
-    /*Order the pieces so that all null instances are at the highest indexes of the currentPiece array*/
-    private void order() {
-        int index = 0;
-        while (index < size) {
-            if (currentPieces[index] == null) {
-                int i = 0;
-                while (index + i < size && currentPieces[index] == null) {
-                    if (currentPieces[index + i] != null) {
-                        Piece holdr = currentPieces[index + i];
-                        currentPieces[index + i] = null;
-                        currentPieces[index] = holdr;
-                        break;
-                    }
-                }
-            }
-            index ++;
-        }
-    }
-    /*Returns the price of a piece if it is to be purchased
-    * @Param Piece purchase piece to be purchased
-    * @Return int price price of selection, -1 if not possible*/
+    /**
+     * Returns the price of a piece if it is to be purchased
+     * @author u7646615
+     * @param purchase piece to be purchased
+     * @return price of selection, -1 if not purchasable
+     * */
     public int findPrice(Piece purchase) {
+        //Last piece may not be purchased
         if (getCurrentPieceCount() < 2) {
-            //System.out.println(getCurrentPieceCount() + " : Piece");
-            //System.out.println("Low");
             return -1;
         }
         for (int i = 0; i < size; i++) {
@@ -116,12 +114,16 @@ public class ConstructionSite {
                 return i;
             }
         }
-        //System.out.println("Cant");
         return -1;
     }
 
-    /*Removes an amount of Pieces from the construction site from the left
-    * @Param piece to be removed*/
+    /**
+     * Removes piece from the construction site
+     * @author u7646615
+     * <p>
+     * preserves order of pieces and ensures all null instances held are at the end of the array
+     *
+     * @param piece to be removed*/
     public void removePiece(Piece piece) {
         /*this round about way of removing is to make sure all nulls remain at the end*/
         boolean hasReachedPieceToBeRemoved = false;
@@ -146,8 +148,11 @@ public class ConstructionSite {
         }
     }
 
-    /*Adds pieces to the construction Site
-    * @Param pieces to be added*/
+    /**
+     * returns piece from the stack
+     *
+     * @param stack the stack from which the pieces are taken
+     * @return the piece selected from the stack*/
     private static Piece addPiece(Stack stack) {
         Piece output = stack.choose();
         return output;
