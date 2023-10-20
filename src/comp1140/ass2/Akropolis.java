@@ -80,7 +80,6 @@ public class Akropolis {
         this.numberOfPlayers = numberOfPlayers + numberOfAI;
         this.scoreVariants = scoringVariants;
         this.currentPlayers = new Player[this.numberOfPlayers];
-        System.out.println(currentPlayers.length + " Length");
         this.currentTurn = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
             currentPlayers[i] = new Player(i,new Board(),i+1, false);
@@ -598,9 +597,7 @@ public class Akropolis {
 
         //Get values to limit search
         int boardRadiusX = player.getBoard().getBoardRadiusX();
-        // System.out.println(boardRadiusX);
         int boardRadiusY = player.getBoard().getBoardRadiusY();
-        // System.out.println(boardRadiusY);
         int stones = player.getStones();
         Piece[] pieces = constructionSite.getCurrentPieces();
         int avaliablePiece = constructionSite.getCurrentPieceCount();
@@ -632,16 +629,12 @@ public class Akropolis {
                     for (int s = 0; s < Math.min(stones+1, avaliablePiece); s++) {
                         Piece piece = pieces[s];
                         Move move = new Move(piece, transform);
-                        // System.out.println(move);
                         validMoves.add(move);
                         //We need not check validity of equivalent transforms
                         Move move1 = new Move(piece, new Transform(new HexCoord(x,y-1), Rotation.DEG_300));
-                        // System.out.println(move1);
                         Move move2 = new Move(piece, new Transform(new HexCoord(x-1,y-1+(Math.abs(x) % 2)), Rotation.DEG_60));
-                        // System.out.println(move2);
                         validMoves.add(move1);
                         validMoves.add(move2);
-                        // System.out.println("_________________________");
                     }
                 }
 
@@ -1051,7 +1044,6 @@ public class Akropolis {
 
         // Apply a search through the moves to determine the best move
         for (Move move : validMovesArray) {
-            //System.out.println(move);
             Akropolis gameAfterMove = applyMoveSafe(move);
             int eval = gameAfterMove.calculateCompleteScoreIndividual(playerTurn);
 
@@ -1116,13 +1108,11 @@ public class Akropolis {
     public int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
         // Base Case: Finish Searching all nodes return the eval
         if (depth <= 0) {
-            //System.out.println("Reached Bottom");
             return calculateCompleteScoreIndividual(player);
         }
 
 
         Set<Move> validMoves = gameState.generateAllValidMoves();
-        System.out.println(validMoves.size());
         for (Move move : validMoves) {
             Akropolis gameAfterMove = gameState.applyMoveSafe(move);
             int eval = minimax(gameAfterMove, depth - 1, player, alpha, beta, !maximizingPlayer);
