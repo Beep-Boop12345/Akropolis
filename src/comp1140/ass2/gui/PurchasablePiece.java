@@ -154,7 +154,7 @@ public class PurchasablePiece extends Group {
                 updateShape();
             }
             akropolis.applyMove(moveSelected);
-            viewer.playSound();
+            // viewer.playSound();
             viewer.updateView();
         });
     }
@@ -167,7 +167,6 @@ public class PurchasablePiece extends Group {
         for (int i = 0; i < 3; i++) {
             // resize lines
             int j = (i+1) % 3;
-            System.out.println("(j: " + j + ",i: " + i + ")");
             Line line = connectors.get(i);
             line.setStrokeWidth(size);
             line.setStartX(vTiles.get(i).getLayoutX());
