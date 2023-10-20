@@ -50,6 +50,9 @@ public class Viewer extends Application {
 
 
     private Scene scene;
+
+
+
     /**
      * Draw a placement in the window, removing any previously drawn placements
      * @author u7683699
@@ -213,14 +216,14 @@ public class Viewer extends Application {
         primaryStage.setTitle("Akropolis Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
+        this.scene = scene;
         root.getChildren().add(controls);
-        root.getChildren().add(currentView);
-
 
         makeControls();
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     /**
@@ -240,6 +243,10 @@ public class Viewer extends Application {
         root.getChildren().add(controls);
         primaryStage.show();
 
+    }
+
+    public Viewer() {
+        gameTextField = new TextField();
     }
 
     /**Updates the viewed state
