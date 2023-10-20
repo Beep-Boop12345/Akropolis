@@ -138,6 +138,7 @@ public class VisualMove extends Group {
         }
     }
 
+
     /**
      * Produces a hexagon shape
      * @author u7646615

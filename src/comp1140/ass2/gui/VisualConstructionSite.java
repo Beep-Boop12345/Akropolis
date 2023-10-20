@@ -51,7 +51,7 @@ public class VisualConstructionSite extends Group {
             PurchasablePiece nextVisualPiece = new PurchasablePiece(1.8*sideLength,
                     sideLength*i*4+sideLength * 3.5,
                     pieces[i],
-                    sideLength, viewer, akropolis);
+                    sideLength, true, viewer, akropolis);
             purchasablePieces.add(nextVisualPiece);
             this.getChildren().add(nextVisualPiece);
         }
