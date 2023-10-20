@@ -261,21 +261,6 @@ public class Viewer extends Application {
         }
     }
 
-    /**
-     * Plays a sound when a move is played
-     * @author u7330006
-     */
-    public void playSound() {
-
-        File audioFile = new File("assets/Move.mp3");
-        Media sound = new Media(audioFile.toURI().toString());
-        MediaPlayer soundPlayer = new MediaPlayer(sound);
-        soundPlayer.play();
-/*        File audioClip = new File("assets/Move.mp3");
-        AudioClip ac = new AudioClip(getClass().getResource("assets/Move.mp3").toExternalForm());
-        ac.play();*/
-    }
-
 
     public static void delay(long millis, Runnable continuation) {
         Task<Void> sleeper = new Task<Void>() {
@@ -293,7 +278,6 @@ public class Viewer extends Application {
     private void aiTurn() {
         var aiMove = akropolis.generateAIMove(true);
         akropolis.applyMove(aiMove);
-        //playSound();
         updateView();
     }
 

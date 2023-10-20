@@ -172,7 +172,6 @@ public class PurchasablePiece extends Group {
                 viewer.getBoard().closestMove.deactivate();
                 //Updates the gameState with move
                 akropolis.applyMove(vMoveSelected.getMove());
-                // viewer.playSound();
                 viewer.updateView();
             }
         });
