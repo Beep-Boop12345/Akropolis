@@ -90,13 +90,13 @@ public class Gameover {
         if (multipleWinner) {
             gameOverMessage = "The Winners Are:";
             for (int i = 0; i < winners.size(); i++) {
-                gameOverMessage += " Player " + (winners.get(i) + 1);
+                gameOverMessage += " Player " + (winners.get(i));
                 if (i != winners.size() - 1) {
                     gameOverMessage += ",";
                 }
             }
         } else {
-            gameOverMessage = "The Winner is Player " + (winners.get(0) + 1 ) + "!";
+            gameOverMessage = "The Winner is Player " + (winners.get(0)) + "!";
         }
 
         // Set text for the winner label
