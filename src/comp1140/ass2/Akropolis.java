@@ -1110,7 +1110,7 @@ public class Akropolis {
     public int minimax(Akropolis gameState, int depth, int player, int alpha, int beta, boolean maximizingPlayer) {
         // Base Case: Finish Searching all nodes return the eval
         if (depth <= 0) {
-            System.out.println("Reached Bottom");
+            //System.out.println("Reached Bottom");
             return calculateCompleteScoreIndividual(player);
         }
 
