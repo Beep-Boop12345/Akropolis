@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -38,7 +39,7 @@ public class Setup {
     private static final boolean[] scoreVariants = {false,false,false,false,false};
 
     //private static boolean aiVariant = false;
-    private static final StackPane background = new StackPane();
+    private static final AnchorPane background = new AnchorPane();
 
     private static final Group controls = new Group();
 
@@ -58,8 +59,6 @@ public class Setup {
     static CheckBox barracksVariant;
     static CheckBox templesVariant;
     static CheckBox gardensVariant;
-
-
 
     /**
      * Initializes/formats the controls
@@ -247,12 +246,23 @@ public class Setup {
     // Method to make background
     public static void makeBackground() {
         // Create background image
-        Image backgroundImage = new Image("https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg",
-                SETUP_WIDTH, SETUP_HEIGHT, false, false);
-        BackgroundImage BI = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        Background BG = new Background(BI);
-        background.setBackground(BG);
+        Image backgroundImage = new Image("https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg");
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView.setFitHeight(SETUP_HEIGHT);
+        backgroundImageView.setFitWidth(SETUP_WIDTH);
+        backgroundImageView.setPreserveRatio(false);
+        backgroundImageView.setSmooth(false);
+        root.getChildren().add(backgroundImageView);
+
+        AnchorPane.setBottomAnchor(backgroundImageView,0.0);
+        AnchorPane.setLeftAnchor(backgroundImageView,0.0);
+        AnchorPane.setRightAnchor(backgroundImageView,0.0);
+        AnchorPane.setTopAnchor(backgroundImageView,0.0);
+
+        // Fit to fullscreen if window size changed
+        backgroundImageView.fitWidthProperty().bind(root.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(root.heightProperty());
+
     }
 
     public static void display() {

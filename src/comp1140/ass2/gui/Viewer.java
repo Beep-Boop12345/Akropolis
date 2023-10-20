@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -244,6 +245,16 @@ public class Viewer extends Application {
         }
     }
 
+    /**
+     * Plays a sound when a move is played
+     * @author u7330006
+     */
+    public void playSound() {
+        AudioClip audioClip = new AudioClip("assets/Move.mp3");
+        audioClip.play();
+    }
+
+
     public static void delay(long millis, Runnable continuation) {
         Task<Void> sleeper = new Task<Void>() {
             @Override
@@ -260,6 +271,7 @@ public class Viewer extends Application {
     private void aiTurn() {
         var aiMove = akropolis.generateAIMove(true);
         akropolis.applyMove(aiMove);
+        playSound();
         updateView();
     }
 
