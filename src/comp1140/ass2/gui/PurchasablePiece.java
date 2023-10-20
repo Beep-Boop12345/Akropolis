@@ -154,6 +154,7 @@ public class PurchasablePiece extends Group {
                 updateShape();
             }
             akropolis.applyMove(moveSelected);
+            viewer.playSound();
             viewer.updateView();
         });
     }
