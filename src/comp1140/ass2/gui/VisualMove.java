@@ -11,6 +11,10 @@ import javafx.scene.shape.Polygon;
 import static javafx.scene.paint.Color.GOLD;
 
 
+/**
+ * Creates a preview of the move about to be played.
+ * @author u7646615
+ */
 public class VisualMove extends Group {
 
     private final Move move;

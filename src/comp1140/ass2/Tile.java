@@ -1,5 +1,11 @@
 package comp1140.ass2;
 
+/**
+ * Represents a single hexagonal tile that can be positioned on the board
+ * @author u7683699
+ * @author u7646615
+ * @author u7330006
+ */
 public class Tile {
     private District districtType;
 

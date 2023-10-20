@@ -11,6 +11,12 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
+/**
+ * A GUI class the represents a backend Piece class in the construction site that could potentially be purchased by the
+ * current player.
+ * @author u7683699
+ * @author u7646615
+ */
 public class PurchasablePiece extends Group {
     /*The back end piece this represents*/
     private final Piece piece;

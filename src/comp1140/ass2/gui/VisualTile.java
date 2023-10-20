@@ -10,7 +10,11 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 
-// Creates a Visual Representation of a Backend Tile
+/**
+ * Creates a Visual Representation of a Backend Tile
+ * @author u7683699
+ * @author u7646615
+ */
 public class VisualTile extends Group {
 
     Tile tile;

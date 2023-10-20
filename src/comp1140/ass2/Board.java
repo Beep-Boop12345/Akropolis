@@ -2,7 +2,12 @@ package comp1140.ass2;
 
 import java.util.*;
 
-
+/**
+ * Represents the board for each player
+ * @author u7683699
+ * @author u7646615
+ * @author u7330006
+ */
 public class Board {
 
     /*100 100 is origin, Array of all the tiles appearing on the surface*/

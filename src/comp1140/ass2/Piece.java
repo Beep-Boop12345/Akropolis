@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+/**
+ * class that represents the three tiles that make up one piece
+ * @author u7683699
+ * @author u7646615
+ */
 public class Piece {
     /* Tile array of the tiles associated to the piece from top left,
        bottom left and bottom right at standard rotation                               */

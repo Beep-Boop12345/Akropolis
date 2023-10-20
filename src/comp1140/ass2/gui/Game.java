@@ -5,6 +5,10 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 
+/**
+ * Initiates the game
+ * @author u7646615
+ */
 public class Game extends Application {
 
     private final Group root = new Group();

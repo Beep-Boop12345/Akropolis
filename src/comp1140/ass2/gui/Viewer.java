@@ -21,6 +21,12 @@ import java.io.File;
 
 import static javafx.scene.paint.Color.*;
 
+/**
+ * Displays a visual representation of the current akropolis instance
+ * @author u7683699
+ * @author u7646615
+ * @author u7330006
+ */
 public class Viewer extends Application {
 
     private static final double VIEWER_WIDTH = 1200;

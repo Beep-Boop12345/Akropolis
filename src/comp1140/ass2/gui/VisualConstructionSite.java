@@ -10,6 +10,11 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+/**
+ * GUI class that represents any backend construction site class
+ * @author u7683699
+ * @author u7646615
+ */
 public class VisualConstructionSite extends Group {
     /*Holds the pieces that can be purchased*/
     public ArrayList<PurchasablePiece> purchasablePieces;

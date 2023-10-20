@@ -1,6 +1,10 @@
 package comp1140.ass2;
 
-
+/**
+ * Holds a postition and rotation of a hexcoord to represent a hexcoord movement
+ * @author u7646615
+ * @author u7330006
+ */
 public class Transform {
     private HexCoord pos;
 

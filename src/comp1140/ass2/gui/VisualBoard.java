@@ -8,6 +8,11 @@ import javafx.scene.shape.Line;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * GUI class that represents any backend Board class. Is movable by mouse click
+ * @author u7683699
+ * @author u7646615
+ */
 public class VisualBoard extends Group {
 
     /*Backend board that this visual board corresponds to*/

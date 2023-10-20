@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+/**
+ * Main Backend class that represents each player
+ * @author u7683699
+ * @author u7646615
+ */
 public class Player {
 
     // The players ID

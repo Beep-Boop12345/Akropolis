@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+/**
+ * class that represents the pieces left in the game stack
+ * @author u7683699
+ * @author u7646615
+ */
 public class Stack {
 
     private int pieceCount;

@@ -1,6 +1,12 @@
 package comp1140.ass2;
 
 import java.util.Set;
+
+/**
+ * Represents the hex system used in the assignment spec
+ * @author u7646615
+ * @author u7330006
+ */
 public class HexCoord {
 
     // The horizontal and vertical positions as integers x and y.

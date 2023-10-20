@@ -1,5 +1,10 @@
 package comp1140.ass2;
 
+/**
+ * Represents a possible board move
+ * @author u7683699
+ * @author u7646615
+ */
 public class Move {
     /*The Piece used*/
     private final Piece piece;

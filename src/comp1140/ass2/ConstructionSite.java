@@ -1,6 +1,10 @@
 package comp1140.ass2;
 
-
+/**
+ * Backend class that represents the current construction site
+ * @author u7683699
+ * @author u7646615
+ */
 public class ConstructionSite {
 
     private int size;
