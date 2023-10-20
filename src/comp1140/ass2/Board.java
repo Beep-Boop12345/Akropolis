@@ -245,36 +245,6 @@ public class Board {
         return height0;
     }
 
-    //Remove if we never use it
-    /**
-    * Given a hexCoord describing a point of the board will check if it is a part of a lake.
-    * @author u7646615
-    * <p>
-    * A lake is a part of the board where no piece has been placed but is surrounded by tiles
-    *
-    * @param point the point on the board that will be checked if it is a tile
-    * @return boolean, true if it is a lake
-    **/
-    /*
-    public boolean isLake(HexCoord point) {
-        if (getTile(point) != null) {
-            return false;
-        }
-        *//*This quick way of checking if it is not a lake, failing this does not mean that it cannot be a lake*//*
-        boolean hasReachedEdgeCardinally = false;
-        hasReachedEdgeCardinally = hasReachedEdgeCardinally || !cardinalSearchForTile(new HexCoord(0,1),point);
-        hasReachedEdgeCardinally = hasReachedEdgeCardinally || !cardinalSearchForTile(new HexCoord(0,-1),point);
-        hasReachedEdgeCardinally = hasReachedEdgeCardinally || !cardinalSearchForTile(new HexCoord(1,0),point);
-        hasReachedEdgeCardinally = hasReachedEdgeCardinally || !cardinalSearchForTile(new HexCoord(-1,0),point);
-        if (hasReachedEdgeCardinally) {
-            return false;
-        }
-        *//*This tries to build the largest set of empty coordinates, if it reaches a sie of 20, it will stop adding
-        * elements, in this case we assume it is not a lake*//*
-        Set<HexCoord> noTileGroup = new HashSet<>();
-        groupOfNoTiles(point, noTileGroup);
-        return noTileGroup.size() > 20;
-    }*/
 
     /**Checks if a tile is a lake according to the definition of the test cases.
      * @author u7646615
@@ -299,74 +269,6 @@ public class Board {
         }
         return true;
     }
-
-//Remove if no isLake
-//    /**
-//     * searches from a point in a given direction checking if a piece or edge is reached.
-//     * @author u76466615
-//     *
-//     * @param point HexCoord describing the position from where the search will start
-//     * @param direction HexCoord now acting as a direction, the direction in which the search will move
-//     *
-//     * @return boolean, true if tile reached, false if edge reached
-//     * */
-//    private boolean cardinalSearchForTile(HexCoord direction, HexCoord point) {
-//        if (point.getX() < -100 || point.getX() > 99 || point.getY() < -100 || point.getY() > 99) {
-//            return false;
-//        }
-//        if (getTile(point) != null) {
-//            return true;
-//        }
-//        return cardinalSearchForTile(direction, point.add(direction));
-//    }
-
-    //Remove if no lake
-     /**
-     * Given a point will construct the set of adjacent empty tile.
-     * @author u7646615
-     * <p>
-     * Will terminate once the set has more than 20 elements.
-     * Will not add to set when called with point where the tile is not empty.
-     *
-     * @param point the point from where the all adjacent tiles will be checked.
-     * @param noTileGroup the set which collects points reffering to empty tiles.
-     * */
-     /*
-    private void groupOfNoTiles(HexCoord point, Set<HexCoord> noTileGroup) {
-        if (noTileGroup.size() > 20) {
-            return;
-        }
-        if (getTile(point) != null) {
-            return;
-        }
-        noTileGroup.add(point);
-        HexCoord[] neighbours = point.getSurroundings();
-        for (HexCoord neighbour : neighbours) {
-            if (!containsIdentical(noTileGroup,neighbour)) {
-                groupOfNoTiles(neighbour, noTileGroup);
-            }
-        }
-    }
-*/
-    //Remove if no isLake
-//    /**Checks if set of HexCoord contains an identical element to another HexCoord.
-//     * @author u7646615
-//     * <p>
-//     * Does not check if set contains an element, but if it holds an element that is equal to another
-//     *
-//     * @param set the set to be checked for identical elements
-//     * @param element the element that may be equal to an element in the set
-//     * @return boolean true if the set has an element equal to the element given.
-//     **/
-//    private boolean containsIdentical(Set<HexCoord> set, HexCoord element) {
-//        Iterator<HexCoord> setIterator = set.iterator();
-//        while (setIterator.hasNext()) {
-//            if (element.equals(setIterator.next())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
 
     /**
@@ -410,17 +312,17 @@ public class Board {
         ArrayList<HexCoord> listOfCoords = getTilesOfType(District.HOUSES);
         ArrayList<ArrayList<HexCoord>> foundGroups = new ArrayList<>();
         outerLoop:
-        for (int i = 0; i < listOfCoords.size(); i++) {
+        for (HexCoord listOfCoord : listOfCoords) {
 
             for (var group : foundGroups) {
-                if (group.contains(listOfCoords.get(i))) {
+                if (group.contains(listOfCoord)) {
                     continue outerLoop;
                 }
             }
             ArrayList<HexCoord> newGroup = new ArrayList<>();
-            newGroup.add(listOfCoords.get(i));
+            newGroup.add(listOfCoord);
             foundGroups.add(newGroup);
-            findSurroundingHouses(newGroup, listOfCoords.get(i));
+            findSurroundingHouses(newGroup, listOfCoord);
 
         }
 
