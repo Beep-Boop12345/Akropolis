@@ -131,7 +131,7 @@ public class Viewer extends Application {
         currentView = newView;
 
         if (akropolis.currentPlayers[akropolis.currentTurn].isAI) {
-            delay(100, () -> aiTurn());
+            delay(500, this::aiTurn);
         }
 
     }
