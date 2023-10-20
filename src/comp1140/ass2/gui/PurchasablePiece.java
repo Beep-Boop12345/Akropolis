@@ -93,7 +93,6 @@ public class PurchasablePiece extends Group {
             vTiles.add(newTile);
             this.getChildren().add(newTile);
         }
-        System.out.println("There are: " + connectors.size() + "lines ");
         requestFocus();
 
         this.setLayoutX(x);
