@@ -19,8 +19,16 @@ declaration: >-
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
 collaboration:
-  - name:
-    comment: >-
+  - name: Itay Yarom
+    comment: >- 
+      I was sitting next to Itay in the comp labs. I was thinking about how I could reduce the complexity of
+      all valid moves by considering rotations as the same in terms of placement rules. Itay suggested that this
+      could be extended to Piece placement. I implemented all the changes myself and I inititated the discussion as to 
+      how I could start considering some moves as identical in placement validity.
+  - name: Oliver Ross
+    comment: >- 
+      Oliver originally wrote the constructor for PurchasablePiece, 
+      I implement the user interaction components of purchasablePiece and the geometric transformations.
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -37,15 +45,15 @@ code:
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
 class:
-   - 
+   - PurchasablePiece
    - 
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - 
+   - generateAllValidMoves
    - 
 
 # sign *your* name and uid here
-name:
-uid:
+name: Koen Dubrow
+uid: u7646615

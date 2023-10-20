@@ -21,9 +21,11 @@ declaration: >-
 # (or remove it altogether if you haven't collaborated with anyone)
 collaboration:
   - name: Itay Yarom
-    comment: >- I was sitting next to Itay in the comp labs. I was thinking about how I could reduce the complexity of
+    comment: >- 
+      I was sitting next to Itay in the comp labs. I was thinking about how I could reduce the complexity of
       all valid moves by considering rotations as the same in terms of placement rules. Itay suggested that this
-      could be extended to Piece placement. I implemented all the changes (or will).
+      could be extended to Piece placement. I implemented all the changes myself and I inititated the discussion as to 
+      how I could start considering some moves as identical in placement validity.
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
