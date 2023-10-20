@@ -256,7 +256,7 @@ public class VisualBoard extends Group {
      **/
     public void activateClosestMove(Set<Move> moves, double x, double y, Rotation rotation) {
         if (closestMove != null) {
-            closestMove.deactivate();
+            deactivateClosestMove();
         }
         Move closestMoveRep = findClosestMove(moves, x, y, rotation);
         if (closestMoveRep == null || moveDistance(closestMoveRep, x, y) > 40) {
