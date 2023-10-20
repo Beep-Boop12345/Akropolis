@@ -107,7 +107,6 @@ public class VisualBoard extends Group {
     * darkens tiles that are on lower heights
     * @author u7683699*/
     private void heightDarken() {
-        System.out.println("Darken");
         for (VisualTile vTile : tiles) {
             int metaTileHeight = vTile.getTile().getHeight();
             for (int i = 0; i < boardHeight - metaTileHeight; i++) {

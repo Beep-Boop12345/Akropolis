@@ -71,8 +71,6 @@ public class Viewer extends Application {
 
         // Old Code to Display Stones
         int stones = akropolis.getCurrentPlayer().getStones();
-        System.out.println(stones);
-
         StoneLabel stoneLabel = new StoneLabel(50, VIEWER_HEIGHT - 100, stones, currentTurnId);
         newView.getChildren().add(stoneLabel);
 
@@ -250,7 +248,7 @@ public class Viewer extends Application {
      * @author u7330006
      */
     public void playSound() {
-        AudioClip audioClip = new AudioClip("assets/Move.mp3");
+        AudioClip audioClip = new AudioClip(getClass().getResource("assets/Move.mp3").toExternalForm());
         audioClip.play();
     }
 
@@ -271,7 +269,7 @@ public class Viewer extends Application {
     private void aiTurn() {
         var aiMove = akropolis.generateAIMove(true);
         akropolis.applyMove(aiMove);
-        playSound();
+        // playSound();
         updateView();
     }
 
