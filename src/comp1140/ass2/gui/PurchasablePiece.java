@@ -51,16 +51,19 @@ public class PurchasablePiece extends Group {
      * @param y y-coordinate
      * @param piece backend object it is representing
      * @param sideLength size of the lines on the hexagons that make it up
+     * @param playable if it can be played
      * @param viewer that is displaying it
      * @param akropolis back end game representation of game that it is in
      */
-    PurchasablePiece(double x, double y, Piece piece, double sideLength, Viewer viewer, Akropolis akropolis){
+    PurchasablePiece(double x, double y,
+                     Piece piece, double sideLength, boolean playable,
+                     Viewer viewer, Akropolis akropolis){
         this.piece = piece;
         this.vTiles = new ArrayList<>();
         this.connectors = new ArrayList<>();
         this.rotation = 0;
         this.size = sideLength;
-        this.playable = true;
+        this.playable = playable;
 
         Tile[] tiles = piece.getTiles();
 
@@ -90,7 +93,6 @@ public class PurchasablePiece extends Group {
             vTiles.add(newTile);
             this.getChildren().add(newTile);
         }
-        System.out.println("There are: " + connectors.size() + "lines ");
         requestFocus();
 
         this.setLayoutX(x);
@@ -144,24 +146,35 @@ public class PurchasablePiece extends Group {
         });
 
         this.setOnMouseReleased(event -> {
+            //Gaurd to prevent interaction
             if (!playable) {
                 return;
             }
+            //Still find change in move
             double moveX = event.getSceneX() - mousePositionX;
             double moveY = event.getSceneY() - mousePositionY;
-            Move moveSelected = viewer.getBoard().findClosestMove(akropolis.generateAllValidMovesOfPiece(piece),
-                    moveX + mousePositionX - mousePosDiffX,
-                    moveY + mousePositionY - mousePosDiffY,
-                    Rotation.getAngle(60 * ((int) (rotation))));
-            if (moveSelected == null) {
+            //Find the closest move
+            VisualMove vMoveSelected = viewer.getBoard().getClosestMove();
+            //Moves back to site if no selected move
+            if (vMoveSelected == null) {
                 setLayoutX(x);
                 setLayoutY(y);
                 size = 25;
                 updateShape();
+            } else {
+                //Appear to snap to the position of the move
+                setLayoutX(vMoveSelected.getLayoutX() + viewer.getBoard().getLayoutX() - viewer.getSite().getLayoutX());
+                setLayoutY(vMoveSelected.getLayoutY() + viewer.getBoard().getLayoutY() - viewer.getSite().getLayoutY());
+                if (Math.abs ((int) (this.rotation)) % 2 == 1) {
+                    setLayoutY(getLayoutY() + 30 * (Math.sin(Math.toRadians(60))));
+                    setLayoutX(getLayoutX() + 15);
+                }
+                viewer.getBoard().closestMove.deactivate();
+                //Updates the gameState with move
+                akropolis.applyMove(vMoveSelected.getMove());
+                // viewer.playSound();
+                viewer.updateView();
             }
-            akropolis.applyMove(moveSelected);
-            // viewer.playSound();
-            viewer.updateView();
         });
     }
 

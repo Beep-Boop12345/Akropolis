@@ -264,9 +264,7 @@ public class VisualBoard extends Group {
         }
         closestMove = new VisualMove(closestMoveRep, windowPositionOfMove(closestMoveRep));
         this.getChildren().add(closestMove);
-        System.out.println(findClosestMove(moves, x, y, rotation));
         closestMove.activate();
-        System.out.println("I activated a move");
     }
 
     /**Removes the preview effect

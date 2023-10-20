@@ -12,12 +12,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import static javafx.scene.paint.Color.*;
 
@@ -252,7 +257,7 @@ public class Viewer extends Application {
             // Close the viewer window
             closeViewerWindow();
         } else {
-            delay(100, () -> displayState(akropolis));
+            delay(500, () -> displayState(akropolis));
         }
     }
 
@@ -261,8 +266,14 @@ public class Viewer extends Application {
      * @author u7330006
      */
     public void playSound() {
-        AudioClip audioClip = new AudioClip(getClass().getResource("assets/Move.mp3").toExternalForm());
-        audioClip.play();
+
+        File audioFile = new File("assets/Move.mp3");
+        Media sound = new Media(audioFile.toURI().toString());
+        MediaPlayer soundPlayer = new MediaPlayer(sound);
+        soundPlayer.play();
+/*        File audioClip = new File("assets/Move.mp3");
+        AudioClip ac = new AudioClip(getClass().getResource("assets/Move.mp3").toExternalForm());
+        ac.play();*/
     }
 
 
@@ -282,7 +293,7 @@ public class Viewer extends Application {
     private void aiTurn() {
         var aiMove = akropolis.generateAIMove(true);
         akropolis.applyMove(aiMove);
-        // playSound();
+        //playSound();
         updateView();
     }
 
