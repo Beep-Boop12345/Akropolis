@@ -26,8 +26,6 @@ assets:
       url: https://github.com/lichess-org/lila
       licence: The added license file
 
-
-
 # Use this to list any assets (artwork, sound, etc) that you used.
 # Provide a comment explaining your use of that asset and the URL
 # and license for the asset
@@ -40,7 +38,7 @@ assets:
       url: https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg
       licence: Educational Purposes
 
-
+\
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
