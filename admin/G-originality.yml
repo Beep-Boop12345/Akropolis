@@ -20,12 +20,13 @@ declaration: >-
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external assets)
-assets: 
-    - comment: 
+assets:
+    - artwork:
+      comment: 
         Used in GUI for setting up the game.  
-    - url: 
+      url: 
         https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg
-    - licence: 
+      licence: 
         Educational Purposes
 
   
