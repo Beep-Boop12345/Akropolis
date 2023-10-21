@@ -34,13 +34,13 @@ collaboration:
 # you want to just submit methods):
 class:
    - PurchasablePiece
-   - 
+   
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
    - generateAllValidMoves
-   - 
+   
 
 # sign *your* name and uid here
 name: Koen Dubrow
