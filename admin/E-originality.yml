@@ -1,4 +1,4 @@
-# IMPORTANT: It is very important that you correctly complete this originality
+## IMPORTANT: It is very important that you correctly complete this originality
 # statement.
 #
 # This is your statement of your submitted work being your own.
@@ -8,7 +8,6 @@
 # For information on how to fill this out correctly, see
 # https://cs.anu.edu.au/courses/comp1110/help/faq/09-originality/
 #
-
 
 declaration: >-
   I declare that everything I have submitted for stage D of this assignment
@@ -23,12 +22,10 @@ declaration: >-
 # (or remove it altogether if you haven't used any external assets)
 assets:
   - artwork:
-      comment: 
-        Used in GUI for setting up the game.
-      url: 
-        https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/         filters:strip_icc()/pic6705097.jpg
-      licence: 
-        Educational Purposes
+      comment: Used in GUI for setting up the game.
+      url: https://cf.geekdo-images.com/OTb0hIJHE-U3eD0FmpBrzA__opengraph/img/gYkj6_qAS2W_vj-uNP92cWCbakc=/0x0:3060x1607/fit-in/1200x630/filters:strip_icc()/pic6705097.jpg
+      licence: Educational Purposes
+
 
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
