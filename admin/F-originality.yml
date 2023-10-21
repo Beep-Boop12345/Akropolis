@@ -27,30 +27,6 @@ collaboration:
       could be extended to Piece placement. I implemented all the changes myself and I inititated the discussion as to 
       how I could start considering some moves as identical in placement validity.
 
-# Use this to list any code that you used that you did not write,
-# aside from code provided by the lecturer.  Provide a comment
-# explaining your use and the URL to that code and the licence for
-# that code
-#
-# Add as many "url+licence+comment" entries as necessary
-# (or remove it altogether if you haven't used any external code)
-code:
-  - comment:
-    url:
-    licence:
-
-# Use this to list any assets (artwork, sound, etc) that you used.
-# Provide a comment explaining your use of that asset and the URL
-# and license for the asset
-#
-# Add as many "url+licence+comment" entries as necessary
-# (or remove it altogether if you haven't used any external assets)
-assets:
-  - comment:
-    url:
-    licence:
-
-
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
