@@ -36,7 +36,8 @@ collaboration:
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
-class: Setup Gameover
+class: 
+  - Setup Gameover
    
 
 # sign *your* name and uid here
