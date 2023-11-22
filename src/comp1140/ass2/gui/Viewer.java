@@ -52,6 +52,11 @@ public class Viewer extends Application {
     private Scene scene;
 
 
+    void displayState(String gameState) {
+        Akropolis akropolis = new Akropolis(gameState);
+        displayState(akropolis);
+    }
+
 
     /**
      * Draw a placement in the window, removing any previously drawn placements
